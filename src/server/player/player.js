@@ -1,102 +1,64 @@
 import Game from './game'
 
 class Player {
-    constructor(socket, name = "*******") {
+    constructor(socket, name = "*********") {
 	this.socket = socket
-	if (!name)
-	    this.name = "******"
-	else
-	    this.name = name
-
-	// init controller and map
+	this.name = name
 	this.nbr = 0
-	this.game = new Game(socket)
+	this.game = new Game()
 	this.pause = false;
-	//	this.socket.on("INFO", (data) => this.getUser(data))
-	console.log("new playr:", socket.id)
-    }
-
-
-    get() {
-	var info = {
-	    name: this.name,
-	    line: this.game.getLine(20)
-	}
-
-	console.log(info)
-	return info
+	console.log(`New player ${socket.id} ${name}`)
     }
     
-    controller(action) {
-	if (!this.start) {
-	    return 
-	}
-
-	if (this.pause)
-	    return
-	if (action === 'LEFT') {
+    controller(data) {
+	console.log(`${this.socket.id} - ${data}`)
+	if (data === 'LEFT') {
 	    this.game.left()
-	} else if (action === 'UP') {
+	} else if (data === 'UP') {
 	    this.game.rotate()
-	} else if (action === 'RIGHT') {
+	} else if (data === 'RIGHT') {
 	    this.game.right()
-	} else if (action === 'DOWN') {
+	} else if (data === 'DOWN') {
 	    this.game.down()
-	} else if (action === 'SPACE') {
-	    this.pause = true
-	    this.game.down(true)
-	    this.pause = false
+	} else if (data === 'SPACE') {
+	    this.game.place()
 	}
+	this.socket.emit("DISPLAY", this.game.map)
     }
 
     // cb function for a new piece ! and for terminate the session
-    async start(getPiece, sendMallus, win) {
+    start(getPiece, sendMallus, win) {
 	this.socket.on("disconnect", (data) => this.stopGame());
 	this.socket.on("QUIT", (data) => this.stopGame())
-
-	    console.log("[GAME START] - ", this.socket.id)
-	    this.start = true
-	    this.itr = setInterval(async function () {
-		if (!this.pause) {
-		    if (this.game.down() === false) {
-			console.log("need new piece")
-			if (this.game.piece === undefined) {
-			    var p = await getPiece(this.socket.id, this.nbr)
-			    
-			    if (!this.game.add(p)) {
-				return clearInterval(this.itr);
-			    } else {
-				this.nbr++
-			    }
-			}
-		    } else {
-			console.log("down")
-		    }
-		}
-	    }.bind(this), 1000);
+	console.log("[GAME START] - ", this.socket.id)
+	this.itr = 0
+	var marine = function () {
+	       if (this.game.down() === false) {
+		if (this.game.verify() !== 0)
+		    sendMallus(this.socket.id)
+		var p = getPiece(this.socket.id, this.nbr)
+		if (!this.game.add(p))
+		    return clearInterval(this.itr)
+		this.nbr++
+	       }
+	    this.socket.emit("DISPLAY", this.game.map)
+	}.bind(this)
+	this.itr = setInterval(marine, 1000)
     }
-
+    
     stopGame() {
-	if (this.itr === 0) {
+	if (this.itr === 0)
 	    return ;
-	}
 	clearInterval(this.itr)
     }
 
     getMalus() {
-	this.pause = true;
 	if (!this.game.setMalus()) {
 	    clearInterval(this.itr)
 	    return false
 	}
-	this.pause = false
 	return true
-    }
-
-    async getUser(data) {
-	this.name = data.user
-    }
-    
+    }    
 }
 
 

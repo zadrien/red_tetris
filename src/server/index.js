@@ -22,23 +22,18 @@ const initApp = (app, params, cb) => {
 	    res.writeHead(200)
 	    res.end(data)
 	})
-    }
-    
+    }    
     app.on('request', handler)
-
-    app.listen({host, port}, () =>{
+    app.listen({host, port}, () => {
 	loginfo(`tetris listen on ${params.url}`)
 	cb()
     })
 }
 
-connectToDatabase("mongodb://localhost:27017/rooms")
-
-import Player from './player/player'
-import { get } from './player/tetraminos'
+connectToDatabase("mongodb://database:27017/rooms")
 
 const initEngine = io => {
-    io.on('connection', function(socket){
+    io.on('connection', function (socket) {
 	loginfo("Socket connected: " + socket.id)
 	
 	socket.on('action', (action) => {
@@ -49,27 +44,26 @@ const initEngine = io => {
 	});
 
 	socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
-	socket.on("JOIN", function(data) {
-	    roomsAPI.join(data, socket)
+	socket.on("JOIN", async function (data) {
+	    var obj = await roomsAPI.accessRoom(data, socket)
+	    var ctrl = function (data) {
+		obj.player.controller(data)
+	    }
+	    var start = function (data) {
+		obj.room.startGame(data, socket)
+	    }
+
+	    var leave = function(data) {
+		socket.removeListener("CONTROLLER", ctrl)
+		socket.removeListener("START", start)
+		socket.removeListener("QUIT", leave)
+		obj.room.leave(socket)
+	    }
+	    socket.on("CONTROLLER", ctrl)
+	    socket.on("START", start)
+	    socket.on("QUIT", leave)
 	})
-	socket.on("CREATION", (data) => roomsAPI.create(data, socket))
-
-	// socket.on("START", function (data) {
-	//     console.log("start")
-
-
-	//     const player = new Player(socket, "Browntrip")
-	//     player.start(function(id) {
-	// 	return get()
-	//     }, null, null)
-
-	//     var i = setInterval(function() {
-	//     	if (!player.getMalus())
-	// 	    clearInterval(i)
-	// 	player.get()
-	//     }, 10000)
-	// })
-	
+		
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);
 
