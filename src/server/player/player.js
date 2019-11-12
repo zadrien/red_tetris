@@ -7,6 +7,7 @@ class Player {
 	this.nbr = 0
 	this.game = new Game()
 	this.pause = false;
+	this.start = false;
 	console.log(`New player ${socket.id} ${name}`)
     }
     
@@ -44,21 +45,36 @@ class Player {
 	    this.socket.emit("DISPLAY", this.game.map)
 	}.bind(this)
 	this.itr = setInterval(marine, 1000)
+	this.start = true;
     }
     
     stopGame() {
 	if (this.itr === 0)
 	    return ;
 	clearInterval(this.itr)
+	this.start = false;
     }
 
     getMalus() {
+	if (!this.start)
+	    return ;
 	if (!this.game.setMalus()) {
 	    clearInterval(this.itr)
 	    return false
 	}
 	return true
-    }    
+    }
+
+    info(game = false) {
+	var line;
+	if (game === true) // get party info
+	    line = this.game.info(20)
+	return {
+	    id: this.socket.id,
+	    name: this.name,
+	    line
+	}
+    }
 }
 
 

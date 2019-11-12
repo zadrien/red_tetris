@@ -10,8 +10,11 @@ class Lobby {
 	
 	this.host = undefined
 	this.users = {}
-	this.open = true
+	this.start = false
 	this.pieces = []
+	this.broad = setInterval(function () {
+	    this.startBroadcast()
+	}.bind(this), 500)
     }
 
     newPlayer(player) {
@@ -50,6 +53,7 @@ class Lobby {
     
     startGame(data, socket) {
 	if (socket.id === this.host) {
+	    this.start = true;
 	    var id = Object.keys(this.users)
 	    for (var i = 0; i < id.length; i++) {
 		this.users[id[i]].start(this.pieceCallback.bind(this),
@@ -59,6 +63,25 @@ class Lobby {
 	}
     }
 
+    startBroadcast() {
+//	console.log("Broadcasting")
+	var id = Object.keys(this.users)
+	if (!id)
+	    return 
+	for (var i = 0; i < id.length; i++) {
+	    var players = _.omit(this.users, id[i])
+	    console.log("Broadcast information to", id[i],":")
+	    var obj = []
+	    _.map(players, (v, k) => {
+//		console.log(v.name)
+		obj.push(v.info(this.start));
+	    })
+	    console.log("==========")
+	    console.log(obj)
+	    this.users[id[i]].socket.emit("PLAYERS", obj)
+	}
+    }
+    
     pieceCallback(id, nbr) {
 	var p = this.pieces[nbr]
 	if (!p) {
