@@ -22,7 +22,7 @@ class Game {
 	
     }
 
-    getLine(i) { // error value malus
+    info(i) { // error value malus
 	var r = (i -1) - this.malus
 	console.log(r)
 	var line = [...this.map[r]]

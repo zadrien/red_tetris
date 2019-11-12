@@ -50,7 +50,7 @@ const Card = ({ player }) => (
   <div style={style}>
     <h6>{player.name}</h6>
     <div>
-      {render(player.line)}
+      {player.line === undefined ? null : render(player.line) }
     </div>
   </div>
 )
