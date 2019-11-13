@@ -148,7 +148,7 @@ class Game {
 			return
 		this.lock = true;
 		var copy = copyMap(this.map)
-		var piece = Object.assign({}, this.piece)
+	var piece = copyMap(this.piece)
 		
 		if (remove(copy, piece, this.x, this.y)) {
 			rotateClockwise(piece)
