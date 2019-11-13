@@ -1,5 +1,3 @@
-'use strict'
-
 export function newMap() {
     var map = new Array(20);
     
@@ -25,7 +23,6 @@ export function placeable(map, piece, mapX, mapY) {
 		    return false
 		} else if (map[mapY + y][mapX + x] === '.') {
 		    map[mapY + y][mapX + x] = piece.shape[y][x];
-//		    console.log("HNNNNN")
 		} else
 		    return false
 	    }
@@ -50,9 +47,7 @@ export function remove(map, piece, mapX, mapY) {
 }
 
 export function copyMap(arr) {
-    var newMap = arr.map(function(arr) { return arr.slice()});
-
-    return newMap
+    return JSON.parse(JSON.stringify(arr));
 }
 
 export function fillLine(map, pos) {
@@ -93,16 +88,3 @@ export function rotateUndo(piece) {
 	undo.map(row => row[k])
     ))
 }
-
-// module.exports = {
-//     newMap,
-//     copyMap,
-//     showMap,
-//     remove,
-//     placeable,
-//     fillLine,
-//     fullLine,
-//     rotateClockwise,
-//     rotateUndo
-    
-// }
