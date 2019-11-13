@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import Button from '../Button';
 import { createRoom } from '../../actions/menu'
 
+// After remove Button.js file
+// import Button from 'react-bootstrap/lib/Button';
+
+// const Butt = 
+
 const mapStateToProps = (state, ownProps) => ({
   active: false,
   style: ownProps.style

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Display from '../components/Display';
 import Play from '../components/app/HomeButton';
 import ListingRooms from './ListingRooms';
 import Room from './Room';

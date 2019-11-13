@@ -1,10 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setMenu } from '../../actions/Menu';
-//import { listRoom, fetch_rooms, onJoin } from '../../actions/socket'
-import { onCreation, onFetch, emitFetch } from '../../actions/listing'
 import { setInterface } from '../../actions/menu'
-
+import { onCreation, onFetch, emitFetch } from '../../actions/listing'
 import { onJoined, onQuit, onHost, onPlayers, onDisplay, emitMove } from '../../actions/room'
 
 import Button from 'react-bootstrap/lib/Button';

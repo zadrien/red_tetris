@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { emitJoin } from '../../actions/socket';
-import { isJoining, onPlayers } from '../../actions/rooms';
-// import { isCreating } from '../../actions/listing'
 import { isCreating, onCreation, emitCreate } from '../../actions/create'
 
 import Button from 'react-bootstrap/lib/Button'
