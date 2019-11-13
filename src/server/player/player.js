@@ -7,7 +7,7 @@ class Player {
 	this.nbr = 0
 	this.game = new Game()
 	this.pause = false;
-	this.start = false;
+	this.run = false;
 	console.log(`New player ${socket.id} ${name}`)
     }
     
@@ -29,34 +29,34 @@ class Player {
 
     // cb function for a new piece ! and for terminate the session
     start(getPiece, sendMallus, win) {
-	this.socket.on("disconnect", (data) => this.stopGame());
-	this.socket.on("QUIT", (data) => this.stopGame())
-	console.log("[GAME START] - ", this.socket.id)
-	this.itr = 0
-	var marine = function () {
-	       if (this.game.down() === false) {
-		if (this.game.verify() !== 0)
-		    sendMallus(this.socket.id)
-		var p = getPiece(this.socket.id, this.nbr)
-		if (!this.game.add(p))
-		    return clearInterval(this.itr)
-		this.nbr++
-	       }
-	    this.socket.emit("DISPLAY", this.game.map)
-	}.bind(this)
-	this.itr = setInterval(marine, 1000)
-	this.start = true;
+		this.socket.on("disconnect", (data) => this.stopGame());
+		this.socket.on("QUIT", (data) => this.stopGame())
+		console.log("[GAME START] - ", this.socket.id)
+		this.itr = 0
+		var marine = function () {
+			if (this.game.down() === false) {
+				if (this.game.verify() !== 0)
+					sendMallus(this.socket.id)
+				var p = getPiece(this.socket.id, this.nbr)
+				if (!this.game.add(p))
+					return clearInterval(this.itr)
+				this.nbr++
+			}
+			this.socket.emit("DISPLAY", this.game.map)
+		}.bind(this)
+		this.itr = setInterval(marine, 1000)
+		this.run = true;
     }
     
     stopGame() {
 	if (this.itr === 0)
 	    return ;
 	clearInterval(this.itr)
-	this.start = false;
+	this.run = false;
     }
 
     getMalus() {
-	if (!this.start)
+	if (!this.run)
 	    return ;
 	if (!this.game.setMalus()) {
 	    clearInterval(this.itr)
