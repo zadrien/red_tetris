@@ -5,25 +5,13 @@ import ListingRooms from './ListingRooms';
 import Room from './Room';
 import Create from './Create'
 
-import Button from 'react-bootstrap/lib/Button';
-
-const AppStyle = {
-  margin: "auto",
-  width: "350px",
-  height: "500px",
-  
-  display: "flex",
-  flexDirection: "column",
-
-  alignItems: "center",
-  backgroundColor: 'blue'
-}
+import './style.css';
+import '../global.css';
 
 const App = ({ menu }) => {
   if (!menu) {
     return (
-      <div style={AppStyle}>
-        <h1>Red Tetris</h1>
+      <div className="menu-screen">
         <Play />
       </div>
     )
@@ -33,14 +21,13 @@ const App = ({ menu }) => {
     return (<Room />)
   } else if (menu === 'LISTING') {
     return (
-      <div style={AppStyle}>
+      <div className="menu-screen">
         <ListingRooms />
-        
       </div>
     )
   } else if (menu === 'CREATE') {
     return (
-      <div style={AppStyle}>
+      <div className="menu-screen">
         <Create />
       </div>
     )
