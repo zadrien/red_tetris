@@ -7,8 +7,8 @@ const Create = ({ onClick }) => {
   return (
     <div>
       <h1 className="title">Create a room</h1>
-      <div className="bob-btn secondary" onClick={onClick}>Back</div>
       <Component />
+      <div className="bob-btn secondary" onClick={onClick}>Back</div>
     </div>
   )
 }
