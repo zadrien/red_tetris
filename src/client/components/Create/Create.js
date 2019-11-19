@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { emitJoin } from '../../actions/socket';
 import { isCreating, onCreation, emitCreate } from '../../actions/create'
 
-import Button from 'react-bootstrap/lib/Button'
-
 const Create = ({ isCreating, onSubmit, user}) => (
   <form onSubmit={(e) => onSubmit(e, user)}>
     <label id="room">Room's Name</label><br/>
@@ -13,8 +11,8 @@ const Create = ({ isCreating, onSubmit, user}) => (
     <h2>Game Mode</h2>
     <input type="radio" name="mode" defaultValue="classic"/>Classic<br/>
     <input type="radio" name="mode" defaultValue="invisible"/>Invisible Piece<br/>
-    { isCreating ? <Button disabled>Creating...</Button> :
-      <Button type="Submit" defaultValue="Submit">Create</Button>
+    { isCreating ? <div className="bob-btn" disabled>Creating...</div> :
+      <input type="button" className="bob-btn" type="Submit" defaultValue="Submit" value="Create"/>
     }
   </form>
 )
