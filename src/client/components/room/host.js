@@ -10,7 +10,7 @@ const host = ({ host, start, onClick }) => {
 
   return (
     <div>
-      <div className={`bob-btn ${start == true ? 'disabled' : ''}`} onClick={onClick}>Start</div>
+      <div className={`bob-btn secondary ${start == true ? 'disabled' : ''}`} onClick={onClick}>Start</div>
     </div>
     
   )
