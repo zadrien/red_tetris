@@ -2,44 +2,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { onLoading, onJoined, emitJoin } from '../../actions/listing'
 
-import Card from 'react-bootstrap/lib/Card';
-import Button from 'react-bootstrap/lib/Button'
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-
-const CardStyle = {
-  display: "flex",
-  marginTop: "5px",
-  width: "245px",
-  height: "50px",
-  backgroundColor: "grey",
-  justifyContent: "center"
-}
-
-const colStyle = {
-  align: "center"
-}
-
 const room = ({ rooms, id, user, onClick }) => {
 //  console.log("card:", rooms, id)
   var room = rooms[id]
 //  console.log(rooms[id])
   if (room) {
     return (
-      <div style={CardStyle} className="rounded shadow">
-        <Col className=''>
-          <Row>
-            <p>{room.name}</p>
-          </Row>
-          <Row>
-            {room.mode}
-          </Row>
-        </Col>
-        <Col sm={4} className='m-auto'>
+      <div onClick={() => onClick(user)} className="room-list-item">
+        <div className="description">
+          <p className="name">{room.name}</p>
+          <p className="mode">{room.mode}</p>
+        </div>
+        <div className='join-button'>
           {room.isLoading ?
-           <Button disabled={true}>Loading...</Button> : <Button onClick={() => onClick(user)} variant='success'>join</Button>
+           <div disabled={true}>Loading...</div> : <div>JOIN</div>
           }
-        </Col>
+        </div>
       </div>
     )
   }
