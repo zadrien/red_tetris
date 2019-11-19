@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { startGame, emitStart, onDisplay, emitMove, onPlayers } from '../../actions/room'
-import Button from 'react-bootstrap/lib/Button'
 
 const host = ({ host, start, onClick }) => {
   console.log("YOOOOOe", host)
@@ -9,10 +8,9 @@ const host = ({ host, start, onClick }) => {
     return null
   }
 
-  
   return (
     <div>
-      <Button onClick={onClick} disabled={start == true ? true : false }>Start</Button>
+      <div className={`bob-btn ${start == true ? 'disabled' : ''}`} onClick={onClick}>Start</div>
     </div>
     
   )
