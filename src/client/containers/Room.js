@@ -10,14 +10,12 @@ import Button from 'react-bootstrap/lib/Button'
 
 const AppStyle = {
   margin: "auto",
-  width: "350px",
-  height: "500px",
-  
+  width: "500px",
+  height: "700px",
   display: "flex",
   flexDirection: "column",
-
-  alignItems: "center",
-  backgroundColor: 'blue'
+  border: "1px solid blue",
+  alignItems: "center"
 }
 
 const Room = ({ room, onLeave }) => {
@@ -25,21 +23,22 @@ const Room = ({ room, onLeave }) => {
   if (room) {
     return (
       <div>
-        <Row>
+        <div className="row">
           <Col>
             <div style={AppStyle}>
-              <Row className="w-100"><h1>{room.name}</h1><Button onClick={onLeave} variant='danger'>Leave</Button>
+              <div className=""><h1>{room.name}</h1>
+                <div onClick={onLeave}>Leave</div>
                 <Host />
-              </Row>
-              <Row>
+              </div>
+              <div className="row">
                 <Display/>
-              </Row>
+              </div>
             </div>
           </Col>
           <Col sm={4}>
             <Players />
           </Col>
-        </Row>
+        </div>
 
       </div>
     )
