@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import { Display, Players, Host } from '../components/room'
 import { emitQuit } from '../actions/room'
 
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Button from 'react-bootstrap/lib/Button'
+import '../global.css';
 
 const AppStyle = {
   margin: "auto",
-  width: "500px",
+  width: "100%",
   height: "700px",
   display: "flex",
   flexDirection: "column",
@@ -23,23 +21,19 @@ const Room = ({ room, onLeave }) => {
   if (room) {
     return (
       <div>
-        <div className="row">
-          <Col>
-            <div style={AppStyle}>
-              <div className=""><h1>{room.name}</h1>
-                <div onClick={onLeave}>Leave</div>
-                <Host />
-              </div>
-              <div className="row">
-                <Display/>
-              </div>
-            </div>
-          </Col>
-          <Col sm={4}>
-            <Players />
-          </Col>
+        <div className="align-center width-100">
+          <h1 className="title medium">{room.name}</h1>
         </div>
 
+        <div className="d-flex just-center mx-auto width-25">
+          <Host />
+          <div className="bob-btn secondary" onClick={onLeave}>Leave</div>
+        </div>
+
+        <div className="p-2 width-100 d-flex row just-center">
+          <Display/>
+          {/* <Players /> */}
+        </div>
       </div>
     )
   }
