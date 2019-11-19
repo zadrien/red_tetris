@@ -8,7 +8,7 @@ const Players = ({ players }) => {
   }
   console.log(players)
   return (
-    <div>
+    <div className="d-flex row">
       {players.map(p => (
         <PlayerCard player={p}/>
       ))}
