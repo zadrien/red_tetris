@@ -9,7 +9,7 @@ const List = ({rooms, start, style, onClick}) => {
   if (!rooms || rooms.list.length == 0) {
     return (
       <div className="room-list">
-        <h2>No rooms available</h2>
+        <h2 className="title small my-auto">No room available</h2>
       </div>
     )
   }
