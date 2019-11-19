@@ -4,8 +4,8 @@ import { emitFetch, onPrev, onNext } from '../../actions/listing.js'
 
 const Pagination = ({items, next, prev}) => (
   <div className="d-flex">
-    <div className="bob-btn primary width-100" onClick={() => prev(items)}>Prev</div>
-    <div className="bob-btn primary width-100" onClick={() => next(items)}>Next</div>
+    <div className="bob-btn secondary width-100" onClick={() => prev(items)}>Prev</div>
+    <div className="bob-btn secondary width-100" onClick={() => next(items)}>Next</div>
   </div>
 )
 

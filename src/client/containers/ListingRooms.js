@@ -11,7 +11,7 @@ const Rooms = ({ Create }) => {
         <List />
       </div>
       <div className="d-flex">
-        <div className="bob-btn primary width-100" onClick={Create}>New room</div>
+        <div className="bob-btn secondary width-100" onClick={Create}>New room</div>
         <Pagination />
       </div>
     </div>
