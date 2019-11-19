@@ -2,22 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Card from './card';
 
-
-const ListStyle = {
-  width: "250px",
-  height: "400px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  backgroundColor: "orange"
-  
-}
+import './style.css';
 
 const List = ({rooms, start, style, onClick}) => {
-  console.log(rooms)
-  if (!rooms) {
+  console.log("rooms:", rooms)
+  if (!rooms || rooms.list.length == 0) {
     return (
-      <div style={ListStyle}>
+      <div className="room-list">
         <h2>No rooms available</h2>
       </div>
     )
@@ -30,7 +21,7 @@ const List = ({rooms, start, style, onClick}) => {
     }
     console.log(render)
     return (
-      <div style={ListStyle}>
+      <div className="room-list">
         {render.map((v, k) => (<Card key={k} id={v.id} room={v.room}/>))}
       </div>
     )
