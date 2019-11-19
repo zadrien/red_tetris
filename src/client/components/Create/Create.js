@@ -8,9 +8,9 @@ import "./style.css";
 
 const Create = ({ isCreating, onSubmit, user}) => (
   <form onSubmit={(e) => onSubmit(e, user)} id="create-room-form">
-    <h2 className="mt-3">Room's name</h2>
+    <h2 className="align-left title small mt-3">Room's name</h2>
     <input className="width-100 p-2" type="text" id="room" name="room" placeholder="MY AWSOME ROOM"/>
-    <h2 className="mt-3">Game mode</h2>
+    <h2 className="align-left title small mt-3">Game mode</h2>
     <div>
       <input type="radio" name="mode" defaultValue="classic" checked/>
       <span className="ml-1">Classic</span>
@@ -19,7 +19,7 @@ const Create = ({ isCreating, onSubmit, user}) => (
       <input type="radio" name="mode" defaultValue="invisible"/>
       <span className="ml-1">Invisible Piece</span>
     </div>
-    <button type="submit" className="bob-btn secondary">{isCreating ? 'Creating...' : 'Create'}</button>
+    <button type="submit" className="bob-btn secondary width-100">{isCreating ? 'Creating...' : 'Create'}</button>
   </form>
 )
 
