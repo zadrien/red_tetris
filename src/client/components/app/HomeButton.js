@@ -4,11 +4,15 @@ import { setInterface } from '../../actions/menu'
 import { onCreation, onFetch, emitFetch } from '../../actions/listing'
 import { onJoined, onQuit, onHost, onPlayers, onDisplay, emitMove } from '../../actions/room'
 
-import Button from 'react-bootstrap/lib/Button';
 
-const playBut = ({style, onClick}) => (
-    <Button onClick={onClick}>Play</Button>
-)
+const playBut = ({style, onClick}) => {
+  return (
+    <div className="main-menu">
+      <h1 className="title">Red Tetris</h1>
+      <div className="bob-btn secondary" onClick={onClick}>Play</div>
+    </div>
+  )
+}
 
 const mapStateToProps = (state, ownProps) => ({
   active: false,

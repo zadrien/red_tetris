@@ -3,15 +3,12 @@ import { connect } from 'react-redux'
 import { Component } from '../components/Create'
 import { setInterface } from '../actions/menu'
 
-import Button from 'react-bootstrap/lib/Button'
-
 const Create = ({ onClick }) => {
-
-
   return (
     <div>
-      <Button onClick={onClick}>Back</Button>
+      <h1 className="title">Create a room</h1>
       <Component />
+      <div className="bob-btn secondary" onClick={onClick}>Back</div>
     </div>
   )
 }
@@ -25,7 +22,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClick: () => {
     // remove isCreating if true
     console.log("GO BACK")
-    dispatch(setInterface("LISTING"))
+    dispatch(setInterface("LISTING"));
   }
 })
 

@@ -2,15 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { emitFetch, onPrev, onNext } from '../../actions/listing.js'
 
-import Row from 'react-bootstrap/lib/Row'
-import Button from 'react-bootstrap/lib/Button'
-
 const Pagination = ({items, next, prev}) => (
-  <div>
-    <Row>
-      <Button onClick={() => prev(items)}variant='primary'>Prev</Button>
-      <Button onClick={() => next(items)} variant='primary'>Next</Button>
-    </Row>
+  <div className="d-flex">
+    <div className="bob-btn secondary width-100" onClick={() => prev(items)}>Prev</div>
+    <div className="bob-btn secondary width-100" onClick={() => next(items)}>Next</div>
   </div>
 )
 

@@ -4,26 +4,31 @@ import { connect } from 'react-redux';
 import { emitJoin } from '../../actions/socket';
 import { isCreating, onCreation, emitCreate } from '../../actions/create'
 
-import Button from 'react-bootstrap/lib/Button'
+import "./style.css";
 
 const Create = ({ isCreating, onSubmit, user}) => (
-  <form onSubmit={(e) => onSubmit(e, user)}>
-    <label id="room">Room's Name</label><br/>
-    <input type="text" id="room" name="room" />
-    <h2>Game Mode</h2>
-    <input type="radio" name="mode" defaultValue="classic"/>Classic<br/>
-    <input type="radio" name="mode" defaultValue="invisible"/>Invisible Piece<br/>
-    { isCreating ? <Button disabled>Creating...</Button> :
-      <Button type="Submit" defaultValue="Submit">Create</Button>
-    }
+  <form onSubmit={(e) => onSubmit(e, user)} id="create-room-form">
+    <h2 className="align-left title small mt-3">Room's name</h2>
+    <input className="width-100 p-2" type="text" id="room" name="room" placeholder="MY AWSOME ROOM"/>
+    <h2 className="align-left title small mt-3">Game mode</h2>
+    <div>
+      <input type="radio" name="mode" defaultValue="classic" checked/>
+      <span className="ml-1">Classic</span>
+    </div>
+    <div>
+      <input type="radio" name="mode" defaultValue="invisible"/>
+      <span className="ml-1">Invisible Piece</span>
+    </div>
+    <button type="submit" className="bob-btn secondary width-100">{isCreating ? 'Creating...' : 'Create'}</button>
   </form>
 )
+
 
 const handleForm = (e) => {
   e.preventDefault();
   var room = { }
-
-  room["name"] = e.target.room.value
+  console.log(e.target);
+  room["name"] = e.target.room.value || 'Unamed room'
   room["mode"] = e.target.mode.value
 
   console.log("room:", room)
@@ -39,7 +44,6 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch, e) => ({
   onSubmit: (e, user) => {
-    console.log("here")
     var room = handleForm(e)
     var data = {
       user,
@@ -50,8 +54,8 @@ const mapDispatchToProps = (dispatch, e) => ({
     console.log(data)
     dispatch(emitCreate(data))
     
-//    dispatch(isJoining(true, r))
-//    dispatch(emitJoin(r))
+    //dispatch(isJoining(true, r))
+    //dispatch(emitJoin(r))
     // dispatch(onPlayers())
   }
 })

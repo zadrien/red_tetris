@@ -3,24 +3,15 @@ import { connect } from 'react-redux';
 import { CreateButton, List, Pagination } from '../components/Listing'
 import { setInterface } from '../actions/menu'
 
-import Button from 'react-bootstrap/lib/Button'
-
-
-const ContainerStyle = {
-  
-}
-
 const Rooms = ({ Create }) => {  
   return (
-    <div style={ContainerStyle}>
-      <div style={{display: "inline"}}>
-        <h4 className="text-light">Listing Room</h4>
-
-        <Button onClick={Create} variant="dark">New</Button>
+    <div>
+      <div>
+        <h4 className="title">SELECT A ROOM</h4>
         <List />
       </div>
-
-      <div>
+      <div className="d-flex">
+        <div className="bob-btn secondary width-100" onClick={Create}>New room</div>
         <Pagination />
       </div>
     </div>
