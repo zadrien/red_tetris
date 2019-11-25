@@ -1,5 +1,5 @@
-import Component from './Create'
+import CreateForm from './Create'
 
 module.exports = {
-  Component
+  CreateForm
 }

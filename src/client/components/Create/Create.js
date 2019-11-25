@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { emitJoin } from '../../actions/socket';
 import { isCreating, onCreation, emitCreate } from '../../actions/create'
-
+import { Nav } from '../Interface'
 import "./style.css";
 
 const Create = ({ isCreating, onSubmit, user}) => (
@@ -20,6 +20,7 @@ const Create = ({ isCreating, onSubmit, user}) => (
       <span className="ml-1">Invisible Piece</span>
     </div>
     <button type="submit" className="bob-btn secondary width-100">{isCreating ? 'Creating...' : 'Create'}</button>
+    <Nav to="LISTING" />
   </form>
 )
 
