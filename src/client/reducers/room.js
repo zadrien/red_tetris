@@ -7,7 +7,7 @@ const room = (state = {}, action) => {
       return state
     return Object.assign({}, state, { menu: "ROOM", room: action.result.room })
   case "START":
-    room['start'] = true
+    room['start'] = action.result.start
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "DISPLAY":
     room['display'] = action.result

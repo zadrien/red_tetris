@@ -32,6 +32,12 @@ export const onPlayers = () => {
     }
 }
 
+export const onStart = () => ({
+  event: "START",
+  handle: ROOM,
+  state: "START"
+})
+
 export const emitStart = () => {
   return {
     event: "START",

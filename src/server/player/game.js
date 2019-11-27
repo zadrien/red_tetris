@@ -22,12 +22,12 @@ class Game {
 		
     }
 
-    info(i) { // error value malus
-		var r = (i -1) - this.malus
-		console.log(r)
-		var line = [...this.map[r]]
-		return line
-    }
+  info() { // error value malus
+	var copy = copyMap(this.map);
+	if (this.piece)
+	  remove(copy, this.piece, this.x, this.y);
+	return copy;
+  }
     
     add(piece) {
 		console.log(piece)
@@ -170,7 +170,7 @@ class Game {
 				copy.splice(0, 0, [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ])
 			}
 			this.map = copy
-			showMap(this.map)
+//			showMap(this.map)
 			return r.length
 		}
 		return 0
