@@ -15,7 +15,6 @@ export const onDisplay = () => {
 
 }
 
-
 export const onHost = () => {
     return {
 	event: "HOST",
@@ -61,6 +60,12 @@ export const startGame = (start) => {
     start
   }
 }
+
+export const onGameOver = () => ({
+	event: "GAMEOVER",
+	handle: "ROOM",
+	state: "GAMEOVER"
+})
 
 export const emitQuit = () => ({
   emit: true,

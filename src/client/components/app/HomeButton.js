@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setInterface } from '../../actions/menu'
 import { onCreation, onFetch, emitFetch } from '../../actions/listing'
-import { onJoined, onQuit, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/room'
+import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/room'
 
 
 const playBut = ({style, onClick}) => {
@@ -31,7 +31,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(onDisplay())
     dispatch(onQuit())
     dispatch(onStart())
-
+    dispatch(onGameOver())
+    
     window.addEventListener('keydown', function (e) { // replace this event
       console.log(e.keyCode)
       var key = e.keyCode

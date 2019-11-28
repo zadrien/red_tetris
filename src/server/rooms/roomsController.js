@@ -2,11 +2,19 @@ import _ from 'lodash'
 import Tetraminos from '../player/tetraminos'
 import { showMap } from '../player/helpers'
 
+function selectMode(mode) {
+	if (mode === "classic")
+		return false;
+	else if (mode === "invisible")
+		return true;
+	return false;
+}
+
 class Lobby {
     constructor(id, name, mode) {
 		this.id = id
 		this.name = name
-		this.mode = mode
+		this.mode = selectMode(mode)
 		
 		this.host = undefined
 		this.users = {}
@@ -19,7 +27,7 @@ class Lobby {
 
     newPlayer(player) {
 		console.log("New player:", player.socket.id)
-
+		console.log(this.mode)
 		this.users[player.socket.id] = player;
 		player.socket.emit("JOINED", { state: "JOINED", room: { id: this.id, name: this.name, mode: this.mode } })
 		if (this.host === undefined) {
@@ -60,7 +68,7 @@ class Lobby {
 			var id = Object.keys(this.users)
 			for (var i = 0; i < id.length; i++) {
 				this.users[id[i]].isPlaying = true;
-				this.users[id[i]].start(this.pieceCallback.bind(this),
+				this.users[id[i]].start(this.mode, this.pieceCallback.bind(this),
 										this.mallusCallback.bind(this),
 										this.winnerCallback.bind(this),
 										this.endGameCallback.bind(this))
@@ -68,24 +76,29 @@ class Lobby {
 		}
     }
 
-  endGameCallback(id) {
-	var player = this.users[id]
-	console.log("endGameCallback: players objects:",  this.users)
-	if (!player)
-	  return
-	if (player.isPlaying)
-	  player.isPlaying = false;
-	var stillPlaying = _.find(this.users, function(p) { return p.isPlaying === true })
-	if (_.isEmpty(stillPlaying)) {
-	  this.start = false;
-	  console.log("no one is playing")
-	  console.log(this.host);
-	  this.host.emit("START", { start: this.start })
-	  return
-	}
-	console.log("Someone is stil playing...", stillPlaying)
+	endGameCallback(id) {
+		var player = this.users[id]
+		console.log("endGameCallback: players objects:",  this.users)
+		if (!player)
+			return
+		if (player.isPlaying)
+			player.isPlaying = false;
+		var stillPlaying = _.find(this.users, function(p) { return p.isPlaying === true })
+		if (_.isEmpty(stillPlaying)) {
+			this.start = false;
+			console.log("no one is playing")
+			console.log(this.host);
+			player.socket.emit("GAMEOVER", { win: true })
+			console.log("WINNER");
+			this.host.emit("START", { start: this.start })
+			return
+		} else {
+			player.socket.emit("GAMEOVER", { win: false })
+			console.log("LOSER");
+		}
+		console.log("Someone is stil playing...", stillPlaying)
 
-  }
+	}
   
     startBroadcast() {
 		var id = Object.keys(this.users)
