@@ -24,7 +24,7 @@ class Lobby {
 		player.socket.emit("JOINED", { state: "JOINED", room: { id: this.id, name: this.name, mode: this.mode } })
 		if (this.host === undefined) {
 			this.host = player.socket
-			console.log(`${this.player.socket.id} join the lobby ${this.name}`)
+			console.log(`${player.socket.id} join the lobby ${this.name}`)
 			player.socket.emit("HOST", { host: true })
 			player.socket.emit("START", { start: this.start })
 		} else
