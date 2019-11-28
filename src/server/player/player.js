@@ -1,18 +1,18 @@
 import Game from './game'
 
 class Player {
-  constructor(socket, name = "*********") {
-	this.socket = socket
-	this.name = name
-	this.nbr = 0
-	this.game = undefined
-	this.pause = false
-	this.isPlaying = false
-	console.log(`New player ${socket.id} ${name}`)
+	constructor(socket, name = "*********") {
+		this.socket = socket
+		this.name = name
+		this.nbr = 0
+		this.game = undefined
+		this.pause = false
+		this.isPlaying = false
+		console.log(`New player ${socket.id} ${name}`)
   }
-  
-  controller(data) {
-	console.log(`${this.socket.id} -- ${data}`)
+	
+	controller(data) {
+		console.log(`${this.socket.id} -- ${data}`)
 		if (data === 'LEFT')
 			this.game.left()
 		else if (data === 'UP')
@@ -26,7 +26,7 @@ class Player {
 	}
 
   // cb function for a new piece ! and for terminate the session
-	start(mode, getPiece, sendMallus, win, end) {
+	start(mode, getPiece, sendMallus, end) {
 		var cb = function (data) {
 			this.stopGame()
 			end(this.socket.id);
@@ -55,34 +55,35 @@ class Player {
 		this.isPlaying = true;
   }
   
-  stopGame(notifyLobby) {
-	if (this.itr === 0)
-	  return
-	clearInterval(this.itr)
-	this.isPlaying = false
-  }
-
-  getMalus() {
-	if (!this.isPlaying)
-	  return ;
-	if (!this.game.setMalus()) {
-	  clearInterval(this.itr)
-	  return false
+	stopGame(notifyLobby) {
+		if (this.itr === 0)
+			return
+		clearInterval(this.itr)
+		this.isPlaying = false
+		this.nbr = 0;
 	}
-	return true
-  }
 
-  info(game = false) {
-	var map;
-	if (this.game && game === true) // get party info
-	  map = this.game.info()
-	return {
-	  id: this.socket.id,
-	  name: this.name,
-	  isPlaying: this.isPlaying,
-	  map,
+	getMalus() {
+		if (!this.isPlaying)
+			return ;
+		if (!this.game.setMalus()) {
+			clearInterval(this.itr)
+			return false
+		}
+		return true
 	}
-  }
+
+	info(game = false) {
+		var map;
+		if (this.game && game === true) // get party info
+			map = this.game.info()
+		return {
+			id: this.socket.id,
+			name: this.name,
+			isPlaying: this.isPlaying,
+			map,
+		}
+	}
 }
 
 
