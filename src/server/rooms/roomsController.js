@@ -42,8 +42,10 @@ class Lobby {
 			console.log("Searching new host...")
 			this.host = undefined
 			var newHost = _.sample(this.users)
-			newHost.socket.emit("HOST", { host: true })
-			newHost.socket.emit("START", { start : this.start })
+			if (!newHost)
+				return
+			newHost.emit("HOST", { host: true })
+			newHost.emit("START", { start : this.start })
 			this.host = newHost.socket
 		}
     }
@@ -74,7 +76,6 @@ class Lobby {
 			console.log(`All games are done, the winner is ${player.name}`)
 			this.pieces = []
 			this.start = false;
-			console.log(this.host);
 			player.socket.emit("GAMEOVER", { win: true })
 			this.host.emit("START", { start: this.start })
 			return
