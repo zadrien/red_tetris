@@ -7,7 +7,7 @@ const room = (state = {}, action) => {
       return state
     return Object.assign({}, state, { menu: "ROOM", room: action.result.room })
   case "START":
-    room['start'] = true
+    room['start'] = action.result.start
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "DISPLAY":
     room['display'] = action.result
@@ -16,8 +16,11 @@ const room = (state = {}, action) => {
     room['host'] = action.result.host
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "PLAYERS":
-    room['players'] = action.result
-    return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
+      room['players'] = action.result
+      return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
+  case "GAMEOVER":
+	  room["win"] = action.result.win
+	  return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "QUIT":
     return Object.assign({}, state, { room: undefined, menu: "LISTING" })
   default:
