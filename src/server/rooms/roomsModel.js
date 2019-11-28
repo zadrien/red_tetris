@@ -16,8 +16,6 @@ roomSchema.statics = {
 			const duplicate = this.findOne({ id: newRoom.id })
 			if (!duplicate)
 				return Promise.reject(new Error("room already exist"))
-			if (newRoom.name.length <= 8)
-				return Promise.reject(new Error("invalid lobby name"))
 			var room = new Rooms(newRoom)
 			const p = await room.save()
 			return p
