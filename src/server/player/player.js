@@ -7,7 +7,7 @@ class Player {
 	this.nbr = 0
 	this.game = undefined
 	this.pause = false
-	this.run = false
+	this.isPlaying = false
 	console.log(`New player ${socket.id} ${name}`)
   }
   
@@ -52,18 +52,18 @@ class Player {
 		
 		console.log("[GAME START] - ", this.socket.id)
 		this.itr = setInterval(fn, 1000)
-		this.run = true;
+		this.isPlaying = true;
   }
   
   stopGame(notifyLobby) {
 	if (this.itr === 0)
 	  return
 	clearInterval(this.itr)
-	this.run = false
+	this.isPlaying = false
   }
 
   getMalus() {
-	if (!this.run)
+	if (!this.isPlaying)
 	  return ;
 	if (!this.game.setMalus()) {
 	  clearInterval(this.itr)
@@ -79,7 +79,7 @@ class Player {
 	return {
 	  id: this.socket.id,
 	  name: this.name,
-	  run: this.run,
+	  isPlaying: this.isPlaying,
 	  map,
 	}
   }
