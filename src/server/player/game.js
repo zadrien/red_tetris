@@ -11,23 +11,24 @@ import {     newMap,
 
 
 class Game {
-    constructor() {
+    constructor(socket, mode = false) {
+		this.socket = socket
 		this.map = newMap()
 		this.piece = undefined
 		this.x = 0
 		this.y = 0
-
-		this.lock = false;
+		this.mode = mode
+		this.lock = false
 		this.malus = 0
 		
     }
 
-    info(i) { // error value malus
-		var r = (i -1) - this.malus
-		console.log(r)
-		var line = [...this.map[r]]
-		return line
-    }
+  info() { // error value malus
+	var copy = copyMap(this.map);
+	if (this.piece)
+	  remove(copy, this.piece, this.x, this.y);
+	return copy;
+  }
     
     add(piece) {
 		console.log(piece)
@@ -40,6 +41,7 @@ class Game {
 		if (placeable(cpy, this.piece, this.x, this.y)) {
 			this.map = cpy
 			showMap(this.map)
+			this.socket.emit("DISPLAY", this.map)
 			return true
 		} else {
 			return false
@@ -68,6 +70,12 @@ class Game {
 				this.map = copy
 			}
 		}
+		if (this.mode === true) {
+			copy = copyMap(this.map)
+			remove(copy, this.piece, this.x, this.y)
+			this.socket.emit("DISPLAY", copy)
+		} else
+			this.socket.emit("DISPLAY", this.map)
 		showMap(this.map)
 		return true
     }
@@ -85,6 +93,7 @@ class Game {
 			this.map = copyMap(copy)
 			remove(copy, this.piece, this.x, this.y)
 		}
+		this.socket.emit("DISPLAY", this.map)
 		delete this.piece
 		return true
     }
@@ -102,6 +111,12 @@ class Game {
 				this.y++
 				this.map = copy
 				showMap(this.map)
+				if (this.mode == true) {
+					copy = copyMap(this.map)
+					remove(copy, this.piece, this.x, this.y)
+					this.socket.emit("DISPLAY", copy)
+				} else
+					this.socket.emit("DISPLAY", this.map)
 				return true
 			} else {
 				console.log("//////can't move doown piece\\\\\\")
@@ -123,6 +138,13 @@ class Game {
 				console.log("lefteable!")
 				this.x--
 				this.map = copy
+				if (this.mode == true) {
+					copy = copyMap(this.map)
+					remove(copy, this.piece, this.x, this.y)
+					this.socket.emit("DISPLAY", copy)
+				} else
+					this.socket.emit("DISPLAY", this.map)
+//				this.socket.emit("DISPLAY", this.map)			
 				showMap(this.map)
 			}
 		}
@@ -139,6 +161,13 @@ class Game {
 				this.x++
 				this.map = copy
 				showMap(this.map)
+				if (this.mode == true) {
+					copy = copyMap(this.map)
+					remove(copy, this.piece, this.x, this.y)
+					this.socket.emit("DISPLAY", copy)
+				} else
+					this.socket.emit("DISPLAY", this.map)
+//				this.socket.emit("DISPLAY", this.map)
 			}
 		}
     }
@@ -148,14 +177,20 @@ class Game {
 			return
 		this.lock = true;
 		var copy = copyMap(this.map)
-	var piece = copyMap(this.piece)
+		var piece = copyMap(this.piece)
 		
 		if (remove(copy, piece, this.x, this.y)) {
 			rotateClockwise(piece)
 			if (placeable(copy, piece, this.x, this.y)) {
 				this.map = copy
 				this.piece = piece
-				showMap(this.map)		
+				showMap(this.map)
+				if (this.mode == true) {
+					copy = copyMap(this.map)
+					remove(copy, this.piece, this.x, this.y)
+					this.socket.emit("DISPLAY", copy)
+				} else
+					this.socket.emit("DISPLAY", this.map)
 			}
 		}
 		this.lock = false;
@@ -170,7 +205,7 @@ class Game {
 				copy.splice(0, 0, [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ])
 			}
 			this.map = copy
-			showMap(this.map)
+			this.socket.emit("DISPLAY", this.map)
 			return r.length
 		}
 		return 0
