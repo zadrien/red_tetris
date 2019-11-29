@@ -44,8 +44,8 @@ class Lobby {
 			var newHost = _.sample(this.users)
 			if (!newHost)
 				return
-			newHost.emit("HOST", { host: true })
-			newHost.emit("START", { start : this.start })
+			newHost.socket.emit("HOST", { host: true })
+			newHost.socket.emit("START", { start : this.start })
 			this.host = newHost.socket
 		}
     }
