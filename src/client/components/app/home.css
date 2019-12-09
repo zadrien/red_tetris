@@ -1,0 +1,17 @@
+#form-name {
+    padding: 1em;
+}
+
+#form-name input {
+    border:none;
+    padding: 1em;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.2);
+}
+
+#form-name input, #form-name input::placeholder {
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
