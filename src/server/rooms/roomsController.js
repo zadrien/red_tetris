@@ -82,7 +82,7 @@ class Lobby {
 		} else {
 			player.socket.emit("GAMEOVER", { win: false })
 		}
-		console.log("Someone is stil playing...", stillPlaying)
+		console.log("Someone is still playing...", stillPlaying)
 
 	}
   

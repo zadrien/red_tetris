@@ -50,7 +50,7 @@ class Player {
 		this.socket.on("disconnect", cb)
 		this.socket.on("QUIT", cb)
 		
-		console.log("[GAME START] - ", this.socket.id)
+		console.log(`[GAME START] - ${this.name} ${this.socket.id}`)
 		this.itr = setInterval(fn, 1000)
 		this.isPlaying = true;
   }
@@ -85,6 +85,5 @@ class Player {
 		}
 	}
 }
-
 
 module.exports =  Player

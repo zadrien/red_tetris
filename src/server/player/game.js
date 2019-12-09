@@ -1,13 +1,14 @@
-import {     newMap,
-	     copyMap,
-	     showMap,
-	     remove,
-	     placeable,
-	     fillLine,
-	     fullLine,
-	     rotateClockwise,
-	     rotateUndo
-       } from './helpers'
+import {
+	newMap,
+	copyMap,
+	showMap,
+	remove,
+	placeable,
+	fillLine,
+	fullLine,
+	rotateClockwise,
+	rotateUndo
+} from './helpers'
 
 
 class Game {
@@ -101,10 +102,8 @@ class Game {
     down(instant = false) {
 		if (this.lock)
 			return
-		if (!this.piece) {
-			console.log("piece is undefined")
+		if (!this.piece)
 			return false
-		}
 		var copy = copyMap(this.map)
 		if (remove(copy, this.piece, this.x, this.y)) {
 			if (placeable(copy, this.piece, this.x, this.y+1)) {
@@ -132,10 +131,8 @@ class Game {
 		if (!this.piece)
 			return
 		var copy = copyMap(this.map)
-
 		if (remove(copy, this.piece, this.x, this.y)) {
 			if (placeable(copy, this.piece, this.x - 1, this.y)) {
-				console.log("lefteable!")
 				this.x--
 				this.map = copy
 				if (this.mode == true) {
@@ -144,7 +141,6 @@ class Game {
 					this.socket.emit("DISPLAY", copy)
 				} else
 					this.socket.emit("DISPLAY", this.map)
-//				this.socket.emit("DISPLAY", this.map)			
 				showMap(this.map)
 			}
 		}
@@ -155,7 +151,6 @@ class Game {
 		if (!this.piece)
 			return
 		var copy = copyMap(this.map)
-
 		if (remove(copy, this.piece, this.x, this.y)) {
 			if (placeable(copy, this.piece, this.x + 1, this.y)) {
 				this.x++
@@ -167,7 +162,6 @@ class Game {
 					this.socket.emit("DISPLAY", copy)
 				} else
 					this.socket.emit("DISPLAY", this.map)
-//				this.socket.emit("DISPLAY", this.map)
 			}
 		}
     }
@@ -177,8 +171,7 @@ class Game {
 			return
 		this.lock = true;
 		var copy = copyMap(this.map)
-		var piece = copyMap(this.piece)
-		
+		var piece = copyMap(this.piece)		
 		if (remove(copy, piece, this.x, this.y)) {
 			rotateClockwise(piece)
 			if (placeable(copy, piece, this.x, this.y)) {
