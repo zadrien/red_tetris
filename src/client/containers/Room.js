@@ -32,7 +32,7 @@ const Room = ({ room, onLeave }) => {
 
         <div className="p-2 width-100 d-flex row just-center mx-auto">
           <Display/>
-          {/* <Players /> */}
+          <Players />
         </div>
       </div>
     )
