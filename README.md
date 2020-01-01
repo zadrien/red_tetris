@@ -2,9 +2,9 @@
 
 An online multiplayer game
 
-![image](./img/1.png)
-![image](./img/2.png)
-![image](./img/3.png)
+![image](./img/1.jpg)
+![image](./img/2.jpg)
+![image](./img/3.jpg)
 
 ## To do list
 - [x] server
@@ -73,7 +73,7 @@ URL is not yet editable in `params.js`, change it directly inside `package.json`
 As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
 
 ```
-     Updated: 2020/01/02 00:28:53 by zadrien          ###   ########.fr         
+     Updated: 2020/01/02 00:31:46 by zadrien          ###   ########.fr         
 ```
 
 
