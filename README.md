@@ -3,6 +3,8 @@
 An online multiplayer game
 
 ![image](./img/1.png)
+![image](./img/2.png)
+![image](./img/3.png)
 ## Launch the project with docker
 
 Just do:
@@ -66,7 +68,7 @@ URL is not yet editable in `params.js`, change it directly inside `package.json`
 As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
 
 ```
-     Updated: 2020/01/02 00:22:15 by zadrien          ###   ########.fr         
+     Updated: 2020/01/02 00:23:14 by zadrien          ###   ########.fr         
 ```
 
 
