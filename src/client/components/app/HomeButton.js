@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { onPlayerName } from '../../actions/username';
+import { onPlayerName, emitPlayer, onPlayer, onTrigger, onErrorName } from '../../actions/username';
 import { setInterface } from '../../actions/menu';
 import { onCreation, onFetch, emitFetch } from '../../actions/listing';
 import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/room';
@@ -8,7 +8,8 @@ import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, o
 import './home.css';
 import '../../global.css';
 
-const playBut = ({onSubmit}) => {
+const playBut = ({socket, onSubmit, initListener}) => {
+  initListener()
   return (
     <div className="main-menu">
       <h1 className="title">Red Tetris</h1>
@@ -21,34 +22,38 @@ const playBut = ({onSubmit}) => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  socket: state.socket,
   active: false,
   style: ownProps.style
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-
-  onSubmit: (e) => {
-    e.preventDefault();
-
-    let nickname = e.target.nickname.value;
-    if (!nickname || nickname === "" || nickname.length === 0 || /\W+/.test(nickname))
-      return ;
-
-    dispatch(onPlayerName(nickname));
-    dispatch(setInterface("LISTING"));
-    dispatch(onCreation());
-    dispatch(onFetch());
-    dispatch(emitFetch({skip: 0, limit: 5}));
-    dispatch(onJoined());
-    dispatch(onHost());
-    dispatch(onPlayers());
-    dispatch(onDisplay());
-    dispatch(onQuit());
-    dispatch(onStart());
-    dispatch(onGameOver());
+  initListener: () => {
+    var socket = dispatch(onTrigger())
+      
+    socket.on("login", (data) => {
+      console.log(data)
+      if (data.err) {
+        dispatch(onErrorName(data.err))
+        return 
+      }
+      dispatch(onPlayerName(data.name));
+      dispatch(onCreation());
+      dispatch(onFetch());
+//      dispatch(emitFetch({skip: 0, limit: 5}));
+        dispatch(onJoined());
+        dispatch(onHost());
+        dispatch(onPlayers());
+        dispatch(onDisplay());
+        dispatch(onQuit());
+        dispatch(onStart());
+      dispatch(onGameOver());
+      dispatch(setInterface("LISTING"));
+    })
     
     window.addEventListener('keydown', function (e) { // replace this event
-      console.log(e.keyCode)
+      if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1)
+        e.preventDefault()
       var key = e.keyCode
       if (key == 38) { // UP
         dispatch(emitMove("UP"));
@@ -62,6 +67,17 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(emitMove("SPACE"));
       }
     })
+
+  },
+  
+  onSubmit: (e) => {
+    e.preventDefault();
+    
+    let nickname = e.target.nickname.value;
+    if (!nickname || nickname === "" || nickname.length === 0 || /\W+/.test(nickname))
+      return ;
+    
+    dispatch(emitPlayer(nickname))
   }
 })
 

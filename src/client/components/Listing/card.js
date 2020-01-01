@@ -2,10 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { onLoading, onJoined, emitJoin } from '../../actions/listing'
 
-const room = ({ rooms, id, user, onClick }) => {
-//  console.log("card:", rooms, id)
-  var room = rooms[id]
-//  console.log(rooms[id])
+const room = ({ room, user, onClick }) => {
   if (room) {
     return (
       <div onClick={() => onClick(user)} className="room-list-item">
@@ -27,9 +24,8 @@ const room = ({ rooms, id, user, onClick }) => {
 
 
 const mapStateToProps = (state, ownProps) => ({
-  rooms: state.rooms.list,
-  id: ownProps.id,
-  user: state.user
+  room: ownProps.room,
+  user: state.user,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

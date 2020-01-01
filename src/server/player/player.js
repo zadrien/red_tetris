@@ -9,9 +9,17 @@ class Player {
 		this.pause = false
 		this.isPlaying = false
 		console.log(`New player ${socket.id} ${name}`)
+
+		this.controller = this.controller.bind(this)
   }
-	
-	controller(data) {
+
+
+  initGame(mode) {
+	this.game = new Game(this.socket, mode)
+	this.socket.emit("DISPLAY", this.game.map)
+  }
+  
+  controller(data) {
 		console.log(`${this.socket.id} -- ${data}`)
 		if (data === 'LEFT')
 			this.game.left()
@@ -27,6 +35,7 @@ class Player {
 
   // cb function for a new piece ! and for terminate the session
 	start(mode, getPiece, sendMallus, end) {
+		this.socket.on('CONTROLLER', this.controller)
 		var cb = function (data) {
 			this.stopGame()
 			end(this.socket.id);
@@ -46,18 +55,18 @@ class Player {
 			if (mode === false)
 				this.socket.emit("DISPLAY", this.game.map)
 		}.bind(this)
-		this.game = new Game(this.socket, mode)
 		this.socket.on("disconnect", cb)
 		this.socket.on("QUIT", cb)
 		
 		console.log(`[GAME START] - ${this.name} ${this.socket.id}`)
-		this.itr = setInterval(fn, 1000)
+		this.itr = setInterval(fn, 900)
 		this.isPlaying = true;
   }
   
-	stopGame(notifyLobby) {
+  stopGame() {
 		if (this.itr === 0)
 			return
+		this.socket.removeListener('CONTROLLER', this.controller)
 		clearInterval(this.itr)
 		this.isPlaying = false
 		this.nbr = 0;
@@ -73,15 +82,12 @@ class Player {
 		return true
 	}
 
-	info(game = false) {
-		var map;
-		if (this.game && game === true) // get party info
-			map = this.game.info()
+	info() {
 		return {
-			id: this.socket.id,
-			name: this.name,
-			isPlaying: this.isPlaying,
-			map,
+		  id: this.socket.id,
+		  name: this.name,
+		  isPlaying: this.isPlaying,
+		  display: this.game.info()
 		}
 	}
 }

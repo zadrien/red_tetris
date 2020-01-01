@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Display, Players, Host } from '../components/room'
-import { emitQuit } from '../actions/room'
+import { emitQuit, winValidate } from '../actions/room'
 
 import '../global.css';
 
@@ -16,7 +16,7 @@ const AppStyle = {
   alignItems: "center"
 }
 
-const Room = ({ room, onLeave }) => {
+const Room = ({ room, onLeave, onWin }) => {
 
   if (room) {
     return (
@@ -27,13 +27,17 @@ const Room = ({ room, onLeave }) => {
 
         <div className="d-flex just-center mx-auto width-25">
           <Host />
-          <div className="bob-btn secondary" onClick={onLeave}>Leave</div>
+          <div className="bob-btn secondary" onClick={() => onLeave(room)}>Leave</div>
         </div>
 
         <div className="p-2 width-100 d-flex row just-center mx-auto">
           <Display/>
-          <Players />
         </div>
+        <Players />
+        {room.winner === undefined ? null :
+         (room.winner === true ? <div onClick={onWin}>You won</div> : (room.winner === false ? <div onClick={onWin}>You lose</div>: null))
+        
+        }
       </div>
     )
   }
@@ -47,10 +51,15 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  onLeave: () => {
+  onLeave: (room) => {
     console.log("quit lobby!")
-    dispatch(emitQuit())
+    dispatch(emitQuit(room))
+  },
+  onWin: () => {
+    console.log("OK")
+    dispatch(winValidate())
   }
+  
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

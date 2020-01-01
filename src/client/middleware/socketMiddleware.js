@@ -8,6 +8,7 @@ export default function socketMiddleware() {
       return next(action);
     }
     const {
+	  trigger,
       event,
       leave,
       emit,
@@ -16,6 +17,9 @@ export default function socketMiddleware() {
       ...rest
     } = action;
 
+	if (trigger)
+	  return socket
+	
     if (!event) {
       return next(action);
     }
@@ -26,11 +30,13 @@ export default function socketMiddleware() {
 
     if (emit) {
       console.log("payload:", payload)
-      return socket.emit(event, payload)
+      socket.emit(event, payload)
+	  return socket
     }
-    
+	
     let handleEvent = handle;
     if (typeof handleEvent === 'string') {
+	  console.log("HIIII2")
       handleEvent = result => dispatch({type: handle, result, ...rest})
     }
 

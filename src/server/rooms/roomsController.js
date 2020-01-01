@@ -3,127 +3,132 @@ import Tetraminos from '../player/tetraminos'
 import { showMap } from '../player/helpers'
 
 class Lobby {
-    constructor(id, name, mode) {
-		this.id = id
-		this.name = name
-		this.mode = selectMode(mode)
-		
-		this.host = undefined
-		this.users = {}
-		this.start = false
-		this.pieces = []
-		this.broad = setInterval(function () {
-			this.startBroadcast()
-		}.bind(this), 500)
-    }
+  constructor(io, id, name, mode) {
+	this.io = io.sockets.in(id)
+	this.id = id
+	this.name = name
+	this.mode = selectMode(mode)
+	this.host = undefined
+	this.users = {}
+	this.start = false
+	this.pieces = []
+	this.broad = setInterval(function () {
+	  this.startBroadcast()
+	}.bind(this), 500)
+  }
 
-    newPlayer(player) {
-		if (this.start)
-			return false
-		this.users[player.socket.id] = player;
-		player.socket.emit("JOINED", { state: "JOINED", room: { id: this.id, name: this.name, mode: this.mode } })
-		if (this.host === undefined) {
-			this.host = player.socket
-			console.log(`${player.socket.id} join the lobby ${this.name}`)
-			player.socket.emit("HOST", { host: true })
-			player.socket.emit("START", { start: this.start })
-		} else
-			player.socket.emit("HOST", { host: false })
-		return true
-    }
-    
-    leave(socket) {
-		console.log(`User(${socket.id}) leaving room...`)
-		if (this.start)
-			this.endGameCallback(socket.id)
-		delete this.users[socket.id]
-		socket.emit("QUIT", { state: "QUIT" })		
-		if (socket.id === this.host.id) {
-			console.log("Searching new host...")
-			this.host = undefined
-			var newHost = _.sample(this.users)
-			if (!newHost)
-				return
-			newHost.socket.emit("HOST", { host: true })
-			newHost.socket.emit("START", { start : this.start })
-			this.host = newHost.socket
-		}
-    }
-    
-    startGame(data, socket) {
-		if (socket.id === this.host.id) {
-			console.log(`Starting game: ${this.id}`)
-			this.start = true;
-			this.host.emit("START", { start: this.start })
-			var id = Object.keys(this.users)
-			for (var i = 0; i < id.length; i++) {
-				this.users[id[i]].isPlaying = true;
-				this.users[id[i]].start(this.mode, this.pieceCallback.bind(this),
-										this.mallusCallback.bind(this),
-										this.endGameCallback.bind(this))
-			}
-		}
-    }
+  newPlayer(user) {
+	if (this.start)
+	  return false
+	this.users[user.socket.id] = user
+	user.socket.join(this.id)
+	user.socket.emit("JOINED", { state: "JOINED", room: {id: this.id, name: this.name, mode: this.mode }})
+	if (this.host === undefined) {
+	  this.host = user.socket
+	  user.socket.emit("HOST", { host: true })
+	} else
+	  user.socket.emit("HOST", { host: false })
+	// Adding event here
+	user.initGame(this.mode)
+	return true
+  }
 
-	endGameCallback(id) {
-		var player = this.users[id]
-		if (!player)
-			return
-		if (player.isPlaying)
-			player.isPlaying = false;
-		var stillPlaying = _.find(this.users, function(p) { return p.isPlaying === true })
-		if (_.isEmpty(stillPlaying)) {
-			console.log(`All games are done, the winner is ${player.name}`)
-			this.pieces = []
-			this.start = false;
-			player.socket.emit("GAMEOVER", { win: true })
-			this.host.emit("START", { start: this.start })
-			return
-		} else {
-			player.socket.emit("GAMEOVER", { win: false })
-		}
-		console.log("Someone is still playing...", stillPlaying)
-
+  // EVENT SHOULD BE IN INDEX.JS
+  leave(socket) {
+	console.log(`User(${socket.id} leaving room...`)
+	if (this.start)
+	  this.endGameCallback(socket.id)
+	var user = this.users[socket.id]
+	user.socket.emit("LEAVE", { state: "QUIT" })
+	user.socket.leave(this.id)
+	delete this.users[socket.id]
+	
+	if (socket.id === this.host.id) {
+	  console.log("Searching a new host..")
+	  this.host = undefined
+	  var newHost = _.sample(this.users)
+	  if (!newHost)
+		return
+	  this.host = newHost.socket
+	  this.host.emit("HOST", { host: true })
+	  this.host.emit("START", { start: this.start })
 	}
-  
-    startBroadcast() {
-		var id = Object.keys(this.users)
-		if (!id)
-			return 
-		for (var i = 0; i < id.length; i++) {
-			var players = _.omit(this.users, id[i])
-			var obj = []
-			_.map(players, (v, k) => {
-				obj.push(v.info(this.start));
-			})
-			this.users[id[i]].socket.emit("PLAYERS", obj)
-		}
-    }
-    
-    pieceCallback(id, nbr) {
-		var p = this.pieces[nbr]
-		if (!p) {
-			p = Tetraminos()
-			this.pieces.push(p)
-		}
-		return p
-    }
 
-    mallusCallback(id) {
-		_.map(this.users, (v, k) => {
-			if (k === id)
-				return
-			v.getMalus()
-		})
-    }
+  }
+
+  // EVENT SHOULD BE IN INDEX.JS
+  startGame(socket) {
+	if (socket.id === this.host.id) {
+	  console.log(`Stating game: ${this.id}`)
+	  this.start = true
+	  this.host.emit("START", { start: this.start })
+	  var ids = Object.keys(this.users)
+	  ids.map((id, k) => {
+		this.users[id].initGame(this.mode)
+		this.users[id].isPlaying = true;
+		this.users[id].start(this.mode, this.pieceCallback.bind(this),
+							 this.mallusCallback.bind(this),
+							 this.endGameCallback.bind(this))
+	  })
+	}
+  }
+  
+  endGameCallback(id) {
+	var user = this.users[id]
+	if (!user)
+	  return
+	if (user.isPlaying) {
+	  user.isPlaying = false
+	  user.stopGame()
+	}
+	var stillPlaying = _.find(this.users, function(u) { return u.isPlaying === true })
+	if (_.isEmpty(stillPlaying)) {
+	  console.log(`All game are finished, the winner is ${user.name}`)
+	  this.pieces = []
+	  this.start = false
+	  this.io.in(this.id).emit("GAMEOVER", { winner: user.name })
+	  this.host.emit("START", { start: this.start })
+	  return
+	} else
+	  user.socket.emit("GAMEOVER", { winner: false }) // maybe not necessary
+	
+  }
+
+  startBroadcast() {
+	var id = Object.keys(this.users)
+	if (!id)
+	  return
+	var arr = []
+	id.map((v, k) => {
+	  arr.push(this.users[v].info())
+	})
+	this.io.in(this.id).emit("PLAYERS", arr)
+  }
+
+  pieceCallback(id, nbr) {
+	var p = this.pieces[nbr]
+	if (!p) {
+	  p = Tetraminos()
+	  this.pieces.push(p)
+	}
+	return p
+  }
+
+  mallusCallback(id) {
+	_.map(this.users,(user, index) => {
+	  if (index === id)
+		return
+	  user.getMalus()
+	})
+  }
 }
 
 function selectMode(mode) {
-	if (mode === "classic")
-		return false;
-	else if (mode === "invisible")
-		return true;
+  if (mode === "classic")
 	return false;
+  else if (mode === "invisible")
+	return true;
+  return false;
 }
 
 module.exports = Lobby

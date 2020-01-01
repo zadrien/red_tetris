@@ -16,30 +16,37 @@ const color = {
 
 const box = (c) => {
   return {
-    width: "20px",
-    height: "20px",
+    margin: ".5px",
+    width: "35px",
+    height: "35px",
     backgroundColor: color[c]
   }
 }
 
 const displayStyle = {
-  width: "200px",
-  height: "400px",
-  backgroundColor: "black"
+  marginTop: ".5px",
+  width: "auto",
+  height: "auto",
+  backgroundColor: "#dd4545",
+  textAlign: "center",
+  padding: "5px",
+  borderRadius: "5px"
 }
 
 const lineStyle = {
   display: "flex",
-  flexDirection: "row"
+  flexDirection: "row",
+  justifyContent: "center"
 }
-const render = (line) => {
-  return <div style={lineStyle}>{ line.map((v, k) => (
-    <div style={box(v)}/>
+const render = (line, index) => {
+  return <div key={index} style={lineStyle}>{ line.map((v, k) => (
+    <div key={k} style={box(v)}/>
   ))}</div>
 }
 
 
 const Display = ({display}) => {
+  console.log(display)
   if (!display) {
     return (
       <div style={displayStyle}>
@@ -49,7 +56,7 @@ const Display = ({display}) => {
 
   return (
     <div style={displayStyle}>
-      {display.map((v, k) => render(v))}
+      {display.map((v, k) => render(v, k))}
     </div> 
   )
 }

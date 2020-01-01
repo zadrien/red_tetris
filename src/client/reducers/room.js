@@ -1,4 +1,6 @@
-const room = (state = {}, action) => {
+import _ from 'lodash'
+
+const room = (state = { room: { display: "lol" }}, action) => {
   var room = Object.assign({}, state.room)
   
   switch (action.state) {
@@ -16,11 +18,23 @@ const room = (state = {}, action) => {
     room['host'] = action.result.host
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "PLAYERS":
-      room['players'] = action.result
-      return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
+//	var obj = action.result.find((e) => e.name !== state.user.name)
+	var obj = action.result.filter(function (e) {
+	  return e.name !== state.user.name
+	})
+	if (!obj)
+	  return state
+    room['players'] = obj
+    return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "GAMEOVER":
-	  room["win"] = action.result.win
-	  return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
+	if (action.result.winner === state.user.name)
+	  room["winner"] = true
+	else
+	  room["winner"] = false
+	return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
+  case "RESET":
+	delete room.winner
+	return Object.assign({}, state, { room: room })
   case "QUIT":
     return Object.assign({}, state, { room: undefined, menu: "LISTING" })
   default:

@@ -1,19 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
+// import Row from 'react-bootstrap/lib/Row'
+// import Col from 'react-bootstrap/lib/Col'
 
 const style = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   
-  width: "110px",
-  height: "55px",
-  backgroundColor: "grey",
-  margin: "5px",
-  paddingTop:"5px"
+  width: "auto",
+  height: "236px",
+  backgroundColor: "#dd4545",
+  padding: "5px",
+  borderRadius: "3px",
+
+  marginRight: "5px"
 }
 
 const color = {
@@ -32,8 +34,8 @@ const lineStyle = {
   flexDirection: "row"
 }
 
-const render = (line) => {
-  return <div style={lineStyle}>{ line.map((v, k) => (
+const render = (line, i) => {
+  return <div key={i} style={lineStyle}>{ line.map((v, k) => (
     <div style={box(v)}/>
   ))}</div>
 }
@@ -50,7 +52,7 @@ const Card = ({ player }) => (
   <div style={style}>
     <h6>{player.name}</h6>
     <div>
-      {player.line === undefined ? null : render(player.line) }
+      {player.display.map((v, k) => render(v, k))}
     </div>
   </div>
 )

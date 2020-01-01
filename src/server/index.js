@@ -3,8 +3,9 @@ import debug from 'debug'
 import connectToDatabase from './config';
 import { roomsAPI } from './rooms'
 import Game from './player/game'
+import { Controller as userController } from './player/playerController'
+//var userController = require("./player/playerController")()
 var url = require('url');
-
 
 const logerror = debug('tetris:error')
 , loginfo = debug('tetris:info')
@@ -32,6 +33,7 @@ const initApp = (app, params, cb) => {
 
 connectToDatabase("mongodb://database:27017/rooms")
 
+//console.log(userController.login())
 const initEngine = io => {
     io.on('connection', function (socket) {
 		loginfo("Socket connected: " + socket.id)
@@ -43,35 +45,37 @@ const initEngine = io => {
 			}
 		});
 
-		socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
-		socket.on("JOIN", async function (data) {
-			var obj = await roomsAPI.accessRoom(data, socket)
-			var ctrl = function (data) {
-				obj.player.controller(data)
+		socket.on('login', async function(data) {
+			console.log("logiiin evennnnnt")
+			var player
+			try {
+				console.log("the fuuuck")
+				player = await userController.login(socket, data)
+				if (!player) {
+					return
+				}
+				socket.emit("login", { name: player.name })
+			} catch (err) {
+				console.log("YAAAAAH", err)
+				socket.emit("login", err)
+				return 
 			}
-			var start = function (data) {
-				obj.room.startGame(data, socket)
-			}
-
-			var leave = function(data) {
-				socket.removeListener("CONTROLLER", ctrl)
-				socket.removeListener("START", start)
-				socket.removeListener("QUIT", leave)
-				obj.room.leave(socket)
-			}
-			socket.on("CONTROLLER", ctrl)
-			socket.on("START", start)
-			socket.on("QUIT", leave)
+			console.log("??")
+			socket.on('FETCH', (data) => roomsAPI.fetch(io, socket, data))
+			socket.on('JOIN', (data) => roomsAPI.join(io, socket, data))
+			socket.on("LEAVE", (data) => roomsAPI.leave(socket, data))
+			socket.on("START", (data) => roomsAPI.start(socket, data))
 		})
 		
 		socket.on('disconnect', function() {
 			loginfo('Socket disconnected: ' + socket.id);
-
+			userController.logout(socket)
+			
 		})
     })
 }
 
-export function create(params){
+export function create(params) {
     const promise = new Promise( (resolve, reject) => {
 		const app = require('http').createServer()
 		initApp(app, params, () => {

@@ -37,11 +37,11 @@ export const onStart = () => ({
   state: "START"
 })
 
-export const emitStart = () => {
+export const emitStart = (id) => {
   return {
     event: "START",
     emit: true,
-    payload: "START"
+    payload: id
   }
 }
 
@@ -67,15 +67,20 @@ export const onGameOver = () => ({
 	state: "GAMEOVER"
 })
 
-export const emitQuit = () => ({
+export const emitQuit = (room) => ({
   emit: true,
-  event: "QUIT",
-  handle: ROOM,
-  state: "QUIT"
+  event: "LEAVE",
+  payload: room
 })
 
 export const onQuit = () => ({
-  event: "QUIT",
+  event: "LEAVE",
   handle: ROOM,
-  state: "QUIT"
+  state: "QUIT",
+})
+
+export const winValidate = () => ({
+  type: ROOM,
+  state: "RESET",
+  reset: true
 })

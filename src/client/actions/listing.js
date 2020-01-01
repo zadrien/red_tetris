@@ -1,9 +1,8 @@
 export const LISTING = 'LISTING'
 
 
-export const onFetch = () => ({
+export const onFetch = () => ({ // done
     event: "FETCH",
-//    emit: true,
     handle: LISTING,
     state: "FETCH"
 })
@@ -68,7 +67,7 @@ export const isCreating = (bool) => {
   }
 }
 
-export const onCreation = () => {
+export const onCreation = () => { //done
   return {
     event: "CREATION",
     type: LISTING,
