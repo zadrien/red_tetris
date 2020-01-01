@@ -8,7 +8,7 @@ An online multiplayer game
 
 ## To do list
 - [x] server
-- [] TDD
+- [ ] TDD
 
 ## Launch the project with docker
 
@@ -73,7 +73,7 @@ URL is not yet editable in `params.js`, change it directly inside `package.json`
 As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
 
 ```
-     Updated: 2020/01/02 00:27:10 by zadrien          ###   ########.fr         
+     Updated: 2020/01/02 00:28:53 by zadrien          ###   ########.fr         
 ```
 
 
