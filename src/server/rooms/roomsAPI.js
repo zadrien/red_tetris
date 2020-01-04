@@ -1,8 +1,9 @@
 import { Rooms } from './roomsModel';
-import Handler from './roomsHandler';
+import { create, find, restoreRooms } from './roomsHandler'
+//import Handler from './roomsHandler';
 import  Player from '../player/player';
 
-async function fetch(io, user, data) {
+export async function fetch(io, user, data) {
     try {
 		var rooms = await Rooms.read({}, {}, data.skip, data.limit)
 		var list = await Handler.restoreRooms(io)
@@ -12,7 +13,7 @@ async function fetch(io, user, data) {
     }
 }
 
-async function ping(user, room) {
+export async function ping(user, room) {
 //	console.log("PING")
 	try {
 //		console.log(room)
@@ -25,7 +26,7 @@ async function ping(user, room) {
 	}
 }
 
-async function join(io, user, data) {
+export async function join(io, user, data) {
 	var room
 	try {
 		console.log("Room info::", data)
@@ -42,7 +43,7 @@ async function join(io, user, data) {
 	}
 }
 
-async function leave(user, data) {
+export async function leave(user, data) {
 	console.log("event leave!!")
 	var room
 	try {
@@ -59,7 +60,7 @@ async function leave(user, data) {
 	}
 }
 
-async function start(user, data) {
+export async function start(user, data) {
 	var room
 	try {
 		console.log("Room id", data)
@@ -76,10 +77,10 @@ async function start(user, data) {
 	}
 }
 
-module.exports = {
-	fetch,
-	join,
-	leave,
-	start,
-	ping
-}
+// module.exports = {
+// 	fetch,
+// 	join,
+// 	leave,
+// 	start,
+// 	ping
+// }

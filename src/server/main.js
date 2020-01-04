@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+//import 'babel-polyfill'
 import params  from '../../params'
 import * as server from './index'
 

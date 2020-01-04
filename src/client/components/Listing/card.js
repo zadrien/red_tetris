@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { onLoading, onJoined, emitJoin, emitPing } from '../../actions/listing'
 
-const room = ({ room, user, onClick, Ping }) => {
+const Room = ({ room, user, onClick, Ping }) => {
 
   useEffect(() => {
     window.setTimeout(function(){Ping(room)}, 5000)
@@ -48,4 +48,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(room);
+export default connect(mapStateToProps, mapDispatchToProps)(Room);

@@ -1,15 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import createLogger from 'redux-logger'
-import thunk from 'redux-thunk'
+
 import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import { createLogger } from 'redux-logger'
 import { Provider } from 'react-redux'
-import {storeStateMiddleWare} from './middleware/storeStateMiddleWare'
-import TetrisApp from './reducers'
-import App from './containers/app'
+
+import {storeStateMiddleWare} from './client/middleware/storeStateMiddleWare'
+import socketMiddleware from './client/middleware/socketMiddleware'
 
 
-import socketMiddleware from './middleware/socketMiddleware'
+import TetrisApp from './client/reducers'
+import App from './client/containers/app'
+
 
 
 const initialState = {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { CreateForm } from '../components/Create'
+import CreateForm from '../components/Create/Form'
 import { setInterface } from '../actions/menu'
 
 const Create = ({ onClick }) => {

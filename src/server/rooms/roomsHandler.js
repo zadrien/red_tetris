@@ -8,7 +8,7 @@ const Rooms = {};
 /*
 ** Launch at Start
 */
-async function restoreRooms(io) {
+export async function restoreRooms(io) {
     try {
 		if (!_.isEmpty(Rooms))
 			return null;
@@ -27,7 +27,7 @@ async function restoreRooms(io) {
     }
 }
 
-async function create(io, room) {
+export async function create(io, room) {
     try {
 		var id = uuidv4()
 		var r = new Room(io, id, room.name, room.mode)
@@ -41,13 +41,13 @@ async function create(io, room) {
     }
 }
 
-function find(id) {
+export function find(id) {
     if (!id)
 		return undefined
     return Rooms[id]
 }
 
-function deleteRoom(id) {
+export function deleteRoom(id) {
     console.log("deleting room:", id)
     if (!Rooms[id]) {
 		return new Error("Room doesn't exist")
@@ -57,9 +57,9 @@ function deleteRoom(id) {
     return null
 }
 
-module.exports = {
-    create,
-    find,
-    deleteRoom,
-    restoreRooms
-}
+// module.exports = {
+//     create,
+//     find,
+//     deleteRoom,
+//     restoreRooms
+// }

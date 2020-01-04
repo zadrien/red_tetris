@@ -30,6 +30,7 @@ class Controller {
 	}
 }
 
-module.exports = {
-	Controller: new Controller()
-}
+export default new Controller()
+// module.exports = {
+// 	Controller: new Controller()
+// }

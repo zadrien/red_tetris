@@ -1,6 +1,6 @@
 import Game from './game'
 
-class Player {
+export default class Player {
 	constructor(socket, name = "*********") {
 		this.socket = socket
 		this.name = name
@@ -97,4 +97,4 @@ class Player {
 	}
 }
 
-module.exports =  Player
+//module.exports =  Player

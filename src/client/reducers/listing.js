@@ -41,7 +41,7 @@ const listing = (state = {}, action) => {
     return Object.assign({}, state, { rooms:  obj })
   case "JOINING":
     if (action.status) {
-	  if (actions.status === 'error') {
+	  if (action.status === 'error') {
 		// notify user
 	  } else if (action.status === 'success') {
 		// add room variable with information etc..

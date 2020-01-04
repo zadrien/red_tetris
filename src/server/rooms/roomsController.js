@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Tetraminos from '../player/tetraminos'
 import { showMap } from '../player/helpers'
 
-class Lobby {
+export default class Lobby {
 	constructor(io, id, name, mode) {
 		this.io = io.sockets.in(id)
 		this.id = id
@@ -147,4 +147,4 @@ function selectMode(mode) {
 	return false;
 }
 
-module.exports = Lobby
+//module.exports = Lobby

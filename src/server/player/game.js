@@ -11,7 +11,7 @@ import {
 } from './helpers'
 
 
-class Game {
+export default class Game {
     constructor(socket, mode = false) {
 		this.socket = socket
 		this.map = newMap()
@@ -206,4 +206,4 @@ class Game {
 }
 
 
-module.exports = Game
+//module.exports = Game
