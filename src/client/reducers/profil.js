@@ -2,17 +2,14 @@ const profil = (state = {}, action) => {
 
   switch (action.state) {
   case "NEW":
-	if (!action.name)
+	if (action.result.err)
+	  return Object.assign({}, state, { user: { err: action.result.err }})
+	if (!action.result.name)
 	  return state
 	var user = {
-	  name: action.name
+	  name: action.result.name
 	}
-    return Object.assign({}, state, { user: user })
-  case "ERROR":
-	var user = {
-	  err: action.err
-	}
-	return Object.assign({}, state, { user: user })
+    return Object.assign({}, state, { menu: "LISTING", user: user })
   default:
     return state
   }

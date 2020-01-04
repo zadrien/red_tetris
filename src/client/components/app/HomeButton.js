@@ -29,27 +29,15 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initListener: () => {
-    var socket = dispatch(onTrigger())
-      
-    socket.on("login", (data) => {
-      console.log(data)
-      if (data.err) {
-        dispatch(onErrorName(data.err))
-        return 
-      }
-      dispatch(onPlayerName(data.name));
-      dispatch(onCreation());
-      dispatch(onFetch());
-//      dispatch(emitFetch({skip: 0, limit: 5}));
-        dispatch(onJoined());
-        dispatch(onHost());
-        dispatch(onPlayers());
-        dispatch(onDisplay());
-        dispatch(onQuit());
-        dispatch(onStart());
-      dispatch(onGameOver());
-      dispatch(setInterface("LISTING"));
-    })
+    dispatch(onCreation());
+    dispatch(onFetch());
+    dispatch(onJoined());
+    dispatch(onHost());
+    dispatch(onPlayers());
+    dispatch(onDisplay());
+    dispatch(onQuit());
+    dispatch(onStart());
+    dispatch(onGameOver());
     
     window.addEventListener('keydown', function (e) { // replace this event
       if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1)
@@ -76,7 +64,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     let nickname = e.target.nickname.value;
     if (!nickname || nickname === "" || nickname.length === 0 || /\W+/.test(nickname))
       return ;
-    
+    dispatch(onPlayer())
     dispatch(emitPlayer(nickname))
   }
 })

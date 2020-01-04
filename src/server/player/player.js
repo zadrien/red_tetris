@@ -11,16 +11,24 @@ class Player {
 		console.log(`New player ${socket.id} ${name}`)
 
 		this.controller = this.controller.bind(this)
+		this.socket.on("CONTROLLER", this.controller)
   }
 
 
-  initGame(mode) {
-	this.game = new Game(this.socket, mode)
-	this.socket.emit("DISPLAY", this.game.map)
-  }
-  
-  controller(data) {
-		console.log(`${this.socket.id} -- ${data}`)
+	initGame(mode) {
+		this.nbr = 0
+		this.game = new Game(this.socket, mode)
+		this.socket.emit("DISPLAY", this.game.map)
+	}
+
+	Notify(event, data) {
+		this.socket.emit(event, data)
+	}
+	
+	controller(data) {
+		console.log(`${this.socket.id} - ${data}`)
+		if (!this.isPlaying)
+			return 
 		if (data === 'LEFT')
 			this.game.left()
 		else if (data === 'UP')
@@ -35,7 +43,6 @@ class Player {
 
   // cb function for a new piece ! and for terminate the session
 	start(mode, getPiece, sendMallus, end) {
-		this.socket.on('CONTROLLER', this.controller)
 		var cb = function (data) {
 			this.stopGame()
 			end(this.socket.id);
@@ -66,10 +73,8 @@ class Player {
   stopGame() {
 		if (this.itr === 0)
 			return
-		this.socket.removeListener('CONTROLLER', this.controller)
 		clearInterval(this.itr)
 		this.isPlaying = false
-		this.nbr = 0;
 	}
 
 	getMalus() {

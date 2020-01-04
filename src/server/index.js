@@ -33,7 +33,6 @@ const initApp = (app, params, cb) => {
 
 connectToDatabase("mongodb://database:27017/rooms")
 
-//console.log(userController.login())
 const initEngine = io => {
     io.on('connection', function (socket) {
 		loginfo("Socket connected: " + socket.id)
@@ -46,31 +45,27 @@ const initEngine = io => {
 		});
 
 		socket.on('login', async function(data) {
-			console.log("logiiin evennnnnt")
-			var player
+			var user
 			try {
-				console.log("the fuuuck")
-				player = await userController.login(socket, data)
-				if (!player) {
+				user = await userController.login(socket, data)
+				if (!user) {
 					return
 				}
-				socket.emit("login", { name: player.name })
+				socket.emit("login", { name: user.name })
 			} catch (err) {
-				console.log("YAAAAAH", err)
 				socket.emit("login", err)
 				return 
 			}
-			console.log("??")
-			socket.on('FETCH', (data) => roomsAPI.fetch(io, socket, data))
-			socket.on('JOIN', (data) => roomsAPI.join(io, socket, data))
-			socket.on("LEAVE", (data) => roomsAPI.leave(socket, data))
-			socket.on("START", (data) => roomsAPI.start(socket, data))
+			socket.on('FETCH', (data) => roomsAPI.fetch(io, user, data))
+			socket.on('JOIN', (data) => roomsAPI.join(io, user, data))
+			socket.on("LEAVE", (data) => roomsAPI.leave(user, data))
+			socket.on("START", (data) => roomsAPI.start(user, data))
+			socket.on("CHECK", (data) => roomsAPI.ping(user, data))
 		})
 		
 		socket.on('disconnect', function() {
 			loginfo('Socket disconnected: ' + socket.id);
-			userController.logout(socket)
-			
+			userController.logout(socket)			
 		})
     })
 }

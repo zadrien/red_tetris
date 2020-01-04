@@ -1,9 +1,5 @@
 import Player from './player'
 
-// function Controller(isLogged = {}) {
-// 	this.isLogged = isLogged
-// }
-
 class Controller {
 	constructor() {
 		this.isLogged = {}

@@ -76,3 +76,16 @@ export const onCreation = () => { //done
     
   }
 }
+
+export const emitPing = (room) => ({
+  emit: true,
+  event: "CHECK",
+  payload: room
+})
+
+export const onPing = () => ({
+  type: "LISTING",
+  handle: LISTING,
+  event: "CHECK",
+  state: "CHECK"
+})

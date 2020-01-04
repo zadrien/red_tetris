@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { onLoading, onJoined, emitJoin } from '../../actions/listing'
+import { onLoading, onJoined, emitJoin, emitPing } from '../../actions/listing'
 
-const room = ({ room, user, onClick }) => {
+const room = ({ room, user, onClick, Ping }) => {
+
+  useEffect(() => {
+    window.setTimeout(function(){Ping(room)}, 5000)
+  })
+  
   if (room) {
     return (
-      <div onClick={() => onClick(user)} className="room-list-item">
+      <div disabled={room.isStarted ? true : false} onClick={() => onClick(user)} className="room-list-item">
         <div className="description">
           <p className="name">{room.name}</p>
-          <p className="mode">{room.mode}</p>
+          <p className="mode">{room.mode} [{room.nbrUser ? room.nbrUser : 0}/10]</p>
         </div>
-        <div className='join-button'>
-          {room.isLoading ?
-           <div disabled={true}>Loading...</div> : <div>JOIN</div>
-          }
-        </div>
+       <div className='join-button'>
+         {room.isStarted ? <div disabled={true}>In-Game</div> : <div>JOIN</div>}
+          {/* {room.isLoading ? */}
+          {/*  <div disabled={true}>Loading...</div> : <div>JOIN</div> */}
+          {/* } */}
+       </div>
       </div>
     )
   }
@@ -34,6 +40,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     //  dispatch(onLoading(ownProps.id))
     //    dispatch(onJoined())
     dispatch(emitJoin(user, ownProps.room))
+  },
+
+  Ping: (room) => {
+    console.log("Ping room:", room.name)
+    dispatch(emitPing(room))
   }
 })
 

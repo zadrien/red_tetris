@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PlayerCard from './playerCard'
 
 const style = {
+  display: "flex",
+  flexWrap: "wrap",
   marginLeft: "5px",
 }
 

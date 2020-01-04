@@ -32,8 +32,9 @@ const Room = ({ room, onLeave, onWin }) => {
 
         <div className="p-2 width-100 d-flex row just-center mx-auto">
           <Display/>
+          <Players />
         </div>
-        <Players />
+
         {room.winner === undefined ? null :
          (room.winner === true ? <div onClick={onWin}>You won</div> : (room.winner === false ? <div onClick={onWin}>You lose</div>: null))
         

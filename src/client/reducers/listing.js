@@ -84,6 +84,15 @@ const listing = (state = {}, action) => {
 	  return Object.assign({}, state, { isCreating: false })	
     }
     return Object.assign({}, state, { isCreating: action.bool })
+  case "CHECK":
+	if (action.result.room) {
+	  var rooms = state.rooms.list
+
+	  var i = rooms.findIndex(function (el) { return el.id === action.result.room.id})
+	  rooms[i] = action.result.room
+	  return Object.assign({}, state, { rooms: { list: rooms } })
+				  
+	}
   default:
 	return state
   }
