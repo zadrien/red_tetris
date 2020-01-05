@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { CreateButton, List, Pagination } from '../components/Listing'
+
 import { onPing } from '../actions/listing'
 import { setInterface } from '../actions/menu'
+
+import Pagination from '../components/Listing/Pagination'
+import List from '../components/Listing/Rooms'
 
 const Rooms = ({ Create, Listener, removeListener }) => {
 
@@ -13,6 +16,7 @@ const Rooms = ({ Create, Listener, removeListener }) => {
       removeListener()
     }
   })
+  
   return (
     <div>
       <div>
@@ -29,7 +33,7 @@ const Rooms = ({ Create, Listener, removeListener }) => {
 
 const mapStateToProps = (state) => {
   return {
-//    create: state.create,
+    create: state.create,
   }
 }
 
@@ -43,7 +47,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   removeListener: () => {
-    dispatch({ type: "RMV", leave: true, event: "CHECK" })
+//    dispatch({ type: "RMV", leave: true, event: "CHECK" })
   }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Rooms);

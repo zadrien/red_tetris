@@ -7,7 +7,7 @@
     "client-dev": "react-scripts start",
     "srv-dev": "DEBUG=tetris:* nodemon src/server/start.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-	"docker": "echo \"Launch sudo docker-compose up\""
+    "docker": "echo \"Launch sudo docker-compose up\""
   },
   "repository": {
     "type": "git",
@@ -20,13 +20,18 @@
   },
   "homepage": "https://github.com/zadrien/red_tetris#readme",
   "dependencies": {
+    "connected-react-router": "^6.6.1",
     "debug": "^4.1.1",
     "esm": "^3.2.25",
+    "history": "^4.10.1",
     "lodash": "^4.17.15",
     "mongoose": "^5.8.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "^3.3.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
@@ -46,5 +51,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "mocha": "^7.0.0"
   }
 }

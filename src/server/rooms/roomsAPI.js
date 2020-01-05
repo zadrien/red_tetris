@@ -1,12 +1,10 @@
 import { Rooms } from './roomsModel';
 import { create, find, restoreRooms } from './roomsHandler'
-//import Handler from './roomsHandler';
-import  Player from '../player/player';
 
 export async function fetch(io, user, data) {
     try {
 		var rooms = await Rooms.read({}, {}, data.skip, data.limit)
-		var list = await Handler.restoreRooms(io)
+		var list = await restoreRooms(io)
 		user.Notify("FETCH", { rooms })
     } catch (err) {
 		console.log(err)
@@ -16,8 +14,7 @@ export async function fetch(io, user, data) {
 export async function ping(user, room) {
 //	console.log("PING")
 	try {
-//		console.log(room)
-		var room = await Handler.find(room.id)
+		var room = await find(room.id)
 		if (!room)
 			return
 		user.Notify("CHECK", { room: room.ping() })
@@ -31,9 +28,9 @@ export async function join(io, user, data) {
 	try {
 		console.log("Room info::", data)
 		if (data.room.id)
-			room = Handler.find(data.room.id)
+			room = find(data.room.id)
 		else {
-			room = await Handler.create(io, data.room)
+			room = await create(io, data.room)
 			user.Notify("CREATED", { room: true })
 		}
 		room.newPlayer(user)
@@ -50,7 +47,7 @@ export async function leave(user, data) {
 		console.log("Room info::", data)
 		if (!data.id)
 			return
-		room = Handler.find(data.id)
+		room = find(data.id)
 		if (!room)
 			return
 		room.leave(user)
@@ -66,7 +63,7 @@ export async function start(user, data) {
 		console.log("Room id", data)
 		if (!data)
 			return
-		room = Handler.find(data)
+		room = find(data)
 		if (!room)
 			return
 		console.log(room)
@@ -76,11 +73,3 @@ export async function start(user, data) {
 		Promise.reject(err)
 	}
 }
-
-// module.exports = {
-// 	fetch,
-// 	join,
-// 	leave,
-// 	start,
-// 	ping
-// }

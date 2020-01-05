@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { startGame, emitStart, onDisplay, emitMove, onPlayers } from '../../actions/room'
+import { startGame, emitStart, onDisplay, onPlayers } from '../../actions/room'
 
 const host = ({ host, start, id, onClick }) => {
   if (!host) {
@@ -9,7 +9,7 @@ const host = ({ host, start, id, onClick }) => {
 
   return (
     <div>
-      <div className={`bob-btn secondary ${start == true ? 'disabled' : ''}`} onClick={() => onClick(id)}>Start</div>
+      <div className={`bob-btn secondary ${start === true ? 'disabled' : ''}`} onClick={() => onClick(id)}>Start</div>
     </div>
     
   )

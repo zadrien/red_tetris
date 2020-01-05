@@ -1,4 +1,4 @@
-import _ from 'lodash'
+//import _ from 'lodash'
 
 const room = (state = { room: { display: "lol" }}, action) => {
   var room = Object.assign({}, state.room)
@@ -9,7 +9,10 @@ const room = (state = { room: { display: "lol" }}, action) => {
       return state
     return Object.assign({}, state, { menu: "ROOM", room: action.result.room })
   case "START":
-    room['start'] = action.result.start
+	console.log(action)
+	if (!action.result)
+	  return state
+    room["start"] = action.result.start
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "DISPLAY":
     room['display'] = action.result
@@ -18,7 +21,6 @@ const room = (state = { room: { display: "lol" }}, action) => {
     room['host'] = action.result.host
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "PLAYERS":
-//	var obj = action.result.find((e) => e.name !== state.user.name)
 	var obj = action.result.filter(function (e) {
 	  return e.name !== state.user.name
 	})

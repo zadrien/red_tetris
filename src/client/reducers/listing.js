@@ -1,43 +1,26 @@
-import _ from 'lodash'
+//import _ from 'lodash'
 
 const listing = (state = {}, action) => {
+  var obj
+  var i
+  var arr = []  
   switch (action.state) {
   case "NEXT":
-    var obj = Object.assign({}, state.rooms)
+    obj = Object.assign({}, state.rooms)
     obj.start += action.nbr
     return Object.assign({}, state, { rooms: obj })
 
   case "PREV":
-    var obj = Object.assign({}, state.rooms)
+    obj = Object.assign({}, state.rooms)
     obj.start -= action.nbr
     return Object.assign({}, state, { rooms: obj })
   case "FETCH":
     // should appends multiple result
 	if (action.result.rooms) {
-	  var obj = {
+	  obj = {
 		list: action.result.rooms
 	  }
 	}
-    // console.log("Fetch case")
-    // var obj = Object.assign({}, state.rooms)
-    // console.log(obj)
-    // if (_.isEmpty(obj)) {
-	//   obj = {
-	// 	list: [],
-	// 	nbr: 0,
-	// 	start: 0
-	//   }
-    // }
-    // if (action.result.rooms) {
-	//   console.log("result: ", action.result.rooms)
-	//   _.map(action.result.rooms, function (r) { obj["list"].push(r) })
-	//   //      	obj["list"].push(action.result.rooms)
-	//   console.log("result of mapping:", obj["list"])
-	//   obj["nbr"] += action.result.rooms.length
-	//   obj.start = obj.nbr - 5
-	//   console.log("nbr: ", obj.nbr," start:", obj.start)
-	  
-    // }
     return Object.assign({}, state, { rooms:  obj })
   case "JOINING":
     if (action.status) {
@@ -51,11 +34,11 @@ const listing = (state = {}, action) => {
 	  r[action.key]['loading'] = true; // need testing
 	  return Object.assign({}, state, { rooms: r/*ADD SOMETHING*/ })
     }
+	break ;
   case "LOADING":
-    var r = Object.assign({}, state.rooms)
-    r[action.id]['isLoading'] = true; // need testing
-    var arr = []
-    for (var i = 0; i < Object.keys(r).length; i++) {
+    obj = Object.assign({}, state.rooms)
+    obj[action.id]['isLoading'] = true; // need testing
+    for (i = 0; i < Object.keys(obj).length; i++) {
 	  arr.push(r[i])
     }
     return Object.assign({}, state, { onLoad: action.id, rooms: arr });
@@ -64,10 +47,9 @@ const listing = (state = {}, action) => {
 	  //	console.log("onLoad undefined")
 	  return state
     }
-    var r = Object.assign({}, state.rooms)
-    delete r[state.onLoad]['isLoading']; // need testing
-    var arr = []
-    for (var i = 0; i < Object.keys(r).length; i++) {
+    obj = Object.assign({}, state.rooms)
+    delete obj[state.onLoad]['isLoading']; // need testing
+    for (i = 0; i < Object.keys(obj).length; i++) {
 	  arr.push(r[i])
     }
     if (action.result.err) {
@@ -85,14 +67,13 @@ const listing = (state = {}, action) => {
     }
     return Object.assign({}, state, { isCreating: action.bool })
   case "CHECK":
-	if (action.result.room) {
-	  var rooms = state.rooms.list
-
-	  var i = rooms.findIndex(function (el) { return el.id === action.result.room.id})
-	  rooms[i] = action.result.room
-	  return Object.assign({}, state, { rooms: { list: rooms } })
-				  
-	}
+	if (!action.result.room)
+	  break
+	var rooms = state.rooms.list
+	
+	i = rooms.findIndex(function (el) { return el.id === action.result.room.id})
+	rooms[i] = action.result.room
+	return Object.assign({}, state, { rooms: { list: rooms } })
   default:
 	return state
   }

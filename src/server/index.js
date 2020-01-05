@@ -1,12 +1,10 @@
 import fs  from 'fs'
 import debug from 'debug'
 import connectToDatabase from './config';
-//import { roomsAPI } from './rooms'
 import { fetch, ping, join, leave, start } from './rooms/roomsAPI'
 import Game from './player/game'
-//import { Controller as userController } from './player/playerController'
-import userController from './player/playerController'
-//var userController = require("./player/playerController")()
+import {Controller as userController } from './player'
+
 var url = require('url');
 
 const logerror = debug('tetris:error')
@@ -58,11 +56,11 @@ const initEngine = io => {
 				socket.emit("login", err)
 				return 
 			}
-			socket.on('FETCH', (data) => roomsAPI.fetch(io, user, data))
-			socket.on('JOIN', (data) => roomsAPI.join(io, user, data))
-			socket.on("LEAVE", (data) => roomsAPI.leave(user, data))
-			socket.on("START", (data) => roomsAPI.start(user, data))
-			socket.on("CHECK", (data) => roomsAPI.ping(user, data))
+			socket.on('FETCH', (data) => fetch(io, user, data))
+			socket.on('JOIN', (data) => join(io, user, data))
+			socket.on("LEAVE", (data) => leave(user, data))
+			socket.on("START", (data) => start(user, data))
+			socket.on("CHECK", (data) => ping(user, data))
 		})
 		
 		socket.on('disconnect', function() {

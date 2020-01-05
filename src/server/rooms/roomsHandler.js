@@ -13,13 +13,13 @@ export async function restoreRooms(io) {
 		if (!_.isEmpty(Rooms))
 			return null;
 		var all = await roomDb.read({}, {}, 0, 0)
-		console.log(all.length)
+		console.log("nbr of saved loby:", all.length)
 		_.map(all, function (v) {
-			console.log(v)
+//			console.log(v)
 		  var newRoom = new Room(io, v.id, v.name, v.mode)
 			Rooms[v.id] = newRoom
 		})
-		console.log("constant Rooms:", Rooms)
+//		console.log("constant Rooms:", Rooms)
 		return all
     } catch (err) {
 		console.log(err)
@@ -56,10 +56,3 @@ export function deleteRoom(id) {
     console.log("room deleted")
     return null
 }
-
-// module.exports = {
-//     create,
-//     find,
-//     deleteRoom,
-//     restoreRooms
-// }

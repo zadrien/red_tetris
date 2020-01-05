@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { onLoading, onJoined, emitJoin, emitPing } from '../../actions/listing'
+import { emitJoin, emitPing } from '../../actions/listing'
 
 const Room = ({ room, user, onClick, Ping }) => {
 
@@ -37,8 +37,6 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: (user) => {
     console.log("Joining the room:", ownProps.room, ownProps.id)
-    //  dispatch(onLoading(ownProps.id))
-    //    dispatch(onJoined())
     dispatch(emitJoin(user, ownProps.room))
   },
 

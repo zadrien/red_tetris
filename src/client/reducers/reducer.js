@@ -5,17 +5,18 @@ import NewRoom from './room'
 import Create from './create'
 
 const TetrisApp = (state = {}, action) => {
+	
   switch (action.type) {
   case "INTERFACE":
-    return AppInterface(state, action)
+      return AppInterface(state, action)
   case "PROFIL":
-    return Profil(state, action)
+	  return Profil(state, action)
   case "LISTING":
-    return listing(state, action)
+      return listing(state, action)
   case "ROOM":
-    return NewRoom(state, action)
+      return NewRoom(state, action)
   case "CREATE":
-    return Create(state, action)
+      return Create(state, action)
   default:
     return state
   }

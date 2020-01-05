@@ -8,7 +8,6 @@ export default function socketMiddleware() {
       return next(action);
     }
     const {
-	  trigger,
       event,
       leave,
       emit,
@@ -17,22 +16,18 @@ export default function socketMiddleware() {
       ...rest
     } = action;
 
-	if (trigger)
-	  return socket
-	
     if (!event) {
       return next(action);
     }
 
     if (leave) {
 	  console.log("remove listener")
-      socket.removeListener(event);
+      return socket.removeListener(event);
     }
 
     if (emit) {
       console.log("payload:", payload)
-      socket.emit(event, payload)
-	  return socket
+      return socket.emit(event, payload)
     }
 	
     let handleEvent = handle;
@@ -40,7 +35,8 @@ export default function socketMiddleware() {
 	  console.log("HIIII2")
       handleEvent = result => dispatch({type: handle, result, ...rest})
     }
-
+	console.log("type of event:", typeof event)
+	console.log("type of handleEvent",typeof handleEvent)
     return socket.on(event, handleEvent);
   };
 }

@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { onPlayerName, emitPlayer, onPlayer, onTrigger, onErrorName } from '../../actions/username';
-import { setInterface } from '../../actions/menu';
-import { onCreation, onFetch, emitFetch } from '../../actions/listing';
+import { emitPlayer, onPlayer } from '../../actions/username';
+import { onCreation, onFetch } from '../../actions/listing';
 import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/room';
 
 import './home.css';
 import '../../global.css';
 
-const playBut = ({socket, onSubmit, initListener}) => {
+const playBut = ({onSubmit, initListener}) => {
   initListener()
   return (
     <div className="main-menu">
@@ -22,7 +21,6 @@ const playBut = ({socket, onSubmit, initListener}) => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  socket: state.socket,
   active: false,
   style: ownProps.style
 })
@@ -43,15 +41,15 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
       if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1)
         e.preventDefault()
       var key = e.keyCode
-      if (key == 38) { // UP
+      if (key === 38) { // UP
         dispatch(emitMove("UP"));
-      } else if (key == 39) { // RIGHT
+      } else if (key === 39) { // RIGHT
         dispatch(emitMove("RIGHT"));
-      } else if (key == 40) { // DOWN
+      } else if (key === 40) { // DOWN
         dispatch(emitMove("DOWN"));
-      } else if (key == 37) { // LEFT
+      } else if (key === 37) { // LEFT
         dispatch(emitMove("LEFT"));
-      } else if (key == 32) { // SPACE
+      } else if (key === 32) { // SPACE
         dispatch(emitMove("SPACE"));
       }
     })

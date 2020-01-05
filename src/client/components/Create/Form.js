@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { emitJoin } from '../../actions/socket';
 import { isCreating, onCreation, emitCreate } from '../../actions/create'
-import { Nav } from '../Interface'
+import Nav from '../Interface/Navigate'
 import "./style.css";
 
 const Create = ({ isCreating, onSubmit, user}) => (
@@ -48,12 +47,7 @@ const mapDispatchToProps = (dispatch, e) => ({
       }
       dispatch(isCreating())
       dispatch(onCreation())
-      console.log(data)
       dispatch(emitCreate(data))
-    
-      //dispatch(isJoining(true, r))
-      //dispatch(emitJoin(r))
-      // dispatch(onPlayers())
     }
   }
 })
