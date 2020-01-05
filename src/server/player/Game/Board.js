@@ -10,7 +10,7 @@ import {
 	rotateUndo
 } from './helpers'
 
-function Game(socket, mode) {
+function Board(socket, mode) {
 	this.socket = socket
 	this.map = newMap()
 	this.piece = undefined
@@ -21,14 +21,14 @@ function Game(socket, mode) {
 	this.malus = 0
 }
 
-Game.prototype.get = function () {
+Board.prototype.get = function () {
 	var copy = copyMap(this.map);
 	if (this.piece)
 		remove(copy, this.piece, this.x, this.y);
 	return copy;
 }
 
-Game.prototype.add = function (piece) {
+Board.prototype.add = function (piece) {
 	console.log(piece)
 	this.piece = JSON.parse(JSON.stringify(piece))
 	this.x = Math.round((10 - piece.shape[0].length) / 2);
@@ -37,16 +37,16 @@ Game.prototype.add = function (piece) {
 	var cpy = copyMap(this.map)
 	console.log(this.piece)
 	if (placeable(cpy, this.piece, this.x, this.y)) {
-	  this.map = cpy
-	  showMap(this.map)
-	  this.socket.emit("DISPLAY", this.map)
-	  return true
+		this.map = cpy
+		showMap(this.map)
+		this.socket.emit("DISPLAY", this.map)
+		return true
 	} else {
-	  return false
+		return false
 	}
 }
 
-Game.prototype.setMalus = function () {
+Board.prototype.setMalus = function () {
 	this.malus++
 	var copy = copyMap(this.map)
 	if (this.piece)
@@ -78,7 +78,7 @@ Game.prototype.setMalus = function () {
 }
 
 
-Game.prototype.place = function () {
+Board.prototype.place = function () {
 	if (this.lock)
 		return 
 	if (!this.piece)
@@ -95,7 +95,7 @@ Game.prototype.place = function () {
 	return true
 }
 
-Game.prototype.down = function (instant = false) {
+Board.prototype.down = function (instant = false) {
 	if (this.lock)
 		return
 	if (!this.piece)
@@ -123,7 +123,7 @@ Game.prototype.down = function (instant = false) {
 	}
 }
 
-Game.prototype.left = function () {
+Board.prototype.left = function () {
 	if (!this.piece)
 		return
 	var copy = copyMap(this.map)
@@ -143,7 +143,7 @@ Game.prototype.left = function () {
 
 }
 
-Game.prototype.right = function () {
+Board.prototype.right = function () {
 	if (!this.piece)
 		return
 	var copy = copyMap(this.map)
@@ -162,7 +162,7 @@ Game.prototype.right = function () {
 	}
 }
 
-Game.prototype.rotate = function () {
+Board.prototype.rotate = function () {
 	if (!this.piece)
 		return
 	this.lock = true;
@@ -185,7 +185,7 @@ Game.prototype.rotate = function () {
 	this.lock = false;
 }
 
-Game.prototype.verify = function () {
+Board.prototype.verify = function () {
 	var copy = copyMap(this.map)
 	var r = fullLine(this.map, 20 - this.malus)
 	if (r.length > 0) {
@@ -200,4 +200,4 @@ Game.prototype.verify = function () {
 	return 0
 }
 
-export default Game
+export default Board

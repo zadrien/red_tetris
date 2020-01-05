@@ -1,5 +1,4 @@
-import Game from './game'
-
+import Board from './Game/Board'
 
 function Player(socket, name) {
 	this.socket = socket
@@ -45,11 +44,10 @@ Player.prototype.controller = function (data) {
 }
 
 
-// Move to Game object
 Player.prototype.initGame = function (mode) {
 	this.nbr = 0
-	this.game = new Game(this.socket, mode)
-	this.socket.emit("DISPLAY", this.game.map)	
+	this.game = new Board(this.socket, mode)
+	this.socket.emit("DISPLAY", this.game.get())	
 }
 
 // cb function for a new piece ! and for terminate the session

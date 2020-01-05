@@ -4,7 +4,6 @@ export function newMap() {
     for(var i = 0; i < 20; i++) {
 		map[i] = [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ];
     }
-
     return map.slice();
 }
 
@@ -51,7 +50,6 @@ export function copyMap(arr) {
 }
 
 export function fillLine(map, pos) {
-
     map.splice(0, 1) // need verification if the line is empty, if not down piece and continue
     map.push(['M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M'])
 
@@ -61,10 +59,8 @@ export function fillLine(map, pos) {
 export function fullLine(map, max) {
     var remove = []
     for (var i = max - 1; i > 0; i--) {
-		if (!map[i].find(full)) {
-//			console.log("Removeable")
+		if (!map[i].find(full))
 			remove.push(i)
-		}
     }
     return remove
 }
@@ -75,7 +71,6 @@ export function full(value) {
 
 
 export function rotateClockwise(piece) {
-//    console.log("rotate hel;per functions")
     var rotation = piece.shape.reverse()
     piece.shape = rotation[0].map((v, k) => (
 		rotation.map(row => row[k])

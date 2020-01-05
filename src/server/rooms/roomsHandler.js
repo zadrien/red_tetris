@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid'
 import Room from './roomsController';
-import { Rooms as roomDb } from './roomsModel';
+import { Rooms as roomDb } from './roomsDAL';
 import _ from 'lodash'
 
 const Rooms = {};

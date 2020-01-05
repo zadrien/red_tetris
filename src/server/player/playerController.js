@@ -1,11 +1,11 @@
 import Player from './playerModel'
 
-function Controller() {
-	this.isLogged = {}
+function Controller(isLogged) {
+	this.isLogged = isLogged
 }
 
 Controller.prototype.login = function (socket, data) {
-	console.log("nothing ? :", data)
+//	console.log("nothing ? :", data)
 	if (!data.name)
 		return 
 	var ids = Object.keys(this.isLogged)
@@ -18,8 +18,7 @@ Controller.prototype.login = function (socket, data) {
 	var player = new Player(socket, data.name)
 	this.isLogged[socket.id] = player
 	player.socket.emit('login', { name: player.name })
-	return player
-	
+	return player	
 }
 
 Controller.prototype.logout = function (socket) {
@@ -29,4 +28,4 @@ Controller.prototype.logout = function (socket) {
 	delete this.isLogged[socket.id]	
 }
 
-export default new Controller()
+export default new Controller({})

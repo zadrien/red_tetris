@@ -1,5 +1,5 @@
-import { Rooms } from './roomsModel';
-import { create, find, restoreRooms } from './roomsHandler'
+import { Rooms } from './roomsDAL';
+import { create, find, restoreRooms } from './roomsController'
 
 export async function fetch(io, user, data) {
     try {

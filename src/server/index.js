@@ -2,8 +2,7 @@ import fs  from 'fs'
 import debug from 'debug'
 import connectToDatabase from './config';
 import { fetch, ping, join, leave, start } from './rooms/roomsAPI'
-import Game from './player/game'
-import {Controller as userController } from './player'
+import userController from './player/playerController'
 
 var url = require('url');
 
@@ -74,7 +73,6 @@ export function create(params) {
     const promise = new Promise( (resolve, reject) => {
 		const app = require('http').createServer()
 		initApp(app, params, () => {
-//			import io from 'socket.io'
 			const io = require('socket.io')(app)
 			const stop = (cb) => {
 				io.close()
