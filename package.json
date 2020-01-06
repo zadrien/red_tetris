@@ -6,8 +6,14 @@
   "scripts": {
     "client-dev": "react-scripts start",
     "srv-dev": "DEBUG=tetris:* nodemon src/server/start.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require babel-core/register ",
     "docker": "echo \"Launch sudo docker-compose up\""
+  },
+  "babel": {
+    "presets": [
+      "stage-3",
+      "latest"
+    ]
   },
   "repository": {
     "type": "git",
@@ -20,9 +26,13 @@
   },
   "homepage": "https://github.com/zadrien/red_tetris#readme",
   "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "connected-react-router": "^6.6.1",
     "debug": "^4.1.1",
     "esm": "^3.2.25",
+    "expect.js": "^0.3.1",
     "history": "^4.10.1",
     "lodash": "^4.17.15",
     "mongoose": "^5.8.4",
@@ -53,6 +63,7 @@
     ]
   },
   "devDependencies": {
-    "mocha": "^7.0.0"
+    "mocha": "^7.0.0",
+    "sinon": "^8.0.4"
   }
 }

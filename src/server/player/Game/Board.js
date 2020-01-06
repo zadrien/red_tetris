@@ -21,6 +21,13 @@ function Board(socket, mode) {
 	this.malus = 0
 }
 
+// Board.prototype.start = function () {
+// }
+
+// Board.prototype.stop = function () {
+	
+// }
+
 Board.prototype.get = function () {
 	var copy = copyMap(this.map);
 	if (this.piece)
