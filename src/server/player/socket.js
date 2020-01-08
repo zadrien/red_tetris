@@ -10,7 +10,6 @@ Socket.prototype.connect = function() {
 		})
 
 		socket.on("test", (data) => {
-			console.log("WOOORKED")
 			socket.emit("test", "worked")
 		})
 

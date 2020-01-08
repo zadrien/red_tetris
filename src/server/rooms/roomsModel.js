@@ -15,6 +15,18 @@ export default function Lobby(io, id, name, mode) {
 	}.bind(this), 500)
 }
 
+Lobby.prototype.kill = function() {
+	if (this.broad)
+		clearInterval(this.broad)
+	if (this.start) {
+		this.io.in(this.id).emit("LEAVE", { state: "QUIT", msg: "Server may intentionaly kill this lobby" })
+		_.map(this.users, (user, index) => {
+			user.stopGame()
+		})
+	}
+		
+}
+
 Lobby.prototype.newPlayer = function (user) {
 	if (this.start)
 		return false
@@ -28,17 +40,23 @@ Lobby.prototype.newPlayer = function (user) {
 	} else
 		user.Notify("HOST", { host: false })
 	// Adding event here
+
+	user.socket.on("disconnect", function() {
+		this.leave(user)
+	})
 	user.initGame(this.mode)
 	return true
 }
 
 Lobby.prototype.leave = function (user) {
 	console.log(`User(${user.socket.id} leaving room...`)
-	if (this.start)
-		this.endGameCallback(user.socket.id)
 	var leaver = this.users[user.socket.id]
 	if (!leaver)
 		return
+	if (this.start) {
+		//		this.endGameCallback(user.socket.id)
+		user.stopGame()
+	}
 	delete user.game
 	user.Notify("LEAVE", { state: "QUIT" })
 	user.socket.leave(this.id)
@@ -55,23 +73,24 @@ Lobby.prototype.leave = function (user) {
 		this.host.Notify("HOST", { host: true })
 		this.host.Notify("START", { start: this.start })
 	}
-
 }
 
 Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
-		console.log(`Starting game: ${this.id}`)
+		console.log(`${this.id} - Starting the game!`)
 		this.start = true
 		this.host.Notify("START", { start: this.start })
 		var ids = Object.keys(this.users)
 		ids.map((id, k) => {
 			this.users[id].initGame(this.mode)
 			this.users[id].isPlaying = true;
-			this.users[id].start(this.mode, this.pieceCallback.bind(this),
+			this.users[id].start(this.pieceCallback.bind(this),
 								 this.mallusCallback.bind(this),
 								 this.endGameCallback.bind(this))
 		})
+		return true
 	}
+	return false
 }
 
 Lobby.prototype.endGameCallback = function (id) {
@@ -87,11 +106,14 @@ Lobby.prototype.endGameCallback = function (id) {
 		console.log(`All game are finished, the winner is ${user.name}`)
 		this.pieces = []
 		this.start = false
-		this.io.in(this.id).emit("GAMEOVER", { winner: user.name })
+//		this.io.in(this.id).emit("GAMEOVER", { winner: user.name })
+		user.Notify("GAMEOVER", { winner: true })
 		this.host.Notify("START", { start: this.start })
 		return
-	} else
-		user.Notify("GAMEOVER", { winner: false }) // maybe not necessary	
+	} else {
+		console.log("END")
+		user.Notify("GAMEOVER", { winner: false }) // maybe not necessary
+	}
 }
 
 Lobby.prototype.startBroadcast = function () {
@@ -116,11 +138,14 @@ Lobby.prototype.pieceCallback = function (id, nbr) {
 
 Lobby.prototype.mallusCallback = function (userID) {
 	var ids = Object.keys(this.users)
+	if (ids.length === 0)
+		return false
 	ids.map((id, index) => {
 		if (id === userID)
 			return
 		this.users[id].getMalus()
 	})
+	return true
 }
 
 Lobby.prototype.ping = function () {

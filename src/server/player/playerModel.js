@@ -1,24 +1,28 @@
 import Board from './Game/Board'
+const events = require('events')
 
 function Player(socket, name) {
 	this.socket = socket
 	this.name = name
-	this.nbr = 0
 	this.game = undefined
-	this.pause = false
 	this.isPlaying = false
 	this.controller = this.controller.bind(this)
 	this.socket.on("CONTROLLER", this.controller)
 
-	console.log(`New player ${socket.id} ${name}`)
+//	console.log(`New player ${socket.id} ${name}`)
 }
 
 Player.prototype.get = function () {
+	let display
+	if (this.game)
+		display = this.game.get()
+	else
+		display = undefined
 	return {
 		id: this.socket.id,
 		name: this.name,
 		isPlaying: this.isPlaying,
-		display: this.game.get()
+		display: display
 	}
 }
 
@@ -27,8 +31,8 @@ Player.prototype.Notify = function (event, data) {
 }
 
 Player.prototype.controller = function (data) {
-	console.log(`${this.socket.id} - ${data}`)
-	if (!this.isPlaying)
+//	console.log(`${this.socket.id} - ${data}`)
+	if (!this.game)
 		return 
 	if (data === 'LEFT')
 		this.game.left()
@@ -45,50 +49,46 @@ Player.prototype.controller = function (data) {
 
 
 Player.prototype.initGame = function (mode) {
-	this.nbr = 0
-	this.game = new Board(this.socket, mode)
+	this.eventEmitter = new events.EventEmitter()
+	this.game = new Board(this.eventEmitter, mode)
 	this.socket.emit("DISPLAY", this.game.get())	
 }
 
-// cb function for a new piece ! and for terminate the session
-Player.prototype.start = function (mode, getPiece, sendMallus, end) {
-	var cb = function (data) {
-		this.stopGame()
-		end(this.socket.id);
-	}.bind(this)
+Player.prototype.start = function (getPiece, sendMallus, end) {
+	this.eventEmitter.on('display', (data) => { this.socket.emit("DISPLAY", data) })
+	this.eventEmitter.on('mallus', () => { sendMallus(this.socket.id) })
+	this.eventEmitter.on('add', (data) => {
+		if (!this.game.add(getPiece(this.socket.id, data)))
+			end(this.socket.id)
+	})
 
-	var fn = function () {
-		if (this.game.down() === false) {
-			if (this.game.verify() !== 0)
-				sendMallus(this.socket.id)
-			var p = getPiece(this.socket.id, this.nbr)
-			if (!this.game.add(p)) {
-				this.stopGame();
-				end(this.socket.id)
-			}
-			this.nbr++
-		}
-		if (mode === false)
-			this.socket.emit("DISPLAY", this.game.map)
-	}.bind(this)
-	this.socket.on("disconnect", cb)
-	this.socket.on("QUIT", cb)
-	
-	console.log(`[GAME START] - ${this.name} ${this.socket.id}`)
-	this.itr = setInterval(fn, 900)
-	this.isPlaying = true;
+	this.socket.on('disconnect', () => {
+		if (this.game)
+			this.stopGame()
+	})
+	this.socket.on('QUIT', () => {
+		this.game.stop()
+		this.eventEmitter.removeAllListener()
+	})
+	this.game.start()
+	this.isPlaying = true
 }
+
 
 Player.prototype.stopGame = function () {
-	if (this.itr === 0)
-		return
-	clearInterval(this.itr)
+	if (!this.game)
+		return false
+	this.game.stop()
 	this.isPlaying = false
+	delete this.game // to check
+
+	return true
 }
 
+// THIS ONE TOO
 Player.prototype.getMalus = function () {
 	if (!this.isPlaying)
-		return ;
+		return false;
 	if (!this.game.setMalus()) {
 		clearInterval(this.itr)
 		return false
