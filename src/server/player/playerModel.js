@@ -1,4 +1,4 @@
-import Board from './Game/Board'
+import Board from '../Game/Board'
 const events = require('events')
 
 function Player(socket, name) {

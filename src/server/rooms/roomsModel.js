@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import Tetraminos from './tetraminos'
+import Tetraminos from '../Game/tetraminos'
 
 export default function Lobby(io, id, name, mode) {
 	this.io = io.sockets.in(id)
@@ -16,6 +16,7 @@ export default function Lobby(io, id, name, mode) {
 }
 
 Lobby.prototype.kill = function() {
+//	console.log(`killing ${this.id} instance`)
 	if (this.broad)
 		clearInterval(this.broad)
 	if (this.start) {
@@ -24,7 +25,7 @@ Lobby.prototype.kill = function() {
 			user.stopGame()
 		})
 	}
-		
+	return true
 }
 
 Lobby.prototype.newPlayer = function (user) {
@@ -49,7 +50,7 @@ Lobby.prototype.newPlayer = function (user) {
 }
 
 Lobby.prototype.leave = function (user) {
-	console.log(`User(${user.socket.id} leaving room...`)
+//	console.log(`User(${user.socket.id} leaving room...`)
 	var leaver = this.users[user.socket.id]
 	if (!leaver)
 		return
@@ -64,7 +65,7 @@ Lobby.prototype.leave = function (user) {
 	delete this.users[user.socket.id]
 	
 	if (user.socket.id === this.host.socket.id) {
-		console.log("Searching a new host..")
+//		console.log("Searching a new host..")
 		this.host = undefined
 		var newHost = _.sample(this.users)
 		if (!newHost)
@@ -77,7 +78,7 @@ Lobby.prototype.leave = function (user) {
 
 Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
-		console.log(`${this.id} - Starting the game!`)
+//		console.log(`${this.id} - Starting the game!`)
 		this.start = true
 		this.host.Notify("START", { start: this.start })
 		var ids = Object.keys(this.users)
@@ -101,9 +102,10 @@ Lobby.prototype.endGameCallback = function (id) {
 		user.isPlaying = false
 		user.stopGame()
 	}
+
 	var stillPlaying = _.find(this.users, function(u) { return u.isPlaying === true })
 	if (_.isEmpty(stillPlaying)) {
-		console.log(`All game are finished, the winner is ${user.name}`)
+//		console.log(`All game are finished, the winner is ${user.name}`)
 		this.pieces = []
 		this.start = false
 //		this.io.in(this.id).emit("GAMEOVER", { winner: user.name })
@@ -111,7 +113,7 @@ Lobby.prototype.endGameCallback = function (id) {
 		this.host.Notify("START", { start: this.start })
 		return
 	} else {
-		console.log("END")
+//		console.log("END")
 		user.Notify("GAMEOVER", { winner: false }) // maybe not necessary
 	}
 }

@@ -1,7 +1,7 @@
 import Controller from './playerController'
 import Player from './playerModel'
-import Tetraminos from './Game/tetraminos'
-import Board from './Game/Board'
+import Tetraminos from '../Game/tetraminos'
+import Board from '../Game/Board'
 
 import expect from 'expect.js'
 

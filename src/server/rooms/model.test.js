@@ -33,16 +33,6 @@ describe("Room Model Unit Test", () => {
 	})
 	
 	describe("create new Room instance", () => {
-		beforeEach(() => {
-			server.on("connect", function(socket) {
-				console.log("user connected")
-			})
-		})
-
-		afterEach(() => {
-			room.kill()
-		})
-		
 		it("init room instance", () => {
 			room = new Lobby(server, data.id, `$room-{data.name}`, data.mode)
 			if (!room)
@@ -121,6 +111,7 @@ describe("Room Model Unit Test", () => {
 		})
 		
 		afterEach(() => {
+			room.kill()
 			if (client1)
 				client1.close()
 			if (client2)
@@ -129,9 +120,9 @@ describe("Room Model Unit Test", () => {
 		
 		it("should send GAMEOVER event (winner when solo)", function (done) {
 			server.on("connect", function (socket) {
-				console.log(socket.id)
+//				console.log(socket.id)
 				user = new User(socket, data.name)
-//				room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
+				room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
 				room.newPlayer(user)
 				room.startGame(user)
 				user.game.map = map
@@ -140,7 +131,6 @@ describe("Room Model Unit Test", () => {
 			client1 = ioClient.connect(socketURL, option)
 
 			client1.on("GAMEOVER", function(data) {
-				console.log(data)
 				expect(data.winner).to.be(true)
 				done()
 			})
@@ -150,7 +140,6 @@ describe("Room Model Unit Test", () => {
 
 	describe("#pieceCallback()", () => {
 		it("should return a tetraminos", function () {
-			console.log("id:", data)
 			let piece = room.pieceCallback(data.id, 0)
 			expect(piece).to.have.key('shape')
 			expect(piece).to.have.key('letter')

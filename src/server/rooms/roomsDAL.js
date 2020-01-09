@@ -15,7 +15,7 @@ roomSchema.statics = {
 		try {
 			const duplicate = this.findOne({ id: newRoom.id })
 			if (!duplicate)
-				return Promise.reject(new Error("room already exist"))
+				Promise.reject(new Error("room already exist"))
 			var room = new Rooms(newRoom)
 			const p = await room.save()
 			return p
@@ -49,11 +49,21 @@ roomSchema.statics = {
 
     async update(id, roomUpdate) {
 		try {
-			
+			let res = await this.updateOne({id: id}, roomUpdate)
+			return res.nModified
 		} catch (err) {
 			return Promise.reject(err)
 		}
-    }
+    },
+
+	async deleteRoom(id) {
+		try {
+			var p = await this.deleteOne({id: id}).exec()
+			return p.deletedCount
+		} catch (err) {
+			Promise.reject(err)
+		}
+	}
 }
 
 const Rooms = mongoose.model("Rooms", roomSchema);
