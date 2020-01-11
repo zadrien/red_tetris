@@ -1,4 +1,4 @@
-const AppInterface = (state = {}, action) => {
+const AppInterface = (state = {}, action = {}) => {
   switch (action.state) {
   case "MENU":
     return Object.assign({}, state, { menu: action.menu })/*ADD SOMETHING*/

@@ -14,8 +14,13 @@ describe("Room's DAL unit test", () => {
 		open: true
 	}
 	
-	before(async function() {
-		await connectToDatabase(params.server.db)
+	before(async function(done) {
+		try {
+			await connectToDatabase(params.server.db)
+		} catch(err) {
+			console.log("NANIII")
+			done(err)
+		}
 	})
 
 	after(() => {

@@ -29,6 +29,7 @@ export const onNext = (nbr) => ({
   nbr
 })
 
+// OBSOLETE ?
 export const onLoading = (id) => {
   return {
     type: LISTING,
@@ -48,7 +49,7 @@ export const emitJoin = (user, room) => ({
 })
 
 /*
-** OBSOLETE
+** OBSOLETE ?
 */
 export const onJoined = () => {
   return {
@@ -58,7 +59,7 @@ export const onJoined = () => {
   }
 }
 
-
+// OBSOLETE ?
 export const isCreating = (bool) => {
   return {
     type: LISTING,
@@ -77,6 +78,7 @@ export const onCreation = () => { //done
   }
 }
 
+// OBSOLETE ?
 export const emitPing = (room) => ({
   emit: true,
   event: "CHECK",

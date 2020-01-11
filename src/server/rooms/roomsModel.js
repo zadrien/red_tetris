@@ -2,6 +2,7 @@ import _ from 'lodash'
 import Tetraminos from '../Game/tetraminos'
 
 export default function Lobby(io, id, name, mode) {
+  this.ios = io
 	this.io = io.sockets.in(id)
 	this.id = id
 	this.name = name
@@ -153,13 +154,15 @@ Lobby.prototype.mallusCallback = function (userID) {
 Lobby.prototype.ping = function () {
 	var mode = this.mode === true ? "invsible" : "classic"
 	var nbr = Object.keys(this.users).length
-	return {
+	let info = {
 		id: this.id,
 		name: this.name,
 		mode: mode,
 		nbrUser: nbr,
 		isStarted: this.start
 	}
+  console.log("hi")
+  this.ios.of('/').emit('CHECK', { room : info })
 }
 
 function selectMode(mode) {

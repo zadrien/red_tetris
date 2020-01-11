@@ -1,18 +1,16 @@
-
-const create = (state = {}, action) => {
+const create = (state = {}, action = {}) => {
   switch (action.state) {
   case "CREATING":
     return Object.assign({}, state, { isCreating: true })
   case 'CREATE':
-    if (action.result.err) {
-      alert(action.result.err)
-      if (!action.result.room) {
-	alert("No room!....")
-	return Object.assign({}, state, { isCreating: false })
-      }
-    }
+	  // REDO CREATION error state
+//	if (action.result) {
+//       if (action.result.err)
+// //		alert(action.result.err) // need to move this part
+// 	  else if (!action.result.room)
+// 		alert("No room!....")// need to move this part
+// 	}
     return Object.assign({}, state, { isCreating: false })
-    //    return Object.assign({}, state, { menu: "ROOM", isCreating: false, room: action.result.room })
   default:
     return state
   }

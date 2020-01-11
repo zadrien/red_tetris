@@ -1,5 +1,4 @@
-const profil = (state = {}, action) => {
-
+const profil = (state = {}, action = {}) => {
   switch (action.state) {
   case "NEW":
 	if (action.result.err)
@@ -14,6 +13,5 @@ const profil = (state = {}, action) => {
     return state
   }
 }
-
 
 export default profil

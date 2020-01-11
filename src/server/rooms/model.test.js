@@ -30,6 +30,8 @@ describe("Room Model Unit Test", () => {
 			room.kill()
 		if (socket)
 			socket.close()
+		if (client)
+			client.close()
 	})
 	
 	describe("create new Room instance", () => {
@@ -167,5 +169,34 @@ describe("Room Model Unit Test", () => {
 			socket = ioClient.connect(socketURL, option)				
 		})
 	})
-	
+
+	describe('#ping()', function () { // need better imp
+		beforeEach(() => {
+		})
+
+	  it.skip('should return an object', function(done) {
+		server.on('connect', function(socket) {
+		  console.log("connected")
+		  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
+		  socket.on('PING', function () {
+			room.ping()
+		  })
+		})
+		
+		client = ioClient.connect(socketURL, option)
+		
+		client.on('CHECK', function(data) {
+		  console.log("SALLLO")
+		  const { room } = data
+		  expect(room).to.be.an('object')
+		  expect(room).to.have.property('nbrUser', 0)
+		  expect(room).to.have.property('isStarted', false)
+		  expect(room).to.have.property('id', data.id)
+		  expect(room).to.have.property('name', `room-${data.id}`)
+		  done()
+		})
+
+		client.emit('PING')
+	  })
+	})
 })

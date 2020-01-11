@@ -35,9 +35,11 @@ const lineStyle = {
 }
 
 const render = (line, i) => {
-  return <div key={i} style={lineStyle}>{ line.map((v, k) => (
-    <div style={box(v)}/>
-  ))}</div>
+  return (
+    <div key={i} style={lineStyle}>
+      { line.map((v, k) => ( <div style={box(v)}/> )) }
+    </div>
+  )
 }
 
 const box = (c) => {
@@ -62,4 +64,5 @@ const mapStateToProps = (state, ownProps) => ({
   player: ownProps.player
 })
 
+//export default Card
 export default connect(mapStateToProps)(Card)
