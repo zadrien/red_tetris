@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import Listing from './listing'
+import Listing from './Listing'
 
 describe('Listing\'s Reducer BDD', () => {
   describe('Reducer without parameters', () => {

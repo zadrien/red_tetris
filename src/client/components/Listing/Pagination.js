@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { emitFetch, onPrev, onNext } from '../../actions/listing.js'
+import { emitFetch, onPrev, onNext } from '../../actions/Listing.js'
 
 const Pagination = ({items, next, prev}) => (
   <div className="d-flex">

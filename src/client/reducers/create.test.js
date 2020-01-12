@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import Create from './create'
+import Create from './Create'
 
 describe('Create\'s Reduce BDD', () => {
   describe('Reducer without parameters', () => {

@@ -1,13 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { emitJoin, emitPing } from '../../actions/listing'
+import { emitJoin, emitPing } from '../../actions/Listing'
 
-const Room = ({ room, user, onClick, Ping }) => {
-
-  useEffect(() => {
-    window.setTimeout(function(){Ping(room)}, 5000)
-  })
-  
+const Room = ({ room, user, onClick, Ping }) => {  
   if (room) {
     return (
       <div disabled={room.isStarted ? true : false} onClick={() => onClick(user)} className="room-list-item">
@@ -17,9 +12,6 @@ const Room = ({ room, user, onClick, Ping }) => {
         </div>
        <div className='join-button'>
          {room.isStarted ? <div disabled={true}>In-Game</div> : <div>JOIN</div>}
-          {/* {room.isLoading ? */}
-          {/*  <div disabled={true}>Loading...</div> : <div>JOIN</div> */}
-          {/* } */}
        </div>
       </div>
     )

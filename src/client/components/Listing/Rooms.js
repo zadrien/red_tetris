@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Card from './card';
-import { emitFetch } from '../../actions/listing'
+import { emitFetch } from '../../actions/Listing'
 
 import './style.css';
 

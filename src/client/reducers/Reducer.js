@@ -1,8 +1,8 @@
-import AppInterface from './interface'
-import Profil from './profil'
-import listing from './listing'
-import NewRoom from './room'
-import Create from './create'
+import AppInterface from './Interface'
+import Profil from './Profil'
+import listing from './Listing'
+import NewRoom from './Room'
+import Create from './Create'
 
 const TetrisApp = (state = {}, action) => {
 	

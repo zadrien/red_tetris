@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '../Button';
-import { createRoom } from '../../actions/menu'
+import { createRoom } from '../../actions/Menu'
 
 // After remove Button.js file
 // import Button from 'react-bootstrap/lib/Button';

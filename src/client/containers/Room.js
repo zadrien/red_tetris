@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { emitQuit, winValidate } from '../actions/room'
+import { emitQuit, winValidate } from '../actions/Room'
 
-import Board from '../components/room/display'
-import Players from '../components/room/player'
-import Host from '../components/room/host'
+import Board from '../components/Room/display'
+import Players from '../components/Room/player'
+import Host from '../components/Room/host'
 
 import '../global.css';
 

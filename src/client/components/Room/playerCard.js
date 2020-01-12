@@ -1,9 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-// import Row from 'react-bootstrap/lib/Row'
-// import Col from 'react-bootstrap/lib/Col'
-
 const style = {
   display: "flex",
   flexDirection: "column",

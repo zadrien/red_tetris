@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { startGame, emitStart, onDisplay, onPlayers } from '../../actions/room'
+import { startGame, emitStart, onDisplay, onPlayers } from '../../actions/Room'
 
 const host = ({ host, start, id, onClick }) => {
   if (!host) {

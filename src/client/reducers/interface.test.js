@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import Interface from './interface'
+import Interface from './Interface'
 
 describe('Interface Reduce BDD', () => {
   describe('Reducer without parameter', () => {

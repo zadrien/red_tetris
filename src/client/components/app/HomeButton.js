@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { emitPlayer, onPlayer } from '../../actions/profil';
-import { onCreation, onFetch } from '../../actions/listing';
-import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/room';
+import { emitPlayer, onPlayer } from '../../actions/Profil';
+import { onCreation, onFetch } from '../../actions/Listing';
+import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/Room';
 
 import './home.css';
 import '../../global.css';

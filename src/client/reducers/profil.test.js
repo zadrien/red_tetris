@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import Profil from './profil'
+import Profil from './Profil'
 import { onPlayerName, emitPlayer, onPlayer, onErrorName } from '../actions/profil'
 
 describe('Profil reducer BDD', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { isCreating, onCreation, emitCreate } from '../../actions/create'
+import { isCreating, onCreation, emitCreate } from '../../actions/Create'
 import Nav from '../Interface/Navigate'
 import "./style.css";
 
