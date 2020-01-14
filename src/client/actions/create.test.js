@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import { isCreating, onCreation, emitCreate } from './create'
+import { isCreating, onCreation, emitCreate } from './Create'
 
 describe('Create\'s action Unit Test', () => {
   let res

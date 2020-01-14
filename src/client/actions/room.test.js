@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit, winValidate } from './room'
+import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit, winValidate } from './Room'
 
 describe('', () => {
   let res

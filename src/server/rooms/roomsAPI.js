@@ -3,8 +3,8 @@ import { create, find, restoreRooms } from './roomsController'
 
 export async function fetch(io, user, data) {
     try {
-		var rooms = await Rooms.read({}, {}, data.skip, data.limit)
-		var list = await restoreRooms(io)
+		let rooms = await Rooms.read({}, {}, data.skip, data.limit)
+		let list = await restoreRooms(io)
 		user.Notify("FETCH", { rooms })
     } catch (err) {
 		console.log(err)
@@ -14,7 +14,7 @@ export async function fetch(io, user, data) {
 export async function ping(user, room) {
 //	console.log("PING")
 	try {
-		var room = await find(room.id)
+		let room = await find(room.id)
 		if (!room)
 			return
 		user.Notify("CHECK", { room: room.ping() })
@@ -24,11 +24,11 @@ export async function ping(user, room) {
 }
 
 export async function join(io, user, data) {
-	var room
+	let room
 	try {
 		console.log("Room info::", data)
 		if (data.room.id)
-			room = find(data.room.id)
+			room = await find(data.room.id)
 		else {
 			room = await create(io, data.room)
 			user.Notify("CREATED", { room: true })
@@ -42,7 +42,7 @@ export async function join(io, user, data) {
 
 export async function leave(user, data) {
 	console.log("event leave!!")
-	var room
+	let room
 	try {
 		console.log("Room info::", data)
 		if (!data.id)
@@ -58,7 +58,7 @@ export async function leave(user, data) {
 }
 
 export async function start(user, data) {
-	var room
+	let room
 	try {
 		console.log("Room id", data)
 		if (!data)

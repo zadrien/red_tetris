@@ -1,13 +1,16 @@
 import expect from 'expect.js'
 
-import { onPlayerName, emitPlayer, onPlayer, onErrorName } from './profil'
+import { onPlayerName, emitPlayer, onPlayer, onErrorName } from './Profil'
 
 
 describe('Profil\'s action Unit Test', () => {
   let res
+  let name = 'testName'
+  let room = {
+	id: 'testID'
+  }
   describe('#onPlayerName', () => {
 	it('shoudl return an object', () => {
-	  let name = 'testName'
 	  res = onPlayerName(name)
 
 	  expect(res).to.have.property('type', 'PROFIL')
@@ -18,12 +21,18 @@ describe('Profil\'s action Unit Test', () => {
   
   describe('#emitPlayer()', () => {
 	it('shoudl return an object', () => {
-	  let name = 'testName'
 	  res = emitPlayer(name)
 
 	  expect(res).to.have.property('emit', true)
 	  expect(res).to.have.property('event', 'login')
 	  expect(res.payload).to.have.property('name', name)
+	})
+
+	it('should return an object with room & user payload', () => {
+	  res = emitPlayer(name, room)
+
+	  expect(res.payload).to.have.property('name', name)
+	  expect(res.payload).to.have.property('room', room)
 	})
   })
   

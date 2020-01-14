@@ -15,11 +15,9 @@ export async function restoreRooms(io) {
 		var all = await roomDb.read({}, {}, 0, 0)
 		console.log("nbr of saved loby:", all.length)
 		_.map(all, function (v) {
-//			console.log(v)
 		  var newRoom = new Room(io, v.id, v.name, v.mode)
 			Rooms[v.id] = newRoom
 		})
-//		console.log("constant Rooms:", Rooms)
 		return all
     } catch (err) {
 		console.log(err)
@@ -41,9 +39,12 @@ export async function create(io, room) {
     }
 }
 
-export function find(id) {
+export async function find(id) {
     if (!id)
 		return undefined
+	let room = Rooms[id]
+	if (!room)
+		Promise.reject("room not found")
     return Rooms[id]
 }
 

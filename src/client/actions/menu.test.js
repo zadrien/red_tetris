@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import { setInterface } from './menu.js'
+import { setInterface } from './Menu.js'
 
 describe("menu's action unit test", () => {
 	let data = "LISTING"

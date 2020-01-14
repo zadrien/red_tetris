@@ -15,6 +15,7 @@ Controller.prototype.login = function (socket, data) {
 	
 	var player = new Player(socket, data.name)
 	this.isLogged[socket.id] = player
+	console.log(`New player connected ${player.socket.id} - ${player.name}`)
 	return player	
 }
 

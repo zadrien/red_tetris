@@ -1,6 +1,6 @@
 import expect from 'expect.js'
 
-import  { onFetch, emitFetch, onPrev, onNext, emitJoin, onCreation, onPing } from './listing.js'
+import  { onFetch, emitFetch, onPrev, onNext, emitJoin, onCreation, onPing } from './Listing.js'
 
 
 describe("Listing's action Unit Test", () => {

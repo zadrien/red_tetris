@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { setInterface } from '../actions/Menu'
@@ -6,7 +6,7 @@ import { setInterface } from '../actions/Menu'
 import Pagination from '../components/Listing/Pagination'
 import List from '../components/Listing/Rooms'
 
-const Rooms = ({ Create, Listener, removeListener }) => {  
+const Rooms = ({ Create }) => {  
   return (
     <div>
       <div>

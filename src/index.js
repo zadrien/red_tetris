@@ -10,6 +10,7 @@ import socketMiddleware from './client/middleware/socketMiddleware'
 
 import TetrisApp from './client/reducers'
 import App from './client/containers/app'
+//import configureStore from './client/store/configure-store'
 
 const initialState = {
 
@@ -26,6 +27,9 @@ const store = createStore(
 	initialState,
 	applyMiddleware(thunk, createLogger(), socketMiddleware())
 )
+
+//const store = configureStore()
+
 
 ReactDOM.render((
 	<Provider store={store}>

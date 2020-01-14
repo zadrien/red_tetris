@@ -31,12 +31,8 @@ export default function socketMiddleware() {
     }
 	
     let handleEvent = handle;
-    if (typeof handleEvent === 'string') {
-	  console.log("HIIII2")
+    if (typeof handleEvent === 'string')
       handleEvent = result => dispatch({type: handle, result, ...rest})
-    }
-	console.log("type of event:", typeof event)
-	console.log("type of handleEvent",typeof handleEvent)
     return socket.on(event, handleEvent);
   };
 }
