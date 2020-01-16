@@ -37,23 +37,15 @@ Edit `params.js` for your needs.
 ```
 $ npm run  srv-dev
 > red_tetrisboilerplate@0.0.1 srv-dev /home/eric/JS/red_tetris_boilerplate
-> DEBUG=tetris:* babel-watch -w src src/server/main.js
+> DEBUG=tetris:* nodemon src/server/start.js
 ```
-
-It launches a node.js server listening for socket.io connexions, that is wired to receive `ping` messages and answered to … `pong`.
 
 #### Launch Client
 
 ```
 $ npm run client-dev
 > red_tetrisboilerplate@0.0.1 client-dev /home/eric/JS/red_tetris_boilerplate
-> webpack-dev-server --colors --hot --inline --host 0.0.0.0 --port 8080
-
-http://0.0.0.0:8080/
-webpack result is served from /
-content is served from /home/eric/JS/red_tetris_boilerplate
-…
-webpack: bundle is now VALID.
+> react-scripts start
 ```
 
 
@@ -73,7 +65,7 @@ URL is not yet editable in `params.js`, change it directly inside `package.json`
 As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
 
 ```
-     Updated: 2020/01/11 13:45:36 by zadrien          ###   ########.fr         
+     Updated: 2020/01/16 10:02:04 by zadrien          ###   ########.fr         
 ```
 
 
@@ -189,58 +181,3 @@ describe('Fake server test', function(){
 3. Now we have a socket (client connection), so middleware is able to send socket.io messages to server.
 
 In our context, we dispatch `ping` action and register a callback on `pong` action.
-
-#### Coverage
-
-```
-npm run coverage
-
-> red_tetrisboilerplate@0.0.1 coverage /home/eric/JS/red_tetris_boilerplate
-> NODE_ENV=test nyc -r lcov -r text mocha --require babel-core/register
-
-```
-
-Check results …. of this command, and launch your browser to `./coverage/lcov-report/index.html`
-
-
-### Production Mode
-
-It’s not a production recipe to run your Tetris over billions of players, but just 2 commands to run it without live reload.
-
-```
-$ npm run srv-dist
-
-> red_tetrisboilerplate@0.0.1 srv-dist /home/eric/JS/red_tetris_boilerplate
-> DEBUG=tetris:* babel src --out-dir dist
-
-src/client/actions/alert.js -> dist/client/actions/alert.js
-src/client/actions/server.js -> dist/client/actions/server.js
-src/client/components/test.js -> dist/client/components/test.js
-src/client/containers/app.js -> dist/client/containers/app.js
-src/client/index.js -> dist/client/index.js
-src/client/middleware/storeStateMiddleWare.js -> dist/client/middleware/storeStateMiddleWare.js
-src/client/reducers/alert.js -> dist/client/reducers/alert.js
-src/client/reducers/index.js -> dist/client/reducers/index.js
-src/server/index.js -> dist/server/index.js
-src/server/main.js -> dist/server/main.js
-
-$ npm run client-dist
-
-> red_tetrisboilerplate@0.0.1 client-dist /home/eric/JS/red_tetris_boilerplate
-> NODE_ENV=production webpack --progress --colors
-
-Hash: 6841f78bfe6867fb2913  
-Version: webpack 1.13.0
-Time: 1923ms
-    Asset    Size  Chunks             Chunk Names
-bundle.js  754 kB       0  [emitted]  main
-    + 197 hidden modules
-
-$  DEBUG=tetris:* node dist/server/main.js 
-  tetris:info tetris listen on http://0.0.0.0:3004 +0ms
-  not yet ready to play tetris with U ...
-```
-
-In production mode, node.js server serves `index.html` and `bundle.js`, so you have to point to url set up in `params.js` 
-
-That’s all folks ... 
