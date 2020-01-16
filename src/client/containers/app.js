@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { connect } from 'react-redux'
 import Play from '../components/app/HomeButton';
 import ListingRooms from './ListingRooms';
@@ -6,7 +6,7 @@ import Room from './Room';
 import Create from './Create'
 
 import { onPlayer as onLogin } from '../actions/Profil'
-import { onCreation, onFetch } from '../actions/Listing';
+import { onCreation, onFetch, onPing } from '../actions/Listing';
 import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../actions/Room';
 import quickAccess from '../utils/quickAccess'
 
@@ -14,16 +14,17 @@ import './style.css';
 import '../global.css';
 
 const App = ({ menu, initListener }) => {
-  initListener()
+  useEffect(() => {
+    initListener()
+  }, [])
+  
   if (!menu) {
     return (
       <div className="menu-screen">
         <Play />
       </div>
     )
-  }
-
-  if (menu === 'ROOM') {
+  } else if (menu === 'ROOM') {
     return (<Room />)
   } else if (menu === 'LISTING') {
     return (
@@ -49,15 +50,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   initListener: () => {
-    dispatch(onCreation());
-    dispatch(onFetch());
-    dispatch(onJoined());
-    dispatch(onHost());
-    dispatch(onPlayers());
-    dispatch(onDisplay());
-    dispatch(onQuit());
-    dispatch(onStart());
-    dispatch(onGameOver());
+    dispatch(onCreation())
+    dispatch(onFetch())
+    dispatch(onJoined())
+    dispatch(onHost())
+    dispatch(onPlayers())
+    dispatch(onDisplay())
+    dispatch(onQuit())
+    dispatch(onStart())
+    dispatch(onGameOver())
+    dispatch(onPing())
     
     dispatch(onLogin())
     window.addEventListener('keydown', function (e) { // replace this event
@@ -77,7 +79,7 @@ const mapDispatchToProps = (dispatch) => ({
       }
     })
     console.log(window.location)
-    quickAccess(dispatch, window.location)
+//    quickAccess(dispatch, window.location)
     
   }
   

@@ -80,7 +80,7 @@ Player.prototype.stopGame = function () {
 		return false
 	this.game.stop()
 	this.isPlaying = false
-	delete this.game // to check
+//	delete this.game // to check
 
 	return true
 }

@@ -45,7 +45,7 @@ export async function find(id) {
 	let room = Rooms[id]
 	if (!room)
 		Promise.reject("room not found")
-    return Rooms[id]
+    return room
 }
 
 export function deleteRoom(id) {

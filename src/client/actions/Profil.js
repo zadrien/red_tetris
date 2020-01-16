@@ -4,12 +4,12 @@ export const onPlayerName = (name) => ({
     name
 });
 
-export const emitPlayer = (name, room = {}) => ({
+export const emitPlayer = (name, room) => ({
   emit: true,
   event: "login",
   payload: {
-	name: name,
-	room: room
+	name,
+	room
   }
 })
 

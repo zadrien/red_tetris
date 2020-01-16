@@ -1,5 +1,6 @@
 import fs  from 'fs'
 import debug from 'debug'
+import _ from 'lodash'
 
 import { fetch, ping, join, leave, start } from './rooms/roomsAPI'
 import userController from './player/playerController'
@@ -48,9 +49,8 @@ const initEngine = io => {
 				if (!user)
 					return
 				socket.emit("login", { name: user.name })
-				if (data.room) {
+				if (!_.isEmpty(data.room))
 					join(io, user, data)
-				}
 			} catch (err) {
 				socket.emit("login", err)
 				return 

@@ -10,7 +10,7 @@ import socketMiddleware from './client/middleware/socketMiddleware'
 
 import TetrisApp from './client/reducers'
 import App from './client/containers/app'
-//import configureStore from './client/store/configure-store'
+import configureStore from './client/store/configure-store'
 
 const initialState = {
 
@@ -22,13 +22,13 @@ function accessRoom(location) {
     console.log("REGEXP:", re.exec(location)[1]);
 }
 
-const store = createStore(
-	TetrisApp,
-	initialState,
-	applyMiddleware(thunk, createLogger(), socketMiddleware())
-)
+// const store = createStore(
+// 	TetrisApp,
+// 	initialState,
+// 	applyMiddleware(thunk, createLogger(), socketMiddleware())
+// )
 
-//const store = configureStore()
+const store = configureStore()
 
 
 ReactDOM.render((

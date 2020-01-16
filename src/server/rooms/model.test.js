@@ -66,7 +66,7 @@ describe("Room Model Unit Test", () => {
 					user = new User(socket, data.name)
 					room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
 					room.newPlayer(user)
-					room.leave(user)
+					room.leaveGame(user)
 				})
 
 				socket = ioClient.connect(socketURL, option)

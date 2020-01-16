@@ -11,7 +11,6 @@ const color = {
   V: "Violet",
   R: "Red",
   M: "Grey"
-  
 }
 
 const box = (c) => {

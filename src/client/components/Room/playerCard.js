@@ -23,7 +23,8 @@ const color = {
   Y: "Yellow",
   G: "Green",
   V: "Violet",
-  R: "Red"
+  R: "Red",
+  M: "Grey"
 }
 
 const lineStyle = {

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Tetraminos from '../Game/tetraminos'
 
 export default function Lobby(io, id, name, mode) {
-  this.ios = io
+	this.ios = io
 	this.io = io.sockets.in(id)
 	this.id = id
 	this.name = name
@@ -17,7 +17,6 @@ export default function Lobby(io, id, name, mode) {
 }
 
 Lobby.prototype.kill = function() {
-//	console.log(`killing ${this.id} instance`)
 	if (this.broad)
 		clearInterval(this.broad)
 	if (this.start) {
@@ -47,39 +46,38 @@ Lobby.prototype.newPlayer = function (user) {
 		this.leave(user)
 	})
 	user.initGame(this.mode)
+	this.ping()
 	return true
 }
 
-Lobby.prototype.leave = function (user) {
-//	console.log(`User(${user.socket.id} leaving room...`)
+Lobby.prototype.leaveGame = function (user) {
+	console.log(`User(${user.socket.id} leaving room...`)
 	var leaver = this.users[user.socket.id]
 	if (!leaver)
 		return
-	if (this.start) {
-		//		this.endGameCallback(user.socket.id)
-		user.stopGame()
-	}
+	if (this.start)
+		this.endGameCallback(user.socket.id)
 	delete user.game
 	user.Notify("LEAVE", { state: "QUIT" })
 	user.socket.leave(this.id)
 	
 	delete this.users[user.socket.id]
-	
+	this.nbr--
 	if (user.socket.id === this.host.socket.id) {
-//		console.log("Searching a new host..")
 		this.host = undefined
 		var newHost = _.sample(this.users)
-		if (!newHost)
-			return
-		this.host = newHost
-		this.host.Notify("HOST", { host: true })
-		this.host.Notify("START", { start: this.start })
+		if (newHost) {
+			this.host = newHost
+			this.host.Notify("HOST", { host: true })
+			this.host.Notify("START", { start: this.start })
+		}
 	}
+	this.ping()
 }
 
 Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
-//		console.log(`${this.id} - Starting the game!`)
+		console.log(`${this.id} - Starting the game!`)
 		this.start = true
 		this.host.Notify("START", { start: this.start })
 		var ids = Object.keys(this.users)
@@ -90,6 +88,7 @@ Lobby.prototype.startGame = function (user) {
 								 this.mallusCallback.bind(this),
 								 this.endGameCallback.bind(this))
 		})
+		this.ping()
 		return true
 	}
 	return false
@@ -112,6 +111,7 @@ Lobby.prototype.endGameCallback = function (id) {
 //		this.io.in(this.id).emit("GAMEOVER", { winner: user.name })
 		user.Notify("GAMEOVER", { winner: true })
 		this.host.Notify("START", { start: this.start })
+//		this.ping()
 		return
 	} else {
 //		console.log("END")
@@ -161,8 +161,9 @@ Lobby.prototype.ping = function () {
 		nbrUser: nbr,
 		isStarted: this.start
 	}
-  console.log("hi")
-  this.ios.of('/').emit('CHECK', { room : info })
+	console.log(info)
+//	socket.broadcast('CHECK', { room: info })
+	this.io.emit('CHECK', { room : info })
 }
 
 function selectMode(mode) {
