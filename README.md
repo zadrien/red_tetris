@@ -41,7 +41,7 @@ URL is not yet editable in `params.js`, change it directly inside `package.json`
 As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
 
 ```
-     Updated: 2020/01/16 10:05:53 by zadrien          ###   ########.fr         
+     Updated: 2020/01/16 10:15:35 by zadrien          ###   ########.fr         
 ```
 
 
@@ -53,107 +53,3 @@ Stop server, or use an other setup (//TODO)
 ```
 $ npm run test
 ```
-
-Tests are installed under `test` folder.
-
-#### fake.js
-
-A simple template to implement simple unit tests. In Tetris context you will try to test every functions or classes from server or client code. Just import your files and check (http://shouldjs.github.io/)[should] documentation to extend the test.
-
-
-#### redux.js
-
-Target is to test `actions` and `reducers` in one time. You can always split those tests as explained [here](http://redux.js.org/docs/recipes/WritingTests.html).
-Look at the code :
-
-```
-//cat redux1.js
-// 1
-import {configureStore} from './helpers/server'
-// 2
-import rootReducer from '../src/client/reducers'
-import {ALERT_POP, alert} from '../src/client/actions/alert'
-import chai from "chai"
-const MESSAGE = "message"
-chai.should()
-describe('Fake redux test', function(){
-  it('alert it', function(done){
-    const initialState = {}
-   // 3
-    const store =  configureStore(rootReducer, null, initialState, {
-      ALERT_POP: ({dispatch, getState}) =>  {
-        const state = getState()
-        state.message.should.equal(MESSAGE)
-        done()
-      }
-    })
-   // 4
-    store.dispatch(alert(MESSAGE))
-  });
-
-});
-```
-
-1. We use a special middleware to set up hooks in action’s workflow.
-2. We use here the  root reducer, but it can be replaced by  any kind of reducer
-3. target is to check updates in our store, so we have to create a store for each check (`it()`), `configureStore` is a store helper.
-
-*configureStore* :
-
-* `reducer`:  not necessary the root one
-* `socket`:  (unused here)
-* `initial state`:  set up to realize the action
-* `actions hook`: object where keys are action’s type and values are callbacks. `action’s type` is one of your actions defined in your application, `callback` function will receive  {getState, dispatch, action} as real parameter.
-
-Thanks to the hook you can react to actions, just to check a new state after an action, or to send actions to follow a workflow and check state at the end.
-
-
-In our sample, we register a callback when `ALERT_POP` will be dispatched and check that `state.message`is right. Callback is called after reducers.
-
-
-#### server.js
-
-Very similar to previous test, but offer to test server code involved in a client action. You can use this kind of solution to test a pipeline like `action -> fetch -> action -> reducer`. Here client / server communication is based on socket.io and we use a middleware inspired by [redux-socket.io](https://github.com/itaylor/redux-socket.io) to transparantly dispatch and receive socket.io messages. So our test covers  `action -> socket.emit -> server code -> client socket callback -> action -> reducer`. I do not know if it’s still a unit test, but it’s a useful solution to test.
-
-Let’s have a look on code:
-
-
-```
-import chai from "chai"
-import {startServer, configureStore} from './helpers/server'
-import rootReducer from '../src/client/reducers'
-// 1
-import {ping} from '../src/client/actions/server'
-import io from 'socket.io-client'
-import params from '../params'
-chai.should()
-
-describe('Fake server test', function(){
-  let tetrisServer
-
-// 2 
-  before(cb => startServer( params.server, function(err, server){
-    tetrisServer = server
-    cb()
-  }))
-
-  after(function(done){tetrisServer.stop(done)})
-
-  it('should pong', function(done){
-    const initialState = {}
-    const socket = io(params.server.url)
-    // 3
-    const store =  configureStore(rootReducer, socket, initialState, {
-      'pong': () =>  done()
-    })
-    store.dispatch(ping())
-  });
-});
-```
-
-
-1. This time we will test server actions: it means client actions that transparently communicate with server
-2. for each `describe` we have to launch the server. Tetris server is statefull, so we can run multiple tests (`it`) on one server to check behavior (ex: multiple users, events)
-3. Now we have a socket (client connection), so middleware is able to send socket.io messages to server.
-
-In our context, we dispatch `ping` action and register a callback on `pong` action.
