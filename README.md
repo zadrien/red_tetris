@@ -15,6 +15,7 @@ $ npm run  srv-dev
 > red_tetrisboilerplate@0.0.1 srv-dev /home/zadrien/JS/red_tetris
 > DEBUG=tetris:* nodemon src/server/start.js
 ```
+N.B: You'll need an NoSQL Database to run the server properly (you can configure it with the `params.js` file).
 
 #### Launch Client
 
@@ -37,13 +38,6 @@ bundle.js:616 [WDS] Hot Module Replacement enabled.
 ```
 
 URL is not yet editable in `params.js`, change it directly inside `package.json`.
-
-As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
-
-```
-     Updated: 2020/01/16 10:15:35 by zadrien          ###   ########.fr         
-```
-
 
 #### Test
 
