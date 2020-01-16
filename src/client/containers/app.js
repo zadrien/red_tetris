@@ -5,10 +5,16 @@ import ListingRooms from './ListingRooms';
 import Room from './Room';
 import Create from './Create'
 
+import { onPlayer as onLogin } from '../actions/Profil'
+import { onCreation, onFetch } from '../actions/Listing';
+import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../actions/Room';
+import quickAccess from '../utils/quickAccess'
+
 import './style.css';
 import '../global.css';
 
-const App = ({ menu }) => {
+const App = ({ menu, initListener }) => {
+  initListener()
   if (!menu) {
     return (
       <div className="menu-screen">
@@ -41,4 +47,40 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = (dispatch) => ({
+  initListener: () => {
+    dispatch(onCreation());
+    dispatch(onFetch());
+    dispatch(onJoined());
+    dispatch(onHost());
+    dispatch(onPlayers());
+    dispatch(onDisplay());
+    dispatch(onQuit());
+    dispatch(onStart());
+    dispatch(onGameOver());
+    
+    dispatch(onLogin())
+    window.addEventListener('keydown', function (e) { // replace this event
+      if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1)
+        e.preventDefault()
+      var key = e.keyCode
+      if (key === 38) { // UP
+        dispatch(emitMove("UP"));
+      } else if (key === 39) { // RIGHT
+        dispatch(emitMove("RIGHT"));
+      } else if (key === 40) { // DOWN
+        dispatch(emitMove("DOWN"));
+      } else if (key === 37) { // LEFT
+        dispatch(emitMove("LEFT"));
+      } else if (key === 32) { // SPACE
+        dispatch(emitMove("SPACE"));
+      }
+    })
+    console.log(window.location)
+    quickAccess(dispatch, window.location)
+    
+  }
+  
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

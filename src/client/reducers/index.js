@@ -1,4 +1,4 @@
-import TetrisApp from './reducer';
+import TetrisApp from './Reducer';
 
 export default TetrisApp;
 

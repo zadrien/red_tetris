@@ -21,19 +21,18 @@ export default function socketMiddleware() {
     }
 
     if (leave) {
-      socket.removeListener(event);
+	  console.log("remove listener")
+      return socket.removeListener(event);
     }
 
     if (emit) {
       console.log("payload:", payload)
       return socket.emit(event, payload)
     }
-    
+	
     let handleEvent = handle;
-    if (typeof handleEvent === 'string') {
+    if (typeof handleEvent === 'string')
       handleEvent = result => dispatch({type: handle, result, ...rest})
-    }
-
     return socket.on(event, handleEvent);
   };
 }

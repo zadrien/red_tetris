@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { CreateButton, List, Pagination } from '../components/Listing'
-import { setInterface } from '../actions/menu'
+
+import { setInterface } from '../actions/Menu'
+
+import Pagination from '../components/Listing/Pagination'
+import List from '../components/Listing/Rooms'
 
 const Rooms = ({ Create }) => {  
   return (
@@ -18,15 +21,14 @@ const Rooms = ({ Create }) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-//    create: state.create,
-  }
-}
+const mapStateToProps = (state) => ({
+  create: state.create,
+})
 
 const mapDispatchToProps = (dispatch) => ({
   Create: () => {
     dispatch(setInterface("CREATE"))
   }
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(Rooms);

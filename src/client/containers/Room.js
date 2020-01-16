@@ -1,22 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { emitQuit, winValidate } from '../actions/Room'
 
-import { Display, Players, Host } from '../components/room'
-import { emitQuit } from '../actions/room'
+import Board from '../components/Room/display'
+import Players from '../components/Room/player'
+import Host from '../components/Room/host'
 
 import '../global.css';
 
-const AppStyle = {
-  margin: "auto",
-  width: "100%",
-  height: "700px",
-  display: "flex",
-  flexDirection: "column",
-  border: "1px solid blue",
-  alignItems: "center"
-}
-
-const Room = ({ room, onLeave }) => {
+const Room = ({ room, onLeave, onWin }) => {
 
   if (room) {
     return (
@@ -24,16 +16,20 @@ const Room = ({ room, onLeave }) => {
         <div className="align-center width-100">
           <h1 className="title medium">{room.name}</h1>
         </div>
-
         <div className="d-flex just-center mx-auto width-25">
           <Host />
-          <div className="bob-btn secondary" onClick={onLeave}>Leave</div>
+          <div className="bob-btn secondary" onClick={() => onLeave(room)}>Leave</div>
         </div>
 
-        <div className="p-2 width-100 d-flex row just-center">
-          <Display/>
-          {/* <Players /> */}
+        <div className="p-2 width-100 d-flex row just-center mx-auto">
+          <Board/>
+          <Players />
         </div>
+
+        {room.winner === undefined ? null :
+         (room.winner === true ? <div onClick={onWin}>You won</div> : (room.winner === false ? <div onClick={onWin}>You lose</div>: null))
+        
+        }
       </div>
     )
   }
@@ -47,10 +43,14 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  onLeave: () => {
+  onLeave: (room) => {
     console.log("quit lobby!")
-    dispatch(emitQuit())
+    dispatch(emitQuit(room))
+  },
+  onWin: () => {
+    dispatch(winValidate())
   }
+  
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Room);

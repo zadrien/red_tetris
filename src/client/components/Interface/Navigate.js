@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setInterface } from '../../actions/menu'
+import { setInterface } from '../../actions/Menu'
 
 const Nav = ({ to, onClick }) => (
   <div className="bob-btn secondary width-100" onClick={() => onClick(to)}>Back</div>
@@ -18,3 +18,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav)
+
