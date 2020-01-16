@@ -6,37 +6,13 @@ An online multiplayer game
 ![image](./docs/2.jpg)
 ![image](./docs/3.jpg)
 
-## To do list
-- [x] server
-- [ ] TDD
-
-## Launch the project with docker
-
-Just do:
-```
-$ docker-compose up
-```
-
-## Without docker
-
-### Install
-
-Install [node](https://nodejs.org/en/) first. After that:
-
-```
-$ npm install
-```
-
-Edit `params.js` for your needs.
-
-
 ### Development Mode
 
 #### Launch Server
 
 ```
 $ npm run  srv-dev
-> red_tetrisboilerplate@0.0.1 srv-dev /home/eric/JS/red_tetris_boilerplate
+> red_tetrisboilerplate@0.0.1 srv-dev /home/zadrien/JS/red_tetris
 > DEBUG=tetris:* nodemon src/server/start.js
 ```
 
@@ -44,7 +20,7 @@ $ npm run  srv-dev
 
 ```
 $ npm run client-dev
-> red_tetrisboilerplate@0.0.1 client-dev /home/eric/JS/red_tetris_boilerplate
+> red_tetrisboilerplate@0.0.1 client-dev /home/zadrien/JS/red_tetris
 > react-scripts start
 ```
 
@@ -65,7 +41,7 @@ URL is not yet editable in `params.js`, change it directly inside `package.json`
 As you can guess we are using webpack `hot reload` module, try to update any file under `src/client` and your browser should reload your code.
 
 ```
-     Updated: 2020/01/16 10:02:04 by zadrien          ###   ########.fr         
+     Updated: 2020/01/16 10:05:53 by zadrien          ###   ########.fr         
 ```
 
 
