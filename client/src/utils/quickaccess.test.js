@@ -7,6 +7,7 @@ describe('quickAccess Unit Test', () => {
   let testURL = {
 	href: `http://localhost:3000/#roomID[testName]`,
 	pathname: `/#roomID[testName]`
+  }
   const dispatch = () => {}
   
   describe('#quickAccess()', () => {

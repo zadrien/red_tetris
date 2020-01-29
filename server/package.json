@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server for Red Tetris",
+  "main": "src/start.js",
+  "scripts": {
+    "start": "DEBUG=tetris* nodemon",
+    "test": "mocha --exit --require babel-core/register src/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zadrien/red_tetris.git"
+  },
+  "keywords": [
+    "multiplayer",
+    "server",
+    "socket",
+    "api"
+  ],
+  "author": "zadrien",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zadrien/red_tetris/issues"
+  },
+  "homepage": "https://github.com/zadrien/red_tetris#readme",
+  "devDependencies": {
+    "mocha": "^7.0.1"
+  }
+}
