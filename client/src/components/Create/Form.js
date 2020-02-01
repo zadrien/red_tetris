@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { isCreating, onCreation, emitCreate } from '../../actions/Create'
-import Nav from '../Interface/Navigate'
+import { setInterface, LISTING } from '../../actions/Menu'
+
 import "./style.css";
 
-const Create = ({ isCreating, onSubmit, user}) => (
+export const Create = ({ isCreating, user, onSubmit, goBack}) => (
   <form onSubmit={(e) => onSubmit(e, user)} id="create-room-form">
     <h2 className="align-left title small mt-3">Room's name</h2>
     <input className="width-100 p-2" type="text" maxLength="25" id="room" name="room" placeholder="MY AWSOME ROOM"/>
@@ -19,7 +20,7 @@ const Create = ({ isCreating, onSubmit, user}) => (
       <span className="ml-1">Invisible Piece</span>
     </div>
     <button type="submit" className="bob-btn secondary width-100">{isCreating ? 'Creating...' : 'Create'}</button>
-    <Nav to="LISTING" />
+    <div className="bob-btn secondary width-100" onClick={() => goBack()}>Back</div>/>
   </form>
 )
 
@@ -49,6 +50,9 @@ const mapDispatchToProps = (dispatch, e) => ({
       dispatch(onCreation())
       dispatch(emitCreate(data))
     }
+  },
+  goBack: () => {
+    dispatch(setInterface(LISTING))
   }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Create);

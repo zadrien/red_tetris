@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import CreateForm from '../components/Create/Form'
 
-const Create = ({ onClick }) => {
+const Create = () => {
   return (
     <div>
       <h1 className="title">Create a room</h1>
@@ -11,4 +11,4 @@ const Create = ({ onClick }) => {
   )
 }
 
-export default connect()(Create)
+export default Create

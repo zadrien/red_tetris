@@ -1,26 +1,30 @@
-import { assert } from 'chai'
-
 import quickAccess from './quickAccess'
 
+import { expect } from 'chai'
+
 describe('quickAccess Unit Test', () => {
-  let res
-  let testURL = {
+  const location = {
 	href: `http://localhost:3000/#roomID[testName]`,
-	pathname: `/#roomID[testName]`
+	hash: `#roomID[testName]`
   }
-  const dispatch = () => {}
-  
-  describe('#quickAccess()', () => {
-	it('should return a undefined', () => {
-	  assert.isUndefined(quickAccess(dispatch), 'return is defined')
-	})
-	
-	
-	it('should return regexp', () => {
-	  res = quickAccess(store, testURL)
-	  console.log(res)
-	  assert.isString(res, 'return is not a string')
-	})
+
+  it('should return true', () => {
+	  const dispatch = () => {}
+	  expect(quickAccess(dispatch, location)).to.be.true
+  })
+
+  it('should dispatch emitPlayer action', () => {
+	  const dispatch = (e) => {
+		   expect(e).to.have.property('payload', {
+			   	name: 'testName',
+				room: {
+					id: 'roomID'
+				}
+			  }
+			)
+	  }
+
+	  quickAccess(dispatch, location)
   })
 		   
 })

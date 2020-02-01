@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import { onPlayerName, emitPlayer, onPlayer, onErrorName } from './Profil'
 

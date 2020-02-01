@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import  { onFetch, emitFetch, onPrev, onNext, emitJoin, onCreation, onPing } from './Listing.js'
 

@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect }from 'chai'
 
 import { isCreating, onCreation, emitCreate } from './Create'
 

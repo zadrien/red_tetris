@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit, winValidate } from './Room'
 

@@ -1,13 +1,12 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import Profil from './Profil'
-import { onPlayerName, emitPlayer, onPlayer, onErrorName } from '../actions/Profil'
 
 describe('Profil reducer BDD', () => {
   let res
   describe('reducers behavior without parameters', () => {
 	it("should return an empty object", () => {
-	  expect(Profil({}, {})).to.be.empty()
+	  expect(Profil({}, {})).to.be.an('Object').that.is.empty
 	})
   })
 

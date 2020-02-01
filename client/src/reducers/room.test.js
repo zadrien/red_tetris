@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import Room from './Room'
 
@@ -17,7 +17,7 @@ describe('Room\'s Reducer BDD', () => {
 	
 	describe('Reducer without parameters', () => {
 		it('should return an empty state', () => {
-			res = expect(Room()).to.be.empty()
+			res = expect(Room()).to.be.an('Object').that.is.empty
 		})
 	})
 	

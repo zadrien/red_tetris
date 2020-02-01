@@ -1,11 +1,11 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import Listing from './Listing'
 
 describe('Listing\'s Reducer BDD', () => {
   describe('Reducer without parameters', () => {
 	it('should return an empty state', () => {
-	  expect(Listing()).to.be.empty()
+	  expect(Listing()).to.be.an('Object').that.is.empty
 	})
   })
   

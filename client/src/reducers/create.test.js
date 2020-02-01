@@ -1,11 +1,11 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import Create from './Create'
 
 describe('Create\'s Reduce BDD', () => {
   describe('Reducer without parameters', () => {
 	it('should return an empty object', () => {
-	  expect(Create()).to.be.empty()
+	  expect(Create()).to.be.an('Object').that.is.empty
 	})
   })
 

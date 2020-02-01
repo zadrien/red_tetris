@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { emitPlayer } from '../../actions/Profil';
-//import { onCreation, onFetch } from '../../actions/Listing';
-//import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, emitMove, onStart } from '../../actions/Room';
 
 import './home.css';
 import '../../global.css';
 
-const playBut = ({onSubmit}) => {
+export const HomeButton = ({onSubmit}) => {
   return (
     <div className="main-menu">
       <h1 className="title">Red Tetris</h1>
@@ -36,4 +34,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(playBut);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeButton);

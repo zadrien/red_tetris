@@ -1,26 +1,36 @@
 import React from 'react'
-import { spy } from 'sinon'
+import { expect } from 'chai'
+import { shallow } from 'enzyme'
 
-import expect from 'expect.js'
-import Card from './playerCard'
-import renderer from 'react-test-renderer'
+import { Card } from './Card'
+
+function setup() {
+  const props = {
+    player: {
+      name: "testName",
+      display: [
+        [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
+        [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
+        [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
+        [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
+        [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ]
+      ]
+    }
+  }
+
+  const enzymeWrapper = shallow(<Card {...props}/>)
+  return {
+    props,
+    enzymeWrapper
+  }
+}
 
 describe('Card BDD', () => {
-  let player = {
-    name: "testName",
-    display: [
-      [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
-      [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
-      [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
-      [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ],
-      [ '.', '.', '.', '.', '.', '.', '.', '.', '.', '.' ]
-    ]
-  }
-  const component = renderer.create(<Card player={player}/>)
-  
   it('should render Card component', function() {
-    let tree = component.toJSON()
-    
-    expect(tree).toMatchSnapshot()
+    const { enzymeWrapper } = setup()
+
+    expect(enzymeWrapper.find('h6').text()).to.equal('testName')
+    const board = enzymeWrapper.find('Board').props()
+    expect(board.display).to.be.a('Array')
   })
 })

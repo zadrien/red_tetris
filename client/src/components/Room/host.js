@@ -2,16 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { startGame, emitStart, onDisplay, onPlayers } from '../../actions/Room'
 
-const host = ({ host, start, id, onClick }) => {
-  if (!host) {
+export const Host = ({ host, start, id, onClick }) => {
+  if (!host)
     return null
-  }
 
   return (
     <div>
       <div className={`bob-btn secondary ${start === true ? 'disabled' : ''}`} onClick={() => onClick(id)}>Start</div>
     </div>
-    
   )
 }
 
@@ -31,4 +29,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(host)
+export default connect(mapStateToProps, mapDispatchToProps)(Host)

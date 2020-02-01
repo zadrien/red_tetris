@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import Card from './card';
-
-import { emitFetch } from '../../actions/Listing'
-
 import './style.css';
 
-const List = ({ rooms, style }) => {
+export const List = ({ rooms }) => {
   if (rooms && rooms.list) {
     return (
       <div className="room-list">
@@ -25,10 +23,8 @@ const List = ({ rooms, style }) => {
   )
 }
 
-
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   rooms: state.rooms,
-  style: ownProps.style
 })
 
 export default connect(mapStateToProps, null)(List);

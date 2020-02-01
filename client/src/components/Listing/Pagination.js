@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { emitFetch, onPrev, onNext } from '../../actions/Listing.js'
 
-const Pagination = ({items, next, prev}) => (
+export const Pagination = ({items, next, prev}) => (
   <div className="d-flex">
     <div className="bob-btn secondary width-100" onClick={() => prev(items)}>Prev</div>
     <div className="bob-btn secondary width-100" onClick={() => next(items)}>Next</div>
@@ -12,7 +12,6 @@ const Pagination = ({items, next, prev}) => (
 
 const mapStateToProps = (state) => ({
   items: state.rooms
-  
 })
 
 const mapDispatchToProps = (dispatch) => ({

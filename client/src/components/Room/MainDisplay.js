@@ -43,21 +43,16 @@ const render = (line, index) => {
   ))}</div>
 }
 
+const Board = ({ display }) => (
+  <div style={displayStyle}>
+    {display.map((v, k) => render(v, k))}
+  </div> 
+)
 
-const Display = ({display}) => {
-  console.log(display)
-  if (!display) {
-    return (
-      <div style={displayStyle}>
-      </div>
-    )
-  }
-
-  return (
-    <div style={displayStyle}>
-      {display.map((v, k) => render(v, k))}
-    </div> 
-  )
+export const Display = ({display}) => {
+  if (!display)
+    return <div style={displayStyle}/>
+  return <Board display={display}/>
 }
 
 

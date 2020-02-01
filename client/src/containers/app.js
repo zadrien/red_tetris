@@ -13,7 +13,7 @@ import quickAccess from '../utils/quickAccess'
 import './style.css';
 import '../global.css';
 
-const App = ({ menu, initListener }) => {
+export const App = ({ menu, initListener }) => {
   useEffect(() => {
     initListener()
   }, [])
@@ -50,18 +50,20 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   initListener: () => {
-    dispatch(onCreation())
-    dispatch(onFetch())
-    dispatch(onJoined())
-    dispatch(onHost())
-    dispatch(onPlayers())
-    dispatch(onDisplay())
-    dispatch(onQuit())
-    dispatch(onStart())
-    dispatch(onGameOver())
-    dispatch(onPing())
-    
-    dispatch(onLogin())
+    dispatch([
+      onCreation(),
+      onFetch(),
+      onJoined(),
+      onHost(),
+      onPlayers(),
+      onDisplay(),
+      onQuit(),
+      onStart(),
+      onGameOver(),
+      onPing(),
+      onLogin()
+    ])
+
     window.addEventListener('keydown', function (e) { // replace this event
       if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1)
         e.preventDefault()

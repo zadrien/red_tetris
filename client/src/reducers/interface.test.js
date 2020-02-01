@@ -1,11 +1,11 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import Interface from './Interface'
 
 describe('Interface Reduce BDD', () => {
   describe('Reducer without parameter', () => {
 	it('should return an empty object', () => {
-	  expect(Interface()).to.be.empty()
+	  expect(Interface()).to.be.an('Object').that.is.empty
 	})
   })
 

@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { emitQuit, winValidate } from '../actions/Room'
 
-import Board from '../components/Room/display'
-import Players from '../components/Room/player'
+import Board from '../components/Room/MainDisplay'
+import Players from '../components/Room/Player'
 import Host from '../components/Room/host'
 
 import '../global.css';
 
-const Room = ({ room, onLeave, onWin }) => {
+export const Room = ({ room, onLeave, onWin }) => {
 
   if (room) {
     return (

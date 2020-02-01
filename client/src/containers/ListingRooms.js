@@ -5,9 +5,9 @@ import { setInterface } from '../actions/Menu'
 import { emitFetch } from '../actions/Listing'
 
 import Pagination from '../components/Listing/Pagination'
-import List from '../components/Listing/Rooms'
+import List from '../components/Listing/Listing'
 
-const Rooms = ({ rooms, Create, Fetch }) => {
+export const Listing = ({ rooms, Create, Fetch }) => {
   if (!rooms)
     Fetch(0)
 
@@ -38,4 +38,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Rooms);
+export default connect(mapStateToProps, mapDispatchToProps)(Listing);
