@@ -37,7 +37,7 @@ const listing = (state = { }, action = {}) => {
 		return Object.assign({}, state, { rooms: { list: rooms } })
   	default:
 		return state
-  }
+	}
 }
 
 export default listing

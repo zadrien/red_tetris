@@ -7,8 +7,6 @@ import { createLogger } from 'redux-logger'
 import socketMiddleware from '../middleware/socketMiddleware'
 
 export default function configureStore(initialState = {}) {
-	const middlewares = [ thunk, createLogger(), socketMiddleware]
-
 	return createStore(
 		TetrisApp,
 		initialState,

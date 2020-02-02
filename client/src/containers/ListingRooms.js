@@ -8,34 +8,34 @@ import Pagination from '../components/Listing/Pagination'
 import List from '../components/Listing/Listing'
 
 export const Listing = ({ rooms, Create, Fetch }) => {
-  if (!rooms)
-    Fetch(0)
+	if (!rooms)
+		Fetch(0)
 
-  return (
-    <div>
-      <div>
-        <h4 className="title">SELECT A ROOM</h4>
-        <List />
-      </div>
-      <div className="d-flex">
-        <div className="bob-btn secondary width-100" onClick={Create}>New room</div>
-        <Pagination />
-      </div>
-    </div>
+	return (
+	<div>
+		<div>
+			<h4 className="title">SELECT A ROOM</h4>
+			<List />
+		</div>
+		<div className="d-flex">
+			<div className="bob-btn secondary width-100" onClick={Create}>New room</div>
+			<Pagination />
+		</div>
+	</div>
   )
 }
 
 const mapStateToProps = (state) => ({
-  rooms: state.rooms
+	rooms: state.rooms
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  Create: () => {
-    dispatch(setInterface("CREATE"))
-  },
-  Fetch: (nbr) => {
-    dispatch(emitFetch({skip: nbr}))
-  }
+	Create: () => {
+	dispatch(setInterface("CREATE"))
+	},
+	Fetch: (nbr) => {
+	dispatch(emitFetch({skip: nbr}))
+	}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Listing);

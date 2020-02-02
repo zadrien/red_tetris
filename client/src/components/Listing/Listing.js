@@ -25,8 +25,8 @@ export const List = ({ rooms, cursor }) => {
 }
 
 const mapStateToProps = (state) => ({
-  rooms: state.rooms,
-  cursor: state.cursor
+	rooms: state.rooms,
+	cursor: state.cursor
 })
 
 export default connect(mapStateToProps, null)(List);
