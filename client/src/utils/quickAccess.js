@@ -1,27 +1,19 @@
 import { emitPlayer } from '../actions/Profil'
 
+export default function quickAccess(dispatch, hash) {
+	if (!hash.length)
+		throw "Invalid URL"
+	let str = hash.slice(1)
 
-export default function quickAccess(dispatch, location) {
-  let reg = new RegExp('#(.+)')
-  let data = reg.exec(location.hash)
+	if (!str)
+		throw "Invalid URL"
+	let i = str.indexOf('[')
+	let end = str.lastIndexOf(']')
 
-  if (!data)
-	return undefined
-  
-  //  console.log(data)
-  let str = data[1]
+	if (end === -1 || i === -1)
+		throw "Invalid URL"
+	let roomID = str.slice(0, i)
+	let user = str.slice(++i , end)
 
-  let i = str.indexOf('[')
-  let end = str.lastIndexOf(']')
-
-  if (end !== (str.length -1))
-	return new Error('wrong syntax last index invalid')
-  
-  let roomID = str.slice(0, i)
-  let user = str.slice(i + 1, str.length -1)
-
-  console.log(roomID, user)
-
-  dispatch(emitPlayer(user, { id: roomID }))
-  return true
+	dispatch(emitPlayer(user, { id: roomID }))
 }
