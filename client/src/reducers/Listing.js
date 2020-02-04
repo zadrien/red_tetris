@@ -1,14 +1,20 @@
-import _ from 'lodash'
-
-const listing = (state = { }, action = {}) => {
+const listing = (state, action = {}) => {
 	let obj
   
 	switch (action.state) {
 	case "FETCH":
-		if (state.rooms && !_.isEmpty(state.rooms.list))
-			return Object.assign({}, state, { rooms: { list: [...state.rooms.list, ...action.result.rooms] } })
-    	return Object.assign({}, state, { rooms: { list: action.result.rooms } })
-
+		if (action.result.rooms) {
+			if (!state.rooms)
+				return Object.assign({}, state, {rooms: { list: action.result.rooms }})
+			obj = state.rooms
+			action.result.rooms.forEach((r) => {
+				let exist = obj.list.findIndex(el => {return el.id === r.id})
+				if (exist === -1)
+					obj.list.push(r)
+			})
+			return Object.assign({}, state, { rooms : obj })
+		}
+		return state
   	case "JOINING":
 		if (action.result) {
 			if (action.result.err)
@@ -30,11 +36,15 @@ const listing = (state = { }, action = {}) => {
   	case "CHECK":
 		if (!action.result.room)
 			break
-		let rooms = state.rooms.list
-	
-		let i = rooms.findIndex(function (el) { return el.id === action.result.room.id})
-		rooms[i] = action.result.room
-		return Object.assign({}, state, { rooms: { list: rooms } })
+		if (!state.rooms)
+			return state
+		obj = JSON.parse(JSON.stringify(state.rooms))
+		obj.list.forEach((v, k) => {
+			if (v.id !== action.result.room.id)
+				return 
+			obj.list[k] = action.result.room
+		})
+		return Object.assign({}, state, state.rooms = obj)
   	default:
 		return state
 	}

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { emitJoin, emitPing } from '../../actions/Listing'
+import { emitJoin } from '../../actions/Listing'
 
 const Card = ({room, onClick}) => (
 	<div disabled={room.isStarted ? true : false} onClick={onClick} className="room-list-item">

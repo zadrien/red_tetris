@@ -31,7 +31,7 @@ const room = (state = {}, action = {}) => {
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "GAMEOVER":
-		room['winner'] = (action.result.winner === state.user.name ? true : false)
+		room['winner'] = (action.result.winner)
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "RESET":

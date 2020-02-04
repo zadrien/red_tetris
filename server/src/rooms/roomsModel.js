@@ -43,8 +43,8 @@ Lobby.prototype.newPlayer = function (user) {
 	// Adding event here
 
 	user.socket.on("disconnect", function() {
-		this.leave(user)
-	})
+		this.leaveGame(user)
+	}.bind(this))
 	user.initGame(this.mode)
 	this.ping()
 	return true

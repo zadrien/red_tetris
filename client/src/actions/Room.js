@@ -79,7 +79,7 @@ export const onQuit = () => ({
   state: "QUIT",
 })
 
-export const winValidate = () => ({
+export const removeOverlay = () => ({
   type: ROOM,
   state: "RESET",
   reset: true

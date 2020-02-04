@@ -13,7 +13,6 @@ export async function restoreRooms(io) {
 		if (!_.isEmpty(Rooms))
 			return null;
 		var all = await roomDb.read({}, {}, 0, 0)
-		console.log("nbr of saved loby:", all.length)
 		_.map(all, function (v) {
 		  var newRoom = new Room(io, v.id, v.name, v.mode)
 			Rooms[v.id] = newRoom
@@ -34,7 +33,7 @@ export async function create(io, room) {
 		var obj = await roomDb.create(room)
 		return r
     } catch (err) {
-		console.log("Room creation failure!...")
+		console.log("Room creation failure!..")
 		Promise.reject(err)
     }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { setInterface } from '../actions/Menu'
@@ -7,9 +7,10 @@ import { emitFetch } from '../actions/Listing'
 import Pagination from '../components/Listing/Pagination'
 import List from '../components/Listing/Listing'
 
-export const Listing = ({ rooms, Create, Fetch }) => {
-	if (!rooms)
+export const Listing = ({ Create, Fetch }) => {
+	useEffect(() => {
 		Fetch(0)
+	})
 
 	return (
 	<div>
@@ -31,10 +32,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	Create: () => {
-	dispatch(setInterface("CREATE"))
+		dispatch(setInterface("CREATE"))
 	},
 	Fetch: (nbr) => {
-	dispatch(emitFetch({skip: nbr}))
+		dispatch(emitFetch({skip: nbr}))
 	}
 })
 

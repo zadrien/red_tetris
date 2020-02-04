@@ -10,7 +10,7 @@ const style = {
 
 export const Players = ({ players }) => {
 	if (!players)
-		return (<div style={style}>No one</div>)
+		return null
 	return (
 		<div className="d-flex row" style={style}>
 			{players.map((p, index) => (

@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import Overlay from './Overlay'
+
 const color = {
 	".": "Black",
 	C: "Cyan",
@@ -46,6 +48,7 @@ const render = (line, index) => (
 
 const Board = ({ display }) => (
 	<div style={displayStyle}>
+		<Overlay/>
 		{display.map((v, k) => render(v, k))}
 	</div> 
 )

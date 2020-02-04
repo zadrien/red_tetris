@@ -43,7 +43,6 @@ export async function join(io, user, data) {
 }
 
 export async function leave(user, data) {
-	console.log("event leave!!")
 	let room
 	try {
 		console.log("Room info::", data)

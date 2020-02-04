@@ -20,7 +20,7 @@ export const Create = ({ isCreating, user, onSubmit, goBack}) => (
 			<span className="ml-1">Invisible Piece</span>
 		</div>
 		<button type="submit" className="bob-btn secondary width-100">{isCreating ? 'Creating...' : 'Create'}</button>
-		<div className="bob-btn secondary width-100" onClick={() => goBack()}>Back</div>/>
+		<div className="bob-btn secondary width-100" onClick={() => goBack()}>Back</div>
 	</form>
 )
 

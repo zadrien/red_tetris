@@ -44,6 +44,7 @@ const initEngine = io => {
 
 		socket.on('login', async function(data) {
 			var user
+			loginfo("login route access")
 			try {
 				user = await userController.login(socket, data)
 				if (!user)
