@@ -4,9 +4,9 @@
   "description": "Server for Red Tetris",
   "main": "src/start.js",
   "scripts": {
-    "start": "DEBUG=tetris* nodemon",
+    "start": "NODE_ENV=development EBUG=tetris* nodemon",
     "test": "mocha --exit --require babel-core/register src/**/*.test.js",
-    "build": "webpack"
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",

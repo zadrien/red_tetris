@@ -3,6 +3,7 @@ import { create, find, restoreRooms } from './roomsController'
 
 export async function fetch(io, user, data) {
     try {
+		console.log("??")
 		let skip = data.skip ? data.skip : 0
 		let limit = data.limit ? data.limit : 0
 		let rooms = await Rooms.read({}, {}, skip, limit)

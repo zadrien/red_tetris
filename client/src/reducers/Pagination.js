@@ -1,19 +1,22 @@
 
 export const Pagination = (state = {}, action = {}) => {
-	let newIndex
-	switch (action.type) {
+	let cursor
+	cursor = JSON.parse(JSON.stringify(state.cursor))
+	switch (action.state) {
 		case "CURSOR_NEXT":
-			newIndex = state.cursor.i + state.cursor.pad
-			if (newIndex < state.rooms.list.length)
-				return Object.assign({}, state, state.cursor.i = newIndex)
+			console.log("here")
+			cursor.i += cursor.pad
+			if (cursor.i < state.rooms.list.length)
+			return Object.assign({}, state, {cursor: cursor})
 			break ;
 		case "CURSOR_PREV":
-			newIndex = state.cursor.i - state.cursor.pad
-			if (newIndex >= 0)
-				return Object.assign({}, state, state.cursor.i = newIndex)
+			cursor.i -= cursor.pad
+			if (cursor.i >= 0)
+				return Object.assign({}, state, {cursor: cursor})
 			break ;
 		case "CURSOR_REFRESH":
-			return Object.assign({}, state, state.cursor.i = 0)
+			cursor.i = 0
+			return Object.assign({}, state, { cursor: cursor })
 		default:
 			return state
 	}

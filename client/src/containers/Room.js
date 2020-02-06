@@ -8,8 +8,9 @@ import Host from '../components/Room/host'
 
 import '../global.css';
 
-export const Room = ({ room, enableController, disableController,onLeave }) => {
+export const Room = ({ room, onStartUp, enableController, disableController, onLeave }) => {
 	useEffect(() => {
+		onStartUp(room)
 		enableController()
 
 		return () => {
@@ -60,7 +61,16 @@ const mapDispatchToProps = (dispatch) => () => {
 		}
 	}
 
+	const changeURL = (room) => {
+		window.history.pushState(null,null, `#${room.id}`)
+		document.title = room.name.toUpperCase()
+	}
+
+
 	return ({
+		onStartUp: (e) => {
+			changeURL(e)
+		},
 		enableController: () => {
 			window.addEventListener('keydown', controller)
 		},
@@ -69,6 +79,8 @@ const mapDispatchToProps = (dispatch) => () => {
 		},
 		onLeave: (room) => {
 			dispatch(emitQuit(room))
+			window.history.back()
+			document.title = "Red Tetris"
 		}
 	})
 }

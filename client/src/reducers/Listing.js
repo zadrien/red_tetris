@@ -44,7 +44,7 @@ const listing = (state, action = {}) => {
 				return 
 			obj.list[k] = action.result.room
 		})
-		return Object.assign({}, state, state.rooms = obj)
+		return Object.assign({}, state, { rooms: obj })
   	default:
 		return state
 	}

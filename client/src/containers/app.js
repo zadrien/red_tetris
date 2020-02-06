@@ -6,7 +6,7 @@ import Room from './Room';
 import Create from './Create'
 
 import { onPlayer as onLogin } from '../actions/Profil'
-import { onCreation, onFetch, onPing } from '../actions/Listing';
+import { onCreation, onFetch, onPing, emitFetch } from '../actions/Listing';
 import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, onStart } from '../actions/Room';
 import quickAccess from '../utils/quickAccess'
 
@@ -40,11 +40,9 @@ export const App = ({ menu, initListener }) => {
 	return null
 }
 
-const mapStateToProps = (state) => {
-	return {
+const mapStateToProps = (state) => ({
     	menu: state.menu,
-  	}
-}
+})
 
 const mapDispatchToProps = (dispatch) => ({
 	initListener: () => {
@@ -59,9 +57,15 @@ const mapDispatchToProps = (dispatch) => ({
 			onStart(),
 			onGameOver(),
 			onPing(),
-			onLogin()
-    	])
-		quickAccess(dispatch, window.location.hash)
+			onLogin(),
+		])
+		
+		try {
+			quickAccess(dispatch, window.location.hash)
+		} catch (e) {
+			alert(`${e.message}: ${window.location.href}`)
+			window.history.pushState("", "", "/")
+		}
 	}
   
 })

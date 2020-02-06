@@ -25,7 +25,7 @@ const OverlayDisplay = ({ room, onClick}) => {
 	}, [])
 
 	return (
-		<div className="board-overlay transparent d-flex col my-auto" style={displayStyle}>
+		<div className="board-overlay transparent d-flex col space-around" style={displayStyle}>
 		<h6 className="title big">{ room.winner === true ? "You won" : "You lost"}</h6>
 		<button className="bob-btn" onClick={onClick}>OK</button>
 		</div>

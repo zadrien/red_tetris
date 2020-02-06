@@ -1,11 +1,11 @@
+import http from 'http';
+import io from 'socket.io'
 import fs  from 'fs'
 import debug from 'debug'
 import _ from 'lodash'
 
 import { fetch, ping, join, leave, start } from './rooms/roomsAPI'
 import userController from './player/playerController'
-
-var url = require('url');
 
 const logerror = debug('tetris:error')
 , loginfo = debug('tetris:info')
@@ -34,19 +34,10 @@ const initApp = (app, params, cb) => {
 const initEngine = io => {
 	io.on('connection', function (socket) {
 		loginfo("Socket connected: " + socket.id)
-		
-		socket.on('action', (action) => {
-			console.log("Action:", action)
-			if(action.type === 'server/ping') {
-				socket.emit('action', { type: 'pong' })
-			}
-		});
-
 		socket.on('login', async function(data) {
-			var user
-			loginfo("login route access")
+			let user
 			try {
-				user = await userController.login(socket, data)
+				user = userController.login(socket, data)
 				if (!user)
 					return
 				socket.emit("login", { name: user.name })
@@ -72,18 +63,18 @@ const initEngine = io => {
 
 export function create(params) {
 	const promise = new Promise( (resolve, reject) => {
-		const app = require('http').createServer()
+		const app = http.createServer()
 		initApp(app, params, () => {
-			const io = require('socket.io')(app)
+			const sock = io(app)
 			const stop = (cb) => {
-				io.close()
+				sock.close()
 				app.close( () => {
 					app.unref()
 				})
 				loginfo(`Engine stopped.`)
 				cb()
 			}	
-			initEngine(io)
+			initEngine(sock)
 			resolve({stop})
 		})
 	})

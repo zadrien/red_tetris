@@ -14,6 +14,7 @@ export default function Lobby(io, id, name, mode) {
 	this.broad = setInterval(function () {
 		this.startBroadcast()
 	}.bind(this), 500)
+	this.ping()
 }
 
 Lobby.prototype.kill = function() {

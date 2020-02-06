@@ -9,7 +9,7 @@ import configureStore from './store/configure-store'
 const initialState = {
 	cursor: {
 		i: 0,
-		pad: 5
+		pad: 7
 	}
 }
 const store = configureStore(initialState)
