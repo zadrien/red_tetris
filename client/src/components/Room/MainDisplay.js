@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Overlay from './Overlay'
+import OverlayEndGame from './Overlay'
+import Host from './host'
 
 const color = {
 	".": "Black",
@@ -46,22 +47,29 @@ const render = (line, index) => (
 	</div>
 )
 
-const Board = ({ display }) => (
+const Board = ({ display, Overlay }) => (
 	<div style={displayStyle}>
-		<Overlay/>
+		{Overlay ? <Overlay/> : null}
 		{display.map((v, k) => render(v, k))}
 	</div> 
 )
 
-export const Display = ({display}) => {
+export const Display = ({display, isStarted, isHost, winner}) => {
+	if (winner)
+		return (<Board display={display} Overlay={() => <OverlayEndGame/>}/>)
 	if (!display)
 		return <div style={displayStyle}/>
-	return <Board display={display}/>
+	if (!isStarted)
+		return <Board display={display} Overlay={() => <Host/>}/>
+	return <Board display={display} />
 }
 
 
 const mapStateToProps = (state) => ({
-	display: state.room.display
+	display: state.room.display,
+	isStarted: state.room.start,
+	isHost: state.room.host,
+	winner: state.room.winner
 })
 
 export default connect(mapStateToProps)(Display)

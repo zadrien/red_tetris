@@ -20,9 +20,7 @@ const AvailableRoom = ({rooms}) => (
 export const List = ({ rooms, cursor }) => {
   	if (rooms) {
 		if (rooms.list.length) {
-			console.log(rooms.list.length)
 			let render = rooms.list.slice(cursor.i, cursor.i + cursor.pad)
-			console.log(render.length)
     		return <AvailableRoom rooms={render}/>
 		}
 	}

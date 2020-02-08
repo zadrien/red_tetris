@@ -4,7 +4,7 @@
   "description": "Server for Red Tetris",
   "main": "src/start.js",
   "scripts": {
-    "start": "NODE_ENV=development EBUG=tetris* nodemon",
+    "start": "NODE_ENV=development DEBUG=tetris* node start.js",
     "test": "mocha --exit --require babel-core/register src/**/*.test.js",
     "build": "webpack --mode production"
   },
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "chokidar": "^3.3.1",
     "debug": "^4.1.1",
     "esm": "^3.2.25",
     "lodash": "^4.17.15",

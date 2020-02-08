@@ -3,7 +3,7 @@ const params = {
 		host: '0.0.0.0'
 		, port: 3004
 		, get url(){ return 'http://' + this.host + ':' + this.port }
-		, db: "mongodb://localhost:27017/rooms"
+		, db: "mongodb://192.168.99.101:27017/rooms"
 	},
 }
 

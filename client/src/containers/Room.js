@@ -24,9 +24,9 @@ export const Room = ({ room, onStartUp, enableController, disableController, onL
 				<div className="align-center width-100">
 				<h1 className="title medium">{room.name}</h1>
 			</div>
-			<div className="d-flex just-center mx-auto width-25">
-				<Host />
-				<div className="bob-btn secondary" onClick={() => onLeave(room)}>Leave</div>
+			<div className="p-3 d-flex just-center mx-auto width-25">
+				
+				<div className="bob-btn secondary width-75" onClick={() => onLeave(room)}>Leave</div>
 			</div>
 			<div className="p-2 width-100 d-flex row just-center mx-auto">
 				<Board/>

@@ -33,7 +33,7 @@ const initApp = (app, params, cb) => {
 
 const initEngine = io => {
 	io.on('connection', function (socket) {
-		loginfo("Socket connected: " + socket.id)
+		loginfo("Socket connected: YOO " + socket.id)
 		socket.on('login', async function(data) {
 			let user
 			try {

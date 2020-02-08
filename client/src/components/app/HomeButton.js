@@ -10,7 +10,7 @@ export const HomeButton = ({onSubmit}) => {
 	<div className="main-menu">
 		<h1 className="title">Red Tetris</h1>
 		<form id="form-name" className="d-flex col just-center" onSubmit={(e) => onSubmit(e)}>
-			<input maxLength="15" type="text" name="nickname" placeholder="your nickname (max 15 chars)"/>
+			<input maxLength="15" type="text" name="nickname" placeholder="your nickname (max 15 chars)" autoFocus/>
 			<button type="submit" className="bob-btn secondary">Play</button>
 		</form>
 	</div>
