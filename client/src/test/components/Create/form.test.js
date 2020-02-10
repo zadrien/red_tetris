@@ -1,53 +1,77 @@
 import React from 'react'
 
 import { mount } from 'enzyme'
-import { expect } from 'chai'
 
-import { Create } from '../../../components/Create/Form'
+import Create from '../../../components/Create/Form'
 
-describe("Creation's Form TDD", () => {
-    const setup = (props) => {
-        const wrapper = mount(<Create {...props}/>)
-        return {
-            props,
-            wrapper
-        }
-    }
+import { Provider } from 'react-redux'
+import renderer from 'react-test-renderer'
+import configureStore from 'redux-mock-store'
+import { isCreating, emitCreate, onCreation } from '../../../actions/Create'
+import { setInterface } from '../../../actions/Menu'
 
-    it("should render", () => {
-        let props = {
-            isCreating: false,
-            user: {
-                name: "testName"
-            },
-            onSubmit: jest.fn(),
-            goBack: jest.fn()
-        }
-        const { wrapper } = setup(props)
-        const labels = ["Room's name", "Game mode"]
+const mockStore = configureStore([])
+describe("Form TDD", () => {
+	let store, component
 
-        wrapper.find('h2').forEach((node, i) => {
-            expect(node.text()).to.be.equal(labels[i])
-        })
-    })
 
-    it('should submit the form', () => {
-        let props = {
-            isCreating: false,
-            user: {
-                name: "testName"
-            },
-            onSubmit: (e, user) => {
-                expect(e.target.room.value).to.be.equal('testRoom')
-                expect(e.target.mode.value).to.be.equal('classic')
-                expect(user.name).to.be.equal('testName')
-            },
-            goBack: jest.fn()
-        }
+	const render = (store) => {
+		return renderer.create(
+			<Provider store={store}>
+				<Create/>
+			</Provider>
+		)
+	}
+	const getStore = (state) => mockStore(state)
 
-        const { wrapper } = setup(props)
+	it("should render and submit", () => {
+		let state = {
+			user: {
+				name: "testname"
+			},
+			isCreating: false
+		}
+		store = getStore(state)
+		store.dispatch = jest.fn()
+		component = render(store)
 
-        wrapper.find('input').first().simulate('change', { target: { value: "testRoom"}})
-        wrapper.find('button').simulate('click')
-    })
+		expect(component.toJSON()).toMatchSnapshot()
+
+		renderer.act(() => {
+			component.root.findByProps({ id: "create-room-form"})
+			.props.onSubmit({
+				preventDefault: jest.fn(),
+				target: {
+					room: { value: "ROOM NAME"}, mode: { value: "classic"}}}, state.user)
+		})
+
+		expect(store.dispatch).toHaveBeenCalledTimes(3)
+		expect(store.dispatch).toHaveBeenCalledWith(isCreating())
+		expect(store.dispatch).toHaveBeenCalledWith(onCreation())
+		expect(store.dispatch).toHaveBeenCalledWith(emitCreate({
+			user: state.user,
+			room: {name: "ROOM NAME", mode: "classic"}}))
+	})
+
+	it("should goBack", () => {
+		let state = {
+			user: {
+				name: "testname"
+			},
+			isCreating: false
+		}
+		store = getStore(state)
+		store.dispatch = jest.fn()
+		component = render(store)
+
+		expect(component.toJSON()).toMatchSnapshot()
+
+		const button = component.root.find(el => el.props.onClick !== undefined)
+		renderer.act(() => {
+			button.props.onClick()
+		})
+
+		expect(store.dispatch).toHaveBeenCalledTimes(1)
+		expect(store.dispatch).toHaveBeenCalledWith(setInterface("LISTING"))
+	})
 })

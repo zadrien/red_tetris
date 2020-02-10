@@ -44,41 +44,4 @@ describe('Room container', () => {
         const { wrapper } = setup(props)
 
     })
-
-    it('should trigger onWin method', () => {
-        let props = {
-            room: {
-                name: 'testRoomName',
-                winner: true,
-            },
-            onLeave: jest.fn(),
-            onWin: () => {
-                expect('to be here').to.not.be.empty
-            }
-        }
-
-        const { wrapper } = setup(props)
-
-        const div = wrapper.children().last()
-        expect(div.text()).to.be.equal('You won')
-        div.simulate('click')
-    })
-
-    it('should trigger onWin method', () => {
-        let props = {
-            room: {
-                name: 'testRoomName',
-                winner: false,
-            },
-            onLeave: jest.fn(),
-            onWin: () => {
-                expect('to be here').to.not.be.empty
-            }
-        }
-        const { wrapper } = setup(props)
-
-        const div = wrapper.children().last()
-        expect(div.text()).to.be.equal('You lose')
-        div.simulate('click')
-    })
 })

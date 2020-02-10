@@ -4,8 +4,8 @@ import expect from 'expect.js'
 import io from 'socket.io'
 
 import params from '../../../params'
-import { connectToDatabase, closeDatabase } from '../config'
-import { restoreRooms, create, find, deleteRoom, purge } from './roomsHandler'
+import { connectToDatabase, closeDatabase } from '../../src/config'
+import { restoreRooms, create, find, deleteRoom, purge } from '../../src/rooms/roomsHandler'
 
 describe("rooms Handle unit test", () => {
 	let server

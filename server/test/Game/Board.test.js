@@ -1,7 +1,7 @@
 import expect from 'expect.js'
 
-import Board from './Board'
-import Tetraminos from './tetraminos'
+import Board from '../../src/Game/Board'
+import Tetraminos from '../../src/Game/tetraminos'
 
 const events = require('events')
 

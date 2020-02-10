@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameOver Overlay should render (winner as false 1`] = `
+<div
+  className="board-overlay transparent d-flex col space-around"
+>
+  <h6
+    className="title big"
+  >
+    GAME OVER
+  </h6>
+  <h6
+    className="title medium"
+  >
+    You lost
+  </h6>
+  <button
+    className="bob-btn"
+    onClick={[Function]}
+  >
+    OK
+  </button>
+</div>
+`;
+
+exports[`GameOver Overlay should render (winner as false) 1`] = `
+<div
+  className="board-overlay transparent d-flex col space-around"
+>
+  <h6
+    className="title big"
+  >
+    GAME OVER
+  </h6>
+  <h6
+    className="title medium"
+  >
+    You lost
+  </h6>
+  <button
+    className="bob-btn"
+    onClick={[Function]}
+  >
+    OK
+  </button>
+</div>
+`;
+
+exports[`GameOver Overlay should render (winner as true 1`] = `
+<div
+  className="board-overlay transparent d-flex col space-around"
+>
+  <h6
+    className="title big"
+  >
+    GAME OVER
+  </h6>
+  <h6
+    className="title medium"
+  >
+    You won
+  </h6>
+  <button
+    className="bob-btn"
+    onClick={[Function]}
+  >
+    OK
+  </button>
+</div>
+`;
+
+exports[`GameOver Overlay should render 1`] = `
+<div
+  className="board-overlay transparent d-flex col space-around"
+>
+  <h6
+    className="title big"
+  >
+    GAME OVER
+  </h6>
+  <h6
+    className="title medium"
+  >
+    You won
+  </h6>
+  <button
+    className="bob-btn"
+    onClick={[Function]}
+  >
+    OK
+  </button>
+</div>
+`;

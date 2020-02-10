@@ -1,19 +1,5 @@
 import React from 'react'
 
-const style = {
-	display: "flex",
-	flexDirection: "column",
-	alignItems: "center",
-  
-	width: "auto",
-	height: "236px",
-	backgroundColor: "#dd4545",
-	padding: "5px",
-	borderRadius: "3px",
-
-	marginRight: "5px"
-}
-
 const color = {
 	".": "Black",
 	C: "Cyan",
@@ -26,33 +12,27 @@ const color = {
 	M: "Grey"
 }
 
-const lineStyle = {
-	display: "flex",
-	flexDirection: "row"
-}
-
-const render = (line, i) => (
-	<div key={i} style={lineStyle}>
-		{ line.map((v, k) => ( <div key={k} style={box(v)}/> )) }
-	</div>
-)
-
-
 const box = (c) => ({
-	width: "10px",
-	height: "10px",
 	backgroundColor: color[c]
 })
 
-const Board = ({display}) => (
-	<div>
-		{display.map((value, key) => render(value, key))}
+const render = (line, i) => (
+	<div key={i} className="board-row">
+		{ line.map((v, k) =>
+		<div
+			key={k}
+			className="mini-board-box"
+			style={box(v)}
+			/> )}
 	</div>
 )
 
+
 export const Card = ({ player }) => (
-	<div style={style}>
+	<div className="mini-board">
 		<h6>{player.name}</h6>
-		<Board display={player.display}/>
+		<div>
+			{player.display.map((value, key) => render(value, key))}
+		</div>
 	</div>
 )

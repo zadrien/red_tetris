@@ -1,7 +1,7 @@
 import expect from 'expect.js'
-import Lobby from './roomsModel'
+import Lobby from '../../src/rooms/roomsModel'
 
-import User from '../player/playerModel'
+import User from '../../src/player/playerModel'
 import io from 'socket.io'
 import ioClient from 'socket.io-client'
 

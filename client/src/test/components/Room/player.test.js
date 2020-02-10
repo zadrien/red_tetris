@@ -1,36 +1,48 @@
 import React from 'react'
-import { expect } from 'chai'
 
-import { shallow, mount } from 'enzyme'
-import ConnectedPlayer, { Players } from '../../../components/Room/Player'
+import { Provider } from 'react-redux'
+import renderer from 'react-test-renderer'
+import configureStore from 'redux-mock-store'
 
-describe('Other player card', () => {
-    const setup = (props) => {
-        const wrapper = shallow(<Players {...props}/>)
+import PlayersHandler from '../../../components/Room/Player'
 
-        return {
-            props,
-            wrapper
-        }
-    }
+const mockStore = configureStore([])
+
+describe('Mini board handler', () => {
+	let component
+    const render = (store) => {
+		return renderer.create(
+			<Provider store={store}>
+				<PlayersHandler/>
+			</Provider>
+		)
+	}
+
+	const getStore = (state) => mockStore(state)
 
     it('should render', () => {
-        let props = {
-            players: [
-                {
-                    name: 'testName1',
-                    display: [['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']]
-                },
-                {
-                    name: 'testName2',
-                    display: [['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']]                },
-                {
-                    name: 'testName3',
-                    display: [['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']]                    
-                }
-            ]
+        let state = {
+			room: {
+            	players: [
+					{
+						name: 'testName1',
+						display: [['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']]
+					},
+					{
+						name: 'testName2',
+						display: [['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']]                },
+					{
+						name: 'testName3',
+						display: [['.', '.', '.', '.', '.', '.', '.', '.', '.', '.']]                    
+					}
+				]
+			}
         }
-        const { wrapper } = setup(props)
-        expect(wrapper.find('div').children('Card').length).to.be.equal(3)
+		component = render(getStore(state))
+		const testInstance = component.root
+		expect(component.toJSON()).toMatchSnapshot()
+
+		const board = testInstance.findAllByProps({className: 'mini-board'})
+		expect(board.length).toEqual(3)
     })
 })

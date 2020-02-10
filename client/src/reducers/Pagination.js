@@ -4,7 +4,6 @@ export const Pagination = (state = {}, action = {}) => {
 	cursor = JSON.parse(JSON.stringify(state.cursor))
 	switch (action.state) {
 		case "CURSOR_NEXT":
-			console.log("here")
 			cursor.i += cursor.pad
 			if (cursor.i < state.rooms.list.length)
 			return Object.assign({}, state, {cursor: cursor})

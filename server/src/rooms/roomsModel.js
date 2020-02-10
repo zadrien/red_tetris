@@ -80,7 +80,7 @@ Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
 		console.log(`${this.id} - Starting the game!`)
 		this.start = true
-		this.host.Notify("START", { start: this.start })
+		this.io.in(this.id).emit("START", { start: this.start })
 		var ids = Object.keys(this.users)
 		ids.map((id, k) => {
 			this.users[id].initGame(this.mode)

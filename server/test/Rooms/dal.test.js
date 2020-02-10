@@ -2,8 +2,8 @@ import 'babel-polyfill'
 import expect from 'expect.js'
 import uuidv4 from 'uuid'
 
-import { connectToDatabase, closeDatabase } from '../config'
-import { Rooms as roomsDAL } from './roomsDAL'
+import { connectToDatabase, closeDatabase } from '../../src/config'
+import { Rooms as roomsDAL } from '../../src/rooms/roomsDAL'
 import params from '../../../params'
 
 describe("Room's DAL unit test", () => {

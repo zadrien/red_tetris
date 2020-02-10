@@ -4,7 +4,6 @@ import { emitQuit, emitMove } from '../actions/Room'
 
 import Board from '../components/Room/MainDisplay'
 import Players from '../components/Room/Player'
-import Host from '../components/Room/host'
 
 import '../global.css';
 

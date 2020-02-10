@@ -4,9 +4,9 @@ import sinon from 'sinon'
 
 const events = require('events')
 
-import Controller from './playerController'
-import Player from './playerModel'
-import Board from '../Game/Board'
+import Controller from '../../src/player/playerController'
+import Player from '../../src/player/playerModel'
+import Board from '../../src/Game/Board'
 
 describe("User model", () => {
 	let user
