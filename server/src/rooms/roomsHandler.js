@@ -31,7 +31,6 @@ export async function restoreRooms(io) {
 		if (!_.isEmpty(Rooms))
 			return null;
 		var all = await roomDb.read({}, {}, 0, 0)
-//		_.map(all, function (room) {
 		all.map(function(room) {
 		  var instance = new Room(io, room.id, room.name, room.mode)
 			Rooms[room.id] = instance
@@ -59,7 +58,7 @@ export async function create(io, room) {
 
 export function find(id) {
     if (!id)
-		return undefined
+		throw new Error("ID undefined")
     return Rooms[id]
 }
 
@@ -75,68 +74,3 @@ export async function deleteRoom(id) {
 		Promise.reject(err)
 	}
 }
-
-// function Handler(io, rooms = {}) {
-// 	this.io
-// 	this.Rooms = rooms
-// }
-
-// Handler.prototype.restore = async function() {
-// 	try {
-// 		if (!_.isEmpty(thisRooms))
-// 			return null
-// 		let all = await roomDb.read({}, {}, 0, 0)
-// 		_.map(all, function(room) {
-// 			let instance = new Room(this.io, v.id, v.name, v.mode)
-// 			this.Rooms[room.id] = instance
-// 		})
-// 		return all
-// 	} catch (err) {
-// 		Promise.reject(err)
-// 	}
-// }
-
-// Handler.prototype.create = async function(room) {
-//     try {
-// 		let id, instance, res
-// 		id = uuidv4()
-// 		instance = new Room(this.io, id, room.name, room.mode)
-// 		if (!instance)
-// 			Promise.reject(new Error("failed creating new instance"))
-// 		this.Rooms[id] = instance
-		
-// 		room["id"] = id
-// 		res = await roomDb.create(room)
-// 		return instance
-// 	} catch (err)
-// 		Promise.reject(err)
-// }
-
-// Handler.prototype.find = async function (id) {
-// 	let instance = this.Rooms[id]
-// 	if (!res)
-// 		Promise.reject(new Error("Room instance doesn't exist."))
-// 	return instance
-	
-// }
-
-// Handler.prototype.deleteRoom = async function(id) {
-//     console.log("deleting room:", id)
-//     if (!this.Rooms[id]) {
-// 		return new Error("Room doesn't exist")
-//     }
-	
-//     delete this.Rooms[id]
-// 	let nbr = await roomDb.deleteRoom(id)
-	
-// 	return nbr	
-// }
-
-// Handler.prototype.purge = async function() {
-// 	console.log('/!\ Closing all instance /!\ ')
-// 	try {
-// 		_.(this.Rooms, function (room) {
-// 			room.kill()
-// 		})
-// 	} 
-// }

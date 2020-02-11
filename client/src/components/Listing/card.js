@@ -15,11 +15,8 @@ const Card = ({room, onClick}) => (
 )
 
 export const RoomCard = ({ room, user, onClick}) => {  
-	if (room) {
-		if (!room.isStarted)
-			return <Card room={room} onClick={() => {onClick(user)}}/>
-		return <Card room={room}/>
-	}
+	if (room)
+		return <Card room={room} onClick={() => {onClick(user)}}/>
 	return null
 }
 
@@ -32,7 +29,9 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
 	onClick: (user) => {
-		dispatch(emitJoin(user, ownProps.room))
+		if (!ownProps.room.isStarted) {
+			dispatch(emitJoin(user, ownProps.room))
+		}
 	}
 })
 

@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { mount } from 'enzyme'
-
 import Create from '../../../components/Create/Form'
 
 import { Provider } from 'react-redux'
@@ -11,6 +9,7 @@ import { isCreating, emitCreate, onCreation } from '../../../actions/Create'
 import { setInterface } from '../../../actions/Menu'
 
 const mockStore = configureStore([])
+
 describe("Form TDD", () => {
 	let store, component
 

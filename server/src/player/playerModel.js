@@ -58,6 +58,8 @@ Player.prototype.start = function (getPiece, sendMallus, end) {
 	this.eventEmitter.on('display', (data) => { this.socket.emit("DISPLAY", data) })
 	this.eventEmitter.on('mallus', () => { sendMallus(this.socket.id) })
 	this.eventEmitter.on('add', (data) => {
+		if(!this.game)
+			return 
 		if (!this.game.add(getPiece(this.socket.id, data)))
 			end(this.socket.id)
 	})

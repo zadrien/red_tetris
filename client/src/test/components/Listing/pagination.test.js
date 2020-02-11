@@ -1,37 +1,60 @@
 import React from 'react'
 
-import { shallow } from 'enzyme'
-import { expect } from 'chai'
+import { Provider } from 'react-redux'
+import renderer from 'react-test-renderer'
+import configureStore from 'redux-mock-store'
 
-import { Pagination } from '../../../components/Listing/Pagination'
+import Pagination from '../../../components/Listing/Pagination'
+import { CURSOR_PREV, CURSOR_NEXT } from '../../../actions/Pagination'
+
+const mockStore = configureStore([])
 
 describe('Pagination Button TDD', () => {
-    const setup = (props) => {
-
-        const wrapper = shallow(<Pagination {...props}/>)
-        return {
-            props,
-            wrapper
-        }
+	let store, component
+    const render = (stor) => {
+        return renderer.create(
+			<Provider store={stor}>
+				<Pagination/>
+			</Provider>
+		)
     }
+	const getStore = (state) => mockStore(state)
+	
+	beforeAll(() => {
+		store = getStore({menu: "LISTING"})
+		store.dispatch = jest.fn()
+		component = render(store)
+	})
+	
+	beforeEach(() => {
+		store.dispatch.mockReset()
+	})
 
-    it("should render", () => {
-        const props = {
-            items: {
-                list: []
-            },
-            next: jest.fn(),
-            prev: jest.fn()
-        }
-        let value = ['Prev', 'Next']
-        const { wrapper } = setup(props)
+    it("should render component", () => {
+		const testInstance = component.root
 
-        const child = wrapper.find('div.d-flex').children()
+		expect(component.toJSON()).toMatchSnapshot()
+		expect(testInstance.findByProps({className: "d-flex"}).children.length).toEqual(2)
+		expect(testInstance.findByProps({id: "next"}).children).toEqual(["Next"])
+		expect(testInstance.findByProps({id: "prev"}).children).toEqual(["Prev"])
+	})
 
-        expect(child.length).to.be.equal(2)
-        child.forEach((node, i) => {
-            expect(node.text()).to.be.equal(value[i])
-        })
-        
-    })
+	it('should trigger CURSOR_PREV dispatch', () => {
+
+		renderer.act(() => {
+			component.root.findByProps({ id: "prev"}).props.onClick()
+		})
+
+		expect(store.dispatch).toHaveBeenCalledTimes(1)
+		expect(store.dispatch).toHaveBeenCalledWith(CURSOR_PREV())
+	})
+
+	it('should trigger CURSOR_NEXT dispatch', () => {
+		renderer.act(() => {
+			component.root.findByProps({ id: "next"}).props.onClick()
+		})
+
+		expect(store.dispatch).toHaveBeenCalledTimes(1)
+		expect(store.dispatch).toHaveBeenCalledWith(CURSOR_NEXT())
+	})
 })

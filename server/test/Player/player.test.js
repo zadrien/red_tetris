@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import sinon from 'sinon'
 
@@ -28,7 +28,7 @@ describe("User model", () => {
 		describe("#get()", () => {
 			it("should get undefined display value", () => {
 				let data = user.get()
-				expect(data.display).to.be(undefined)
+				expect(data.display).to.be.equal(undefined)
 			})
 
 			it("should get a array as display value", () => {
@@ -60,8 +60,8 @@ describe("User model", () => {
 			it("should request for an new piece", (done) => {
 				user.initGame(false)
 				fn = function(id, nbr) {
-					expect(id).to.be(eventEmitter.id)
-					expect(nbr).to.be(0)
+					expect(id).to.be.equal(eventEmitter.id)
+					expect(nbr).to.be.equal(0)
 					done()
 				}
 				let end = (id) => {}
@@ -90,11 +90,11 @@ describe("User model", () => {
 				cb2 = (id) => {}
 				user.start(cb, cb1, cb2)
 
-				expect(user.stopGame()).to.be(true)
+				expect(user.stopGame()).to.be.equal(true)
 			})
 
 			it("should return false (game variable not initialized)", () => {
-				expect(user.stopGame()).to.be(false)
+				expect(user.stopGame()).to.be.equal(false)
 			})
 		})
 
@@ -109,11 +109,11 @@ describe("User model", () => {
 				cb2 = (id) => {}
 				user.initGame(false)
 				user.start(cb, cb1, cb2)
-				expect(user.getMalus()).to.be(true)
+				expect(user.getMalus()).to.be.equal(true)
 			})
 
 			it("should return false(when game isn't started)", () => {
-				expect(user.getMalus()).to.be(false)
+				expect(user.getMalus()).to.be.equal(false)
 			})
 		})
 
@@ -209,8 +209,8 @@ describe("User Controller", function() {
 			if (!user) {
 					expect.fail("user not initialized")
 			}
-			expect(Object.keys(Controller.isLogged).length).to.be(1)
-			expect(user.name).to.be(data.name)
+			expect(Object.keys(Controller.isLogged).length).to.be.equal(1)
+			expect(user.name).to.be.equal(data.name)
 			
 		})
 	})
@@ -218,7 +218,7 @@ describe("User Controller", function() {
 	describe("#logout()", () => {
 		it("#logout() should remove user from the Controller variable (isLogged)", () =>{
 			Controller.logout(user.socket)
-			expect(Object.keys(Controller.isLogged).length).to.be(0)
+			expect(Object.keys(Controller.isLogged).length).to.be.equal(0)
 			
 		})
 	})

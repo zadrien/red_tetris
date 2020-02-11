@@ -1,4 +1,4 @@
-import expect from 'expect.js'
+import { expect } from 'chai'
 import Lobby from '../../src/rooms/roomsModel'
 
 import User from '../../src/player/playerModel'
@@ -54,25 +54,7 @@ describe("Room Model Unit Test", () => {
 				socket = ioClient.connect(socketURL, option)
 				
 				socket.on("HOST", function (data) {
-					expect(data.host).to.be(true)
-					done()
-				})
-			})
-		})
-
-		describe("#leave()", () => {
-			it("should send QUIT event", function (done) {
-				server.on("connect", function(socket) {
-					user = new User(socket, data.name)
-					room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
-					room.newPlayer(user)
-					room.leaveGame(user)
-				})
-
-				socket = ioClient.connect(socketURL, option)
-
-				socket.on("LEAVE", function (data) {
-					expect(data.state).to.be("QUIT")
+					expect(data.host).to.be.equal(true)
 					done()
 				})
 			})
@@ -90,7 +72,7 @@ describe("Room Model Unit Test", () => {
 				socket = ioClient.connect(socketURL, option)
 
 				socket.on("START", function (data) {
-					expect(data.start).to.be(true)
+					expect(data.start).to.be.equal(true)
 					done()
 				})
 			})
@@ -122,7 +104,6 @@ describe("Room Model Unit Test", () => {
 		
 		it("should send GAMEOVER event (winner when solo)", function (done) {
 			server.on("connect", function (socket) {
-//				console.log(socket.id)
 				user = new User(socket, data.name)
 				room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
 				room.newPlayer(user)
@@ -133,7 +114,7 @@ describe("Room Model Unit Test", () => {
 			client1 = ioClient.connect(socketURL, option)
 
 			client1.on("GAMEOVER", function(data) {
-				expect(data.winner).to.be(true)
+				expect(data.winner).to.be.equal(true)
 				done()
 			})
 		})
@@ -143,8 +124,8 @@ describe("Room Model Unit Test", () => {
 	describe("#pieceCallback()", () => {
 		it("should return a tetraminos", function () {
 			let piece = room.pieceCallback(data.id, 0)
-			expect(piece).to.have.key('shape')
-			expect(piece).to.have.key('letter')
+			expect(piece).to.have.keys('shape', 'letter')
+			
 		})
 	})
 
@@ -154,10 +135,10 @@ describe("Room Model Unit Test", () => {
 		})
 		
 		it("should return false  (when one is in the room)", () => {
-			expect(room.mallusCallback(data.id)).to.be(false)
+			expect(room.mallusCallback(data.id)).to.be.equal(false)
 		})
 
-		it("should return true (when multiple person are in the room", function (done) {
+		it("should return true (when multiple person are in the room)", function (done) {
 			server.on("connect", function (socket) {
 				console.log(socket.id)
 				user = new User(socket, data.name)
@@ -170,33 +151,28 @@ describe("Room Model Unit Test", () => {
 		})
 	})
 
-	describe('#ping()', function () { // need better imp
-		beforeEach(() => {
-		})
-
-	  it.skip('should return an object', function(done) {
-		server.on('connect', function(socket) {
-		  console.log("connected")
-		  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
-		  socket.on('PING', function () {
-			room.ping()
-		  })
-		})
+	// describe('#ping()', function () { // need better imp
+	//   it.skip('should return an object', function(done) {
+	// 	server.on('connect', function(socket) {
+	// 	  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
+	// 	  socket.on('PING', function () {
+	// 		room.ping()
+	// 	  })
+	// 	})
 		
-		client = ioClient.connect(socketURL, option)
+	// 	client = ioClient.connect(socketURL, option)
 		
-		client.on('CHECK', function(data) {
-		  console.log("SALLLO")
-		  const { room } = data
-		  expect(room).to.be.an('object')
-		  expect(room).to.have.property('nbrUser', 0)
-		  expect(room).to.have.property('isStarted', false)
-		  expect(room).to.have.property('id', data.id)
-		  expect(room).to.have.property('name', `room-${data.id}`)
-		  done()
-		})
+	// 	client.on('CHECK', function(d) {
+	// 	  const { room } = d
+	// 	  expect(room).to.be.an('object')
+	// 	  expect(room).to.have.property('nbrUser', 0)
+	// 	  expect(room).to.have.property('isStarted', false)
+	// 	  expect(room).to.have.property('id', data.id)
+	// 	  expect(room).to.have.property('name', `room-${data.id}`)
+	// 	  done()
+	// 	})
 
-		client.emit('PING')
-	  })
-	})
+	// 	client.emit('PING')
+	//   })
+	// })
 })

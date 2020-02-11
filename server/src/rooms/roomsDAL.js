@@ -7,7 +7,7 @@ const roomSchema = new Schema({
     name: String,
     mode: String,
     open: Boolean
-});
+}, {timestamps: { createdAt: 'created_at'}});
 
 
 roomSchema.statics = {
@@ -37,7 +37,7 @@ roomSchema.statics = {
     
     async read(query, fields, skip, limit) {
 		try {
-			const rooms = await this.find(query, fields).skip(skip).limit(limit).sort({id: 1}).exec();
+			const rooms = await this.find(query, fields).skip(skip).limit(limit).sort({timestamps: 'asc'}).exec();
 			if (!rooms.length) {
 				return []
 			}

@@ -5,13 +5,12 @@ function Controller(isLogged) {
 }
 
 Controller.prototype.login = function (socket, data) {
-	if (!data.name)
-		return 
+	if (!data.hasOwnProperty('name'))
+		throw new Error("No name property")
 	var ids = Object.keys(this.isLogged)
 	var value = ids.find(elem => this.isLogged[elem].name === data.name)
-	if (value) {
-		throw { err: "Username already taken" }
-	}
+	if (value)
+		throw new Error("Username already taken")
 	
 	var player = new Player(socket, data.name)
 	this.isLogged[socket.id] = player

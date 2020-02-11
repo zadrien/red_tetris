@@ -1,52 +1,48 @@
 import React from 'react'
 
-import { shallow } from 'enzyme'
-import { expect } from 'chai'
+import { Provider } from 'react-redux'
+import renderer from 'react-test-renderer'
+import configureStore from 'redux-mock-store'
 
-import { Listing } from '../../containers/ListingRooms'
+import Listing from '../../containers/ListingRooms'
+import { emitFetch } from '../../actions/Listing'
+import { setInterface } from '../../actions/Menu'
+
+const mockStore = configureStore([])
 
 describe('Listing Container', () => {
-    const setup = (props) => {
+    let component, store
+    const render = (store) => {
+		return renderer.create(
+			<Provider store={store}>
+				<Listing/>
+			</Provider>
+		)
+	}
+	const getStore = (state) => mockStore(state)
 
-        const wrapper = shallow(<Listing {...props} />)
+	const state = {
+		rooms: []
+	}
 
-        return {
-            props,
-            wrapper
-        }
-    }
 
-    it('should render', () => {
-        let props = {
-            rooms: [{ name: 'testName' }],
-            Create: jest.fn(),
-            Fetch: jest.fn()
-        }
-        const { wrapper } = setup(props)
+    it('should render (and trigger fetch method', () => {
+		store = getStore(state)
+		store.dispatch = jest.fn()
 
-        expect(wrapper.find('h4.title').text()).to.be.equal("SELECT A ROOM")
-        expect(wrapper.find('div.d-flex').children('div').text()).to.be.equal('New room')
-    })
-
-    it('should trigger Fetch Object method', () => {
-        let props = {
-            Create: jest.fn(),
-            Fetch: (e) => {
-                expect(e).to.be.equal(0)
-            }
-        }
-        const { wrapper } = setup(props) 
-    })
+		component = render(store)
+		expect(component.toJSON()).toMatchSnapshot()
+		
+	})
 
     it('should trigger Create Object method', () => {
-        let props = {
-            Create: () => {
-                expect(0).to.be.equal(0)
-            },
-            Fetch: jest.fn()
-        }
-        const { wrapper } = setup(props)
 
-        wrapper.find('div.bob-btn').simulate('click')
+		renderer.act(() => {
+			component.root.findByProps({id: "create"}).props.onClick()
+		})
+
+		expect(store.dispatch).toHaveBeenCalledTimes(2)
+		expect(store.dispatch).toHaveBeenCalledWith(setInterface("CREATE"))
+		expect(store.dispatch).toHaveBeenCalledWith(emitFetch({skip: 0}))
     })
 })

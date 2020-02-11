@@ -1,55 +1,74 @@
 import React from 'react'
 
-import { shallow } from 'enzyme'
-import { expect } from 'chai'
+import { Provider } from 'react-redux'
+import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
 
-import { App } from '../../containers/app'
+import App from '../../containers/app'
 
-const mockStore = configureStore()
+
+const mockStore = configureStore([])
 
 describe('App Container TDD', () => {
-    const store = mockStore({})
-    const setup = (props) => {
-        const wrapper = shallow(   
-                <App {...props}/>)
-        return {
-            props,
-            wrapper
-        }
-    }
+    let component 
+    const render = (store) => {
+		return renderer.create(
+			<Provider store={store}>
+				<App/>
+			</Provider>
+		)
+	}
+	
+	const getStore = (state) => {
+		let store = mockStore(state)
+		store.dispatch = jest.fn()
+		return store
+	}
 
     it('should render undefined state (Play Component)', () => {
-        let props = {}
-        const { wrapper } = setup(props)
+		const state = {}
+		
+		component = render(getStore(state))
+		const testInstance = component.root
+		expect(component.toJSON()).toMatchSnapshot()
 
-        expect(wrapper.children().length).to.be.equal(1)
+		expect(testInstance.findByProps({className: "main-menu"}).type).toEqual('div')
     })
 
     it('should render Room container', () => {
-        let props = {
-            menu: "ROOM",
-        }
-
-        const { wrapper } = setup(props)
-        expect(wrapper.exists()).to.be.equal(true)
+        const state = {
+			menu: "ROOM",
+			room: {
+				name: "testName",
+				id: 1
+			}
+		}
+		
+		component = render(getStore(state))
+		const testInstance = component.root
+		expect(component.toJSON()).toMatchSnapshot()
+		
     })
 
     it('should render Listing container', () => {
-        let props = {
+        const state = {
             menu: "LISTING",
         }
 
-        const { wrapper } = setup(props)
-        expect(wrapper.children().length).to.be.equal(1)
+		component = render(getStore(state))
+		const testInstance = component.root
+		expect(component.toJSON()).toMatchSnapshot()
+        
     })
 
     it('should render Create container', () => {
-        let props = {
+       	const state = {
             menu: "CREATE",
         }
 
-        const { wrapper } = setup(props)
-        expect(wrapper.children().length).to.be.equal(1)
+		component = render(getStore(state))
+		const testInstance = component.root
+		expect(component.toJSON()).toMatchSnapshot()
+        
     })
 })

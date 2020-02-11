@@ -52,14 +52,14 @@ Lobby.prototype.newPlayer = function (user) {
 }
 
 Lobby.prototype.leaveGame = function (user) {
-	console.log(`User(${user.socket.id} leaving room...`)
 	var leaver = this.users[user.socket.id]
-	if (!leaver)
-		return
-	if (this.start)
-		this.endGameCallback(user.socket.id)
-	delete user.game
+	if (!leaver) {
+		console.log("THROOOOOW")
+		throw new Error("User not found")
+	}
 	user.Notify("LEAVE", { state: "QUIT" })
+	delete user.game
+	
 	user.socket.leave(this.id)
 	
 	delete this.users[user.socket.id]
@@ -73,12 +73,13 @@ Lobby.prototype.leaveGame = function (user) {
 			this.host.Notify("START", { start: this.start })
 		}
 	}
+	if (this.start)
+		this.endGameCallback(user.socket.id)
 	this.ping()
 }
 
 Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
-		console.log(`${this.id} - Starting the game!`)
 		this.start = true
 		this.io.in(this.id).emit("START", { start: this.start })
 		var ids = Object.keys(this.users)
@@ -106,16 +107,13 @@ Lobby.prototype.endGameCallback = function (id) {
 
 	var stillPlaying = _.find(this.users, function(u) { return u.isPlaying === true })
 	if (_.isEmpty(stillPlaying)) {
-//		console.log(`All game are finished, the winner is ${user.name}`)
 		this.pieces = []
 		this.start = false
-//		this.io.in(this.id).emit("GAMEOVER", { winner: user.name })
 		user.Notify("GAMEOVER", { winner: true })
 		this.host.Notify("START", { start: this.start })
-//		this.ping()
+		this.ping()
 		return
 	} else {
-//		console.log("END")
 		user.Notify("GAMEOVER", { winner: false }) // maybe not necessary
 	}
 }
@@ -162,8 +160,6 @@ Lobby.prototype.ping = function () {
 		nbrUser: nbr,
 		isStarted: this.start
 	}
-	console.log(info)
-//	socket.broadcast('CHECK', { room: info })
 	this.io.emit('CHECK', { room : info })
 }
 

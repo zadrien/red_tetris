@@ -1,21 +1,30 @@
 import React from 'react'
 
-import { mount, shallow } from 'enzyme'
-import { expect } from 'chai'
+import { Provider } from 'react-redux'
+import renderer from 'react-test-renderer'
+import configureStore from 'redux-mock-store'
 
-import { List } from '../../../components/Listing/Listing'
+import List from '../../../components/Listing/Listing'
+
+const mockStore = configureStore([])
 
 describe('Listing TDD', () => {
-    const setup = (props) => {
+	let store, component
+    const render = (store) => {
+		return renderer.create(
+			<Provider store={store}>
+				<List/>
+			</Provider>
+		)
+	}
+	
+	const getStore = (state) => mockStore(state)
 
-        const wrapper = mount(<List {...props}/>)
-        return {
-            props,
-            wrapper
-        }
-    }
-
-    const props = {
+    const state = {
+		cursor: {
+			i: 0,
+			pad: 2
+		},
         rooms: {
                 list: [
                 {
@@ -51,22 +60,18 @@ describe('Listing TDD', () => {
             }
     }
 
-    it('should render', () => {
-		const cursor = {
-			i: 0,
-			pad: 7
-		}
-        const { wrapper } = setup({
-			cursor,
-			...props
-		})
-        expect(wrapper.find('div').hasClass('room-list')).to.be.true
-        expect(wrapper.find('AvailableRoom').props().rooms.length).to.be.equal(props.rooms.list.length)
-    })
+    it('should render 2 room', () => {
+		component = render(getStore(state))
+		const testInstance = component.root
 
-    it('should render an empty list', () => {
-        const { wrapper } = setup({})
-        
-        expect(wrapper.find('h2').text()).to.be.equal("No room available")
-    })
+		expect(component.toJSON()).toMatchSnapshot()
+		expect(testInstance.findByProps({className: "room-list"}).children.length).toEqual(2)
+	})
+	
+	it('should render no room available', () => {
+		component = render(getStore({cursor: {i: 0, pad: 2}}))
+		const testInstance = component.root
+
+		expect(testInstance.findByProps({className: "title small my-auto"}).children).toEqual(["No room available"])
+	})
 })

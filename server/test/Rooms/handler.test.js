@@ -1,9 +1,9 @@
 import 'babel-polyfill'
-import expect from 'expect.js'
+import { expect } from 'chai'
 
 import io from 'socket.io'
 
-import params from '../../../params'
+import params from '../../params'
 import { connectToDatabase, closeDatabase } from '../../src/config'
 import { restoreRooms, create, find, deleteRoom, purge } from '../../src/rooms/roomsHandler'
 
@@ -33,7 +33,7 @@ describe("rooms Handle unit test", () => {
 				res = await restoreRooms(server)
 				expect(res).to.be.an('array')
 			} catch (err) {
-				expect().fail(err)
+				expect.fail(err)
 			}
 		})
 	})
@@ -43,9 +43,9 @@ describe("rooms Handle unit test", () => {
 			try {
 				res = await create(server, room)
 				id = res.id
-				expect(res.id).to.not.be(undefined)
+				expect(res.id).to.not.be.equal(undefined)
 			} catch (err) {
-				expect().fail(err)
+				expect.fail(err)
 			}
 		})
 	})
@@ -53,20 +53,20 @@ describe("rooms Handle unit test", () => {
 	describe("#find()", () => {
 		it("should return Room instance", function() {
 			res = find(id)
-			expect(res).to.not.be(undefined)
+			expect(res).to.not.be.equal(undefined)
 		})
 	})
 
 	describe("deleteRoom()", () => {
 		it('should return 1', async function() {
 			res = await deleteRoom(id)
-			expect(res).to.be(1)			
+			expect(res).to.be.equal(1)			
 		})
 	})
 
 	describe('#purge()', () => {
 		it("should stop all instance", () => {
-			expect(purge()).to.be(true)
+			expect(purge()).to.be.equal(true)
 		})
 	})
 })

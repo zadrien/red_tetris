@@ -37,21 +37,19 @@ const initEngine = io => {
 		socket.on('login', async function(data) {
 			let user
 			try {
-				user = userController.login(socket, data)
-				if (!user)
+				if (!data)
 					return
+				user = userController.login(socket, data)
 				socket.emit("login", { name: user.name })
 				if (!_.isEmpty(data.room))
 					join(io, user, data)
+				socket.on('FETCH', (data) => fetch(io, user, data))
+				socket.on('JOIN', (data) => join(io, user, data))
+				socket.on("LEAVE", (data) => leave(user, data))
+				socket.on("START", (data) => start(user, data))
 			} catch (err) {
-				socket.emit("login", err)
-				return 
+				socket.emit("login", { err: err.message })
 			}
-			socket.on('FETCH', (data) => fetch(io, user, data))
-			socket.on('JOIN', (data) => join(io, user, data))
-			socket.on("LEAVE", (data) => leave(user, data))
-			socket.on("START", (data) => start(user, data))
-			socket.on("CHECK", (data) => ping(user, data))
 		})
 		
 		socket.on('disconnect', function() {

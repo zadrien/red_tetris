@@ -19,7 +19,7 @@ export const Listing = ({ Create, Fetch }) => {
 			<List />
 		</div>
 		<div className="d-flex">
-			<div className="bob-btn secondary width-100" onClick={Create}>New room</div>
+			<div className="bob-btn secondary width-100" id="create" onClick={Create}>New room</div>
 			<Pagination />
 		</div>
 	</div>
