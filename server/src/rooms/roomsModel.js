@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Tetraminos from '../Game/tetraminos'
-
+import { isPlaying } from './helpers'
 export default function Lobby(io, id, name, mode) {
 	this.ios = io
 	this.io = io.sockets.in(id)
@@ -14,7 +14,7 @@ export default function Lobby(io, id, name, mode) {
 	this.broad = setInterval(function () {
 		this.startBroadcast()
 	}.bind(this), 500)
-	this.ping()
+	this.ping('CHECK')
 }
 
 Lobby.prototype.kill = function() {
@@ -22,7 +22,7 @@ Lobby.prototype.kill = function() {
 		clearInterval(this.broad)
 	if (this.start) {
 		this.io.in(this.id).emit("LEAVE", { state: "QUIT", msg: "Server may intentionaly kill this lobby" })
-		_.map(this.users, (user, index) => {
+		_.map(this.users, (user) => {
 			user.stopGame()
 		})
 	}
@@ -33,49 +33,16 @@ Lobby.prototype.newPlayer = function (user) {
 	if (this.start)
 		return false
 	this.users[user.socket.id] = user
-	user.socket.join(this.id)
-	
+	user.join(this)
 	user.Notify("JOINED", { state: "JOINED", room: {id: this.id, name: this.name, mode: this.mode }})
 	if (this.host === undefined) {
 		this.host = user
 		user.Notify("HOST", { host: true })
 	} else
 		user.Notify("HOST", { host: false })
-	// Adding event here
-
-	user.socket.on("disconnect", function() {
-		this.leaveGame(user)
-	}.bind(this))
 	user.initGame(this.mode)
-	this.ping()
+	this.ping('CHECK')
 	return true
-}
-
-Lobby.prototype.leaveGame = function (user) {
-	var leaver = this.users[user.socket.id]
-	if (!leaver) {
-		console.log("THROOOOOW")
-		throw new Error("User not found")
-	}
-	user.Notify("LEAVE", { state: "QUIT" })
-	delete user.game
-	
-	user.socket.leave(this.id)
-	
-	delete this.users[user.socket.id]
-	this.nbr--
-	if (user.socket.id === this.host.socket.id) {
-		this.host = undefined
-		var newHost = _.sample(this.users)
-		if (newHost) {
-			this.host = newHost
-			this.host.Notify("HOST", { host: true })
-			this.host.Notify("START", { start: this.start })
-		}
-	}
-	if (this.start)
-		this.endGameCallback(user.socket.id)
-	this.ping()
 }
 
 Lobby.prototype.startGame = function (user) {
@@ -90,30 +57,61 @@ Lobby.prototype.startGame = function (user) {
 								 this.mallusCallback.bind(this),
 								 this.endGameCallback.bind(this))
 		})
-		this.ping()
+		this.ping('CHECK')
 		return true
 	}
 	return false
 }
+Lobby.prototype.resetLobby = function () {
+	this.start = false
+	this.pieces = []
+	this.ping('CHECK')
+}
+
+Lobby.prototype.leaveGame = function (user) {
+	var leaver = this.users[user.socket.id]
+	if (!leaver) {
+		console.log("THROOOOOW")
+		throw new Error("User not found")
+	}
+	user.leave(this.id) //
+	if (leaver.isPlaying)
+		leaver.stopGame()
+	
+	// delete user.game
+	delete this.users[user.socket.id] // BECUSE OF U
+	console.log("Number of player::", this.users.length)
+	if (!isPlaying(this.users))
+		this.resetLobby()
+	if (user.socket.id === this.host.socket.id) {
+		this.host = undefined
+		var newHost = _.sample(this.users)
+		if (newHost) {
+			console.log("new HOST")
+			this.host = newHost
+			this.host.Notify("HOST", { host: true })
+			// this.host.Notify("START", { start: this.start })
+		}
+	}
+	user.Notify("LEAVE", { state: "QUIT" })
+	this.ping('CHECK')
+}
+
+
 
 Lobby.prototype.endGameCallback = function (id) {
 	var user = this.users[id]
-	if (!user)
+	if (!user) 
 		return
-	if (user.isPlaying) {
-		user.isPlaying = false
+	if (user.isPlaying)
 		user.stopGame()
-	}
-
 	var stillPlaying = _.find(this.users, function(u) { return u.isPlaying === true })
 	if (_.isEmpty(stillPlaying)) {
-		this.pieces = []
-		this.start = false
+		this.resetLobby()
 		user.Notify("GAMEOVER", { winner: true })
 		this.host.Notify("START", { start: this.start })
-		this.ping()
-		return
 	} else {
+		user.Notify("START", { start: !this.start})
 		user.Notify("GAMEOVER", { winner: false }) // maybe not necessary
 	}
 }
@@ -150,8 +148,8 @@ Lobby.prototype.mallusCallback = function (userID) {
 	return true
 }
 
-Lobby.prototype.ping = function () {
-	var mode = this.mode === true ? "invsible" : "classic"
+Lobby.prototype.ping = function (event) {
+	var mode = this.mode === true ? "invisible" : "classic"
 	var nbr = Object.keys(this.users).length
 	let info = {
 		id: this.id,
@@ -160,7 +158,12 @@ Lobby.prototype.ping = function () {
 		nbrUser: nbr,
 		isStarted: this.start
 	}
-	this.io.emit('CHECK', { room : info })
+	console.log('[PING] EVENT: ', event, info)
+	try {
+		this.io.emit(event, { room : info })
+	} catch(err) {
+		console.log(err)
+	}
 }
 
 function selectMode(mode) {

@@ -6,7 +6,7 @@ import Room from './Room';
 import Create from './Create'
 
 import { onPlayer as onLogin } from '../actions/Profil'
-import { onCreation, onFetch, onPing, emitFetch } from '../actions/Listing';
+import { onFetch, onPing } from '../actions/Listing';
 import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, onStart } from '../actions/Room';
 import quickAccess from '../utils/quickAccess'
 
@@ -47,7 +47,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	initListener: () => {
 			dispatch([
-			onCreation(),
 			onFetch(),
 			onJoined(),
 			onHost(),

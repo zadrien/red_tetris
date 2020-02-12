@@ -33,10 +33,10 @@ const Board = ({ display, Overlay }) => (
 	</div> 
 )
 
-export const Display = ({display, isStarted, isHost, winner}) => {
+export const Display = ({room, display, isStarted}) => {
 	if (!display)
 		return <div className="board"/>
-	if (winner)
+	if (room.hasOwnProperty('winner'))
 		return (<Board display={display} Overlay={() => <GameOver/>}/>)
 	if (!isStarted)
 		return <Board display={display} Overlay={() => <Host/>}/>
@@ -45,10 +45,10 @@ export const Display = ({display, isStarted, isHost, winner}) => {
 
 
 const mapStateToProps = (state) => ({
+	room: state.room,
 	display: state.room.display,
 	isStarted: state.room.start,
-	isHost: state.room.host,
-	winner: state.room.winner
+	
 })
 
 export default connect(mapStateToProps)(Display)

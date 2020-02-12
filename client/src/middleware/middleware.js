@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-export const AppMiddleWare = ({dispatch }) => {
+export const AppMiddleWare = ({ dispatch }) => {
 	return (next) => (action) => {
 		if (Array.isArray(action))
 			return action.map(a => dispatch(a));
@@ -9,7 +9,7 @@ export const AppMiddleWare = ({dispatch }) => {
 }
 
 export const socketMiddleware = ({ dispatch, state }) => {
-	const socket = io('http://localhost:3004')
+	const socket = io('http://localhost:8080')
 
 	return next => (action) => {
 		if (typeof action === 'function')

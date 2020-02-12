@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { isCreating, onCreation, emitCreate } from '../../actions/Create'
+import { isCreating, emitCreate } from '../../actions/Create'
 import { setInterface, LISTING } from '../../actions/Menu'
 
 import "./style.css";
@@ -30,7 +30,7 @@ const mapStateToProps = (state) => ({
 	user: state.user
 })
 
-const mapDispatchToProps = (dispatch, e) => ({
+const mapDispatchToProps = (dispatch) => ({
 	onSubmit: (e, user) => {
 		e.preventDefault();
 		let roomName = e.target.room.value,
@@ -45,7 +45,6 @@ const mapDispatchToProps = (dispatch, e) => ({
 				}
 			}
 			dispatch(isCreating())
-			dispatch(onCreation())
 			dispatch(emitCreate(data))
 		}
 	},

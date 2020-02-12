@@ -13,8 +13,9 @@ if (process.env.NODE_ENV !== "production") {
         })
 	})
 	require = require('esm')(module)
-	module.exports = require('./src/main.js')
+	module.exports = require('./src/index.js')
 } else {
-	module.exports = require('./src/main.js')
+	console.log("OK")
+	module.exports = require('./src/index.js')
 }
 

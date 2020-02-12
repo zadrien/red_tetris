@@ -19,8 +19,10 @@ Controller.prototype.login = function (socket, data) {
 }
 
 Controller.prototype.logout = function (socket) {
-	if (!this.isLogged[socket.id])
+	const user = this.isLogged[socket.id]
+	if (!user)
 		return 
+	user.disconnect()
 	delete this.isLogged[socket.id]	
 }
 

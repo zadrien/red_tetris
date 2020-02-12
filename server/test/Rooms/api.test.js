@@ -1,10 +1,7 @@
 import 'babel-polyfill'
 import { expect } from 'chai'
-import io from 'socket.io'
-import ioClient from 'socket.io-client'
-import sinon from 'sinon'
 
-import { fetch, ping, join, leave, start} from '../../src/rooms/roomsAPI'
+import ioClient from 'socket.io-client'
 
 import * as server from '../../src/index'
 import { connectToDatabase } from '../../src/config'

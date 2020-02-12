@@ -6,6 +6,7 @@ function Player(socket, name) {
 	this.name = name
 	this.game = undefined
 	this.isPlaying = false
+	this.currentLobby = undefined
 	this.controller = this.controller.bind(this)
 	this.socket.on("CONTROLLER", this.controller)
 
@@ -28,6 +29,23 @@ Player.prototype.get = function () {
 
 Player.prototype.Notify = function (event, data) {
 	this.socket.emit(event, data)
+}
+
+Player.prototype.join = function (Lobby) {
+	this.socket.join(Lobby.id)
+	this.currentLobby = Lobby
+}
+
+Player.prototype.leave = function (Lobby) {
+	console.log('this current lobby:', this.currentLobby.id)
+	this.socket.leave(this.currentLobby.id)
+	this.currentLobby = undefined
+}
+
+Player.prototype.disconnect = function () {
+	if (!this.currentLobby)
+		return ;
+	this.currentLobby.leaveGame(this)
 }
 
 Player.prototype.controller = function (data) {

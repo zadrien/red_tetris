@@ -10,7 +10,7 @@ import List from '../components/Listing/Listing'
 export const Listing = ({ Create, Fetch }) => {
 	useEffect(() => {
 		Fetch(0)
-	})
+	}, [])
 
 	return (
 	<div>
