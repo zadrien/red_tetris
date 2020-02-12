@@ -1,1 +1,0 @@
-{"parent":null,"pid":4201,"argv":["/usr/bin/node","/usr/share/yarn/bin/yarn.js","run","test"],"execArgv":[],"cwd":"/home/zadrien/projects/red_tetris/server","time":1581529604859,"ppid":4167,"coverageFilename":"/home/zadrien/projects/red_tetris/server/.nyc_output/ecbaaa8d-a7bc-4182-91b8-494f60ace39a.json","externalId":"","uuid":"ecbaaa8d-a7bc-4182-91b8-494f60ace39a","files":[]}
