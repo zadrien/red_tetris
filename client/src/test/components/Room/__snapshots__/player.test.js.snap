@@ -1,0 +1,294 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mini board handler should render 1`] = `
+<div
+  className="d-flex row"
+  style={
+    Object {
+      "display": "flex",
+      "flexWrap": "wrap",
+      "marginLeft": "5px",
+    }
+  }
+>
+  <div
+    className="mini-board"
+  >
+    <h6>
+      testName1
+    </h6>
+    <div>
+      <div
+        className="board-row"
+      >
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="mini-board"
+  >
+    <h6>
+      testName2
+    </h6>
+    <div>
+      <div
+        className="board-row"
+      >
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="mini-board"
+  >
+    <h6>
+      testName3
+    </h6>
+    <div>
+      <div
+        className="board-row"
+      >
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+        <div
+          className="mini-board-box"
+          style={
+            Object {
+              "backgroundColor": "Black",
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

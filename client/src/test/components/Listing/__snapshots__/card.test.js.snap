@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[] Card TDD Joinable Room should render a joinable room card 1`] = `
+<div
+  className="room-list-item"
+  disabled={false}
+  onClick={[Function]}
+>
+  <div
+    className="description"
+  >
+    <p
+      className="name"
+    >
+      testRoom
+    </p>
+    <p
+      className="mode"
+    >
+      classic
+       [
+      2
+      /10]
+    </p>
+  </div>
+  <div
+    className="join-button"
+  >
+    <div>
+      JOIN
+    </div>
+  </div>
+</div>
+`;
+
+exports[`[] Card TDD Unjoinable Room should render 1`] = `
+<div
+  className="room-list-item"
+  disabled={true}
+  onClick={[Function]}
+>
+  <div
+    className="description"
+  >
+    <p
+      className="name"
+    >
+      testRoom
+    </p>
+    <p
+      className="mode"
+    >
+      classic
+       [
+      2
+      /10]
+    </p>
+  </div>
+  <div
+    className="join-button"
+  >
+    <div
+      disabled={true}
+    >
+      IN-GAME
+    </div>
+  </div>
+</div>
+`;

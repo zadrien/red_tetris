@@ -7,6 +7,15 @@ export function newMap() {
     return map.slice();
 }
 
+exports.buildMap = function() {
+    var map = new Array(20);
+    
+    for(var i = 0; i < 20; i++) {
+		map[i] = [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ];
+    }
+    return map.slice();
+}
+
 export function showMap(map) {
     console.log("~~~~~~~~~~~~~~`")
     for (var i = 0; i < map.length; i++) {

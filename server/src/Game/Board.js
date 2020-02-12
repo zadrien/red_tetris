@@ -36,7 +36,7 @@ Board.prototype.start = function () {
 	}.bind(this)
 
 	this.itr = setInterval(fn, 900)
-	return true
+	return this.itr
 }
 
 Board.prototype.stop = function () {
@@ -49,27 +49,25 @@ Board.prototype.stop = function () {
 
 Board.prototype.get = function () {
 	var copy = copyMap(this.map);
-	if (this.piece)
-		remove(copy, this.piece, this.x, this.y);
+	// if (this.piece)
+	// 	remove(copy, this.piece, this.x, this.y);
 	return copy;
 }
 
 Board.prototype.add = function (piece) {
-	if (this.piece || !piece)
+	if (!this.piece)
 		return false
 	this.piece = JSON.parse(JSON.stringify(piece))
 	this.x = Math.round((10 - piece.shape[0].length) / 2);
 	this.y = 0
 	
 	var cpy = copyMap(this.map)
-	if (placeable(cpy, this.piece, this.x, this.y)) {
-		this.map = cpy
-		this.event.emit("display", this.map)
-		this.nbr++
-		return true
-	} else {
+	if (!placeable(cpy, this.piece, this.x, this.y))
 		return false
-	}
+	this.map = cpy
+	this.event.emit("display", this.map)
+	this.nbr++
+	return true
 }
 
 Board.prototype.setMalus = function () {

@@ -1,6 +1,6 @@
 export function isPlaying(users) {
-	const keys = Object.keys(users)
 	if (!users)
 		return undefined
+	const keys = Object.keys(users)
 	return keys.find(el => users[el].isPlaying === true)
 }

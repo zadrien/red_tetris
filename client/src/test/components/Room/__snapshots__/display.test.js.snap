@@ -1,0 +1,1317 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Main User Display TDD should render (display as undefined) 1`] = `
+<div
+  className="board"
+/>
+`;
+
+exports[`Main User Display TDD should render (start and host as false) 1`] = `
+<div
+  className="board"
+>
+  <div
+    className="board-overlay transparent d-flex col space-around"
+  >
+    <h6
+      className="title medium"
+    >
+      Pending...
+    </h6>
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": undefined,
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`Main User Display TDD should render (start as true) 1`] = `
+<div
+  className="board"
+>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": undefined,
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`Main User Display TDD should render (winner as true) 1`] = `
+<div
+  className="board"
+>
+  <div
+    className="board-overlay transparent d-flex col space-around"
+  >
+    <h6
+      className="title big"
+    >
+      GAME OVER
+    </h6>
+    <h6
+      className="title medium"
+    >
+      You won
+    </h6>
+    <button
+      className="bob-btn"
+      onClick={[Function]}
+    >
+      OK
+    </button>
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": undefined,
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+  <div
+    className="board-row"
+  >
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+    <div
+      className="board-box"
+      style={
+        Object {
+          "backgroundColor": "Black",
+        }
+      }
+    />
+  </div>
+</div>
+`;
