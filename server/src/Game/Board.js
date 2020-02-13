@@ -10,9 +10,11 @@ import {
 	rotateUndo
 } from './helpers'
 
+import utils from './utils'
+
 function Board(emitter, mode) {
 	this.event = emitter
-	this.map = newMap()
+	this.map = utils.buildMap()
 	this.piece = undefined
 	this.x = 0
 	this.y = 0
@@ -47,23 +49,45 @@ Board.prototype.stop = function () {
 	this.event.emit("end")
 }
 
+// Board.prototype.get = function () {
+// 	var copy = copyMap(this.map);
+// 	// if (this.piece)
+// 	// 	remove(copy, this.piece, this.x, this.y);
+// 	return copy;
+// }
+
 Board.prototype.get = function () {
-	var copy = copyMap(this.map);
-	// if (this.piece)
-	// 	remove(copy, this.piece, this.x, this.y);
-	return copy;
+	return utils.clone(this.map)
 }
 
+// Board.prototype.add = function (piece) {
+// 	if (!this.piece)
+// 		return false
+// 	this.piece = JSON.parse(JSON.stringify(piece))
+// 	this.x = Math.round((10 - piece.shape[0].length) / 2);
+// 	this.y = 0
+	
+// 	var cpy = copyMap(this.map)
+// 	if (!placeable(cpy, this.piece, this.x, this.y))
+// 		return false
+// 	this.map = cpy
+// 	this.event.emit("display", this.map)
+// 	this.nbr++
+// 	return true
+// }
+
 Board.prototype.add = function (piece) {
-	if (!this.piece)
+	if (this.piece)
 		return false
-	this.piece = JSON.parse(JSON.stringify(piece))
+	this.piece = utils.clone(piece)
 	this.x = Math.round((10 - piece.shape[0].length) / 2);
 	this.y = 0
-	
-	var cpy = copyMap(this.map)
-	if (!placeable(cpy, this.piece, this.x, this.y))
+	console.log(this.piece)
+	let cpy = utils.clone(this.map)
+
+	if (!utils.merge(cpy, this.piece, this.x, this.y)) {
 		return false
+	}
 	this.map = cpy
 	this.event.emit("display", this.map)
 	this.nbr++
@@ -72,153 +96,240 @@ Board.prototype.add = function (piece) {
 
 Board.prototype.setMalus = function () {
 	this.malus++
-	var copy = copyMap(this.map)
+	var copy = utils.clone(this.map)
 	if (this.piece)
-		remove(copy, this.piece, this.x, this.y)
+		utils.remove(copy, this.piece, this.x, this.y)
 	
-	var a = copy[0].find(function(c) {
-		return c != '.'
-	})
-	if (a)
+	if (copy[0].find(c => c !== '.'))
 		return false
-	fillLine(copy, 20 - this.malus)
+	utils.addMallus(copy, 20 - this.malus)
 	if (this.piece) {
-		var finalMap = copyMap(copy)
-		placeable(finalMap, this.piece, this.x, this.y -1)
-		if (!placeable(copy, this.piece, this.x, this.y)) {
-			this.map = finalMap
-		} else {
-			this.map = copy
-		}
+		var finalMap = utils.clone(copy)
+		this.map = !utils.merge(copy, this.piece, this.x, this.y) ? finalMap : copy
+	} else {
+		this.map = copy
 	}
 	if (this.mode === true && this.piece) {
-		copy = copyMap(this.map)
-		remove(copy, this.piece, this.x, this.y)
+		copy = utils.clone(this.map)
+		utils.remove(copy, this.piece, this.x, this.y)
 		this.event.emit("display", copy)
 	} else
 		this.event.emit("display", this.map)
-//	showMap(this.map)
 	return true
 }
 
+// Board.prototype.setMalus = function () {
+// 	this.malus++
+// 	var copy = copyMap(this.map)
+// 	if (this.piece)
+// 		remove(copy, this.piece, this.x, this.y)
+	
+// 	var a = copy[0].find(function(c) {
+// 		return c != '.'
+// 	})
+// 	if (a)
+// 		return false
+// 	fillLine(copy, 20 - this.malus)
+// 	if (this.piece) {
+// 		var finalMap = copyMap(copy)
+// 		placeable(finalMap, this.piece, this.x, this.y -1)
+// 		if (!placeable(copy, this.piece, this.x, this.y)) {
+// 			this.map = finalMap
+// 		} else {
+// 			this.map = copy
+// 		}
+// 	}
+// 	if (this.mode === true && this.piece) {
+// 		copy = copyMap(this.map)
+// 		remove(copy, this.piece, this.x, this.y)
+// 		this.event.emit("display", copy)
+// 	} else
+// 		this.event.emit("display", this.map)
+// //	showMap(this.map)
+// 	return true
+// }
+
 
 Board.prototype.place = function () {
-	// if (this.lock)
-	// 	return 
 	if (!this.piece)
 		return false
-	var copy = copyMap(this.map)
-	remove(copy, this.piece, this.x, this.y)
-	while(placeable(copy, this.piece, this.x, this.y + 1)) {
+	var copy = utils.clone(this.map)
+	utils.remove(copy, this.piece, this.x, this.y)
+	while(utils.merge(copy, this.piece, this.x, this.y + 1)) {
 		this.y++
-		this.map = copyMap(copy)
-		remove(copy, this.piece, this.x, this.y)
+		this.map = utils.clone(copy)
+		utils.remove(copy, this.piece, this.x, this.y)
 	}
 	this.event.emit("display", this.map)
 	delete this.piece
 	return true
 }
 
+// Board.prototype.place = function () {
+// 	// if (this.lock)
+// 	// 	return 
+// 	if (!this.piece)
+// 		return false
+// 	var copy = copyMap(this.map)
+// 	remove(copy, this.piece, this.x, this.y)
+// 	while(placeable(copy, this.piece, this.x, this.y + 1)) {
+// 		this.y++
+// 		this.map = copyMap(copy)
+// 		remove(copy, this.piece, this.x, this.y)
+// 	}
+// 	this.event.emit("display", this.map)
+// 	delete this.piece
+// 	return true
+// }
+
 Board.prototype.down = function () {
-	// if (this.lock)
-	// 	return
 	if (!this.piece)
 		return false
-	var copy = copyMap(this.map)
-	if (remove(copy, this.piece, this.x, this.y)) {
-		if (placeable(copy, this.piece, this.x, this.y+1)) {
-			this.y++
-			this.map = copy
-//			showMap(this.map)
-			if (this.mode == true) {
-				copy = copyMap(this.map)
-				remove(copy, this.piece, this.x, this.y)
-				this.event.emit("display", copy)
-			} else
-				this.event.emit("display", this.map)
-			return true
-		} else {
-//			console.log("//////can't move doown piece\\\\\\")
-//			showMap(this.map)
-//			console.log(this.piece, this.x, this.y)
-			delete this.piece
-		}
-	}
-	return false
+	var copy = utils.clone(this.map)
+	if (utils.remove(copy, this.piece, this.x, this.y))
+		if (!utils.merge(copy, this.piece, this.x, this.y+1))
+			return false
+	this.y++
+	this.map = copy
+	if (this.mode == true) {
+		copy = utils.clone(this.map)
+		utils.remove(copy, this.piece, this.x, this.y)
+		this.event.emit("display", copy)
+	} else
+		this.event.emit("display", this.map)
+	return true
 }
+
+// Board.prototype.down = function () {
+// 	// if (this.lock)
+// 	// 	return
+// 	if (!this.piece)
+// 		return false
+// 	var copy = copyMap(this.map)
+// 	if (remove(copy, this.piece, this.x, this.y)) {
+// 		if (placeable(copy, this.piece, this.x, this.y+1)) {
+// 			this.y++
+// 			this.map = copy
+// //			showMap(this.map)
+// 			if (this.mode == true) {
+// 				copy = copyMap(this.map)
+// 				remove(copy, this.piece, this.x, this.y)
+// 				this.event.emit("display", copy)
+// 			} else
+// 				this.event.emit("display", this.map)
+// 			return true
+// 		} else {
+// //			console.log("//////can't move doown piece\\\\\\")
+// //			showMap(this.map)
+// //			console.log(this.piece, this.x, this.y)
+// 			delete this.piece
+// 		}
+// 	}
+// 	return false
+// }
 
 Board.prototype.left = function () {
 	if (!this.piece)
 		return false
-	var copy = copyMap(this.map)
-	if (remove(copy, this.piece, this.x, this.y)) {
-		if (placeable(copy, this.piece, this.x - 1, this.y)) {
-			this.x--
-			this.map = copy
-			if (this.mode == true) {
-				copy = copyMap(this.map)
-				remove(copy, this.piece, this.x, this.y)
-				this.event.emit("display", copy)
-			} else
-				this.event.emit("display", this.map)
-			//			showMap(this.map)
-			return true
+	var copy = utils.clone(this.map)
+	if (utils.remove(copy, this.piece, this.x, this.y))
+		if (!utils.merge(copy, this.piece, this.x - 1, this.y)) {
+			console.log("LOL")
+			return false
 		}
-	}
-	return false
-
+	this.x--
+	this.map = copy
+	if (this.mode == true) {
+		copy = utils.clone(this.map)
+		utils.remove(copy, this.piece, this.x, this.y)
+		this.event.emit("display", copy)
+	} else
+		this.event.emit("display", this.map)
+	return true
 }
 
 Board.prototype.right = function () {
 	if (!this.piece)
 		return false
-	var copy = copyMap(this.map)
-	if (remove(copy, this.piece, this.x, this.y)) {
-		if (placeable(copy, this.piece, this.x + 1, this.y)) {
-			this.x++
-			this.map = copy
-//			showMap(this.map)
-			if (this.mode == true) {
-				copy = copyMap(this.map)
-				remove(copy, this.piece, this.x, this.y)
-				this.event.emit("display", copy)
-			} else
-				this.event.emit("display", this.map)
-			return true
-		}
-	}
-	return false
+	var copy = utils.clone(this.map)
+	if (utils.remove(copy, this.piece, this.x, this.y))
+		if (!utils.merge(copy, this.piece, this.x + 1, this.y))
+			return false
+	this.x++
+	this.map = copy
+	if (this.mode === true) {
+		copy = utils.clone(this.map)
+		utils.remove(copy, this.piece, this.x, this.y)
+		this.event.emit("display", copy)
+	} else
+		this.event.emit("display", this.map)
+	return true
 }
 
 Board.prototype.rotate = function () {
 	if (!this.piece)
-		return
-	this.lock = true;
-	var copy = copyMap(this.map)
-	var piece = copyMap(this.piece)		
-	if (remove(copy, piece, this.x, this.y)) {
-		rotateClockwise(piece)
-		if (placeable(copy, piece, this.x, this.y)) {
-			this.map = copy
-			this.piece = piece
-//			showMap(this.map)
-			if (this.mode == true) {
-				copy = copyMap(this.map)
-				remove(copy, this.piece, this.x, this.y)
-				this.event.emit("display", copy)
-			} else
-				this.event.emit("display", this.map)
-			return true
-		}
+		return false
+	var copy = utils.clone(this.map)
+	var piece = utils.clone(this.piece)		
+	if (utils.remove(copy, piece, this.x, this.y)) {
+		utils.rotateRight(piece)
+		if (!utils.merge(copy, piece, this.x, this.y))
+			return false
 	}
-	this.lock = false;
-	return false
+	this.map = copy
+	this.piece = piece
+	if (this.mode == true) {
+		copy = utils.clone(this.map)
+		utils.remove(copy, this.piece, this.x, this.y)
+		this.event.emit("display", copy)
+	} else
+		this.event.emit("display", this.map)
+	return true
 }
 
+// Board.prototype.rotate = function () {
+// 	if (!this.piece)
+// 		return
+// 	this.lock = true;
+// 	var copy = copyMap(this.map)
+// 	var piece = copyMap(this.piece)		
+// 	if (remove(copy, piece, this.x, this.y)) {
+// 		rotateClockwise(piece)
+// 		if (placeable(copy, piece, this.x, this.y)) {
+// 			this.map = copy
+// 			this.piece = piece
+// 			if (this.mode == true) {
+// 				copy = copyMap(this.map)
+// 				remove(copy, this.piece, this.x, this.y)
+// 				this.event.emit("display", copy)
+// 			} else
+// 				this.event.emit("display", this.map)
+// 			return true
+// 		}
+// 	}
+// 	this.lock = false;
+// 	return false
+// }
+
+// Board.prototype.verify = function () {
+// 	var copy = copyMap(this.map)
+// 	var r = fullLine(this.map, this.map.length - this.malus)
+// 	if (r.length > 0) {
+// 		for (var i = r.length - 1; i >= 0; i--) {
+// 			copy.splice(r[i], 1)
+// 			copy.splice(0, 0, [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ])
+// 		}
+// 		this.map = copy
+// 		this.event.emit("display", this.map)
+// 		return r.length
+// 	}
+// 	return 0
+// }
+
 Board.prototype.verify = function () {
-	var copy = copyMap(this.map)
-	var r = fullLine(this.map, this.map.length - this.malus)
-	if (r.length > 0) {
+	var copy = utils.clone(this.map)
+	var r = utils.isFull(this.map, this.map.length - this.malus, el => el === '.')
+	if (r) {
 		for (var i = r.length - 1; i >= 0; i--) {
 			copy.splice(r[i], 1)
 			copy.splice(0, 0, [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ])

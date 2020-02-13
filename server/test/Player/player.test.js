@@ -8,6 +8,152 @@ import Controller from '../../src/player/playerController'
 import Player from '../../src/player/playerModel'
 import Board from '../../src/Game/Board'
 
+
+describe("User model", () => {
+	let user
+	var eventEmitter, fn
+
+	beforeEach(() => {
+		eventEmitter = new events.EventEmitter()
+		eventEmitter.id = "testID"
+		user = new Player(eventEmitter, "testName")
+	})
+
+	describe("#initGame()", () => {
+		it.only("should trigger displaay listener", (done) => {
+			eventEmitter.on("DISPLAY", (data) => {
+				expect(data).to.be.an('array')
+				done()
+			})
+			user.initGame(false)
+		})
+	})
+
+	describe("#get()", () => {
+		it.only("should return an object", () => {
+			const obj = user.get()
+
+			expect(obj).to.have.property('id', "testID")
+			expect(obj).to.have.property('name', "testName")
+			expect(obj).to.have.property('isPlaying', false)
+			expect(obj).to.have.property('display').to.be.undefined
+		})
+
+		it.only('should return an object with non-undefined display attribute', () => {
+			user.initGame(false)
+			const obj = user.get()
+
+			expect(obj).to.have.property('id', "testID")
+			expect(obj).to.have.property('name', "testName")
+			expect(obj).to.have.property('isPlaying', false)
+			expect(obj).to.have.property('display').to.be.an('array')
+		})
+	})
+
+	describe("#Notify()", () => {
+		it.only("should trigger event", (done) => {
+			const expectedValue = "test"
+			eventEmitter.on("TEST", (data) => {
+				expect(data).to.be.equal(expectedValue)
+				done()
+			})
+
+			user.Notify("TEST", expectedValue)
+		})
+	})
+
+	describe("Lobby Interaction", () => {
+		let value = {
+				id: 1
+			}
+
+		describe("#join()", () => {
+			it.only("should trigger join function", (done) => {
+				eventEmitter.join = function (id) {
+					expect(id).to.be.equal(value.id)
+					done()
+				}
+
+				user.join(value)
+				expect(user.currentLobby).to.be.equal(value)
+			})
+		})
+
+
+		describe("#leave()", () => {
+			it.only("should trigger leave function of eventEmitter", (done) => {
+				eventEmitter.leave = function(id) {
+					expect(id).to.be.equal(value.id)
+					done()
+				}
+				user.currentLobby = value
+				user.leave(value)
+				expect(user.currentLobby).to.be.undefined
+			})
+		})
+
+		describe("#disconnect()", () => {
+			it.only("should trigger leaveGame function of event emitter", (done) => {
+				value.leaveGame = function(id) {
+					expect(id).to.be.eql(user)
+					done()
+				}
+
+				user.currentLobby = value
+				user.disconnect()
+				expect(user.currentLobby).to.be.undefined
+			})
+
+			it("should return false (currentLobby as undefined", () => {
+				expect(user.disconnect()).to.be.false
+			})
+		})
+
+		describe("#controller()", () => {
+			let stub
+			beforeEach(() => {
+				user.initGame(false)
+			})
+
+			afterEach(() => {
+				user.stopGame()
+				stub.restore()
+			})
+
+			it.only("should trigger LEFT function", (done) => {	
+				stub = sinon.stub(Board.prototype, "left").callsFake(() => done())
+				
+				eventEmitter.emit("CONTROLLER", "LEFT")
+			})
+		
+			it.only("should trigger RIGHT function", (done) => {
+				stub = sinon.stub(Board.prototype, "right").callsFake(() => done())
+				
+				eventEmitter.emit("CONTROLLER", "RIGHT")
+			})
+
+			it.only("should trigger DOWN function", (done) => {
+				stub = sinon.stub(Board.prototype, "down").callsFake(() => done())
+				
+				eventEmitter.emit("CONTROLLER", "DOWN")
+			})
+			
+			it.only("should trigger UP function", (done) => {
+				stub = sinon.stub(Board.prototype, "rotate").callsFake(() => done())
+
+				eventEmitter.emit("CONTROLLER", "UP")
+			})
+
+			it.only("should trigger SPACE function", (done) => {
+				stub = sinon.stub(Board.prototype, "place").callsFake(() => done())
+
+				eventEmitter.emit("CONTROLLER", "SPACE")
+			})
+
+		})
+	})
+})
+
 describe("User model", () => {
 	let user
 	var eventEmitter, fn

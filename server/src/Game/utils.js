@@ -1,4 +1,6 @@
 
+import _ from 'lodash'
+
 exports.buildMap = function() {
     var map = new Array(20);
     
@@ -9,98 +11,82 @@ exports.buildMap = function() {
 }
 
 exports.clone = function(arr) {
-    return [...arr];
+    return _.cloneDeep(arr)
 }
 
 exports.merge = (map, piece, x, y) => {
 	const { start } = piece
 
-	console.log(piece.shape[start])
 	let k = y
 	for(let i = start; i < piece.shape.length; i++) {
-
 		let l = x
 		for(let j = 0; j < piece.shape[i].length; j++) {
 			if (piece.shape[i][j] === piece.letter) {
-				console.log("!", l)
 				if (!map[k]) {
 					return false
-				} else if (map[k][l] === '.') {
+				} else if (map[k][l] && map[k][l] === '.') {
 						map[k][l] = piece.letter
 				} else
 					return false
-				l++
 			}
+			l++
 		}
 		k++
 	}
 	return true;
 }
 
-// exports.merge = function (map, piece, mapX, mapY) {
-//     for(var y = 0; y < piece.shape.length; y++) {
-// 		for(var x = 0; x < piece.shape[y].length; x++) {
-// 			if (piece.shape[y][x] === piece.letter) {
-// 				if (!map[mapY + y]) {
-// 					return false
-// 				} else if (map[mapY + y][mapX + x] === '.') {
-// 					map[mapY + y][mapX + x] = piece.shape[y][x];
-// 				} else
-// 					return false
-// 			}
-// 		}	
-//     }
-//     return true;
-// }
+exports.remove = (map, piece, x, y) => {
+	const { start } = piece
 
-// function remove(map, piece, mapX, mapY) {
-//     for (var y = 0; y < piece.shape.length; y++) {
-// 		for(var x = 0; x < piece.shape[y].length; x++) {
-// 			if (piece.shape[y][x] === piece.letter) {
-// 				if (!map[mapY + y][mapX + x]) {
-// 					return false;
-// 				} else if (map[mapY + y][mapX + x] === piece.letter) {
-// 					map[mapY + y][mapX + x] = '.';
-// 				}
-// 			}
-// 		}
-//     }
-//     return true;	
-// }
+	let k = y
+    for (var i = start; i < piece.shape.length; i++) {
+		let l = x
+		for(var j = 0; j < piece.shape[i].length; j++) {
+			if (piece.shape[i][j] === piece.letter) {
+				if (!map[k][l]) {
+					return false;
+				} else if (map[k][l] === piece.letter) {
+					map[k][l] = '.';
+				}
+			}
+			l++;
+		}
+		k++
+    }
+    return true;	
+}
 
 
 
-// export function fillLine(map, pos) {
-//     map.splice(0, 1) // need verification if the line is empty, if not down piece and continue
-//     map.push(['M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M'])
+exports.addMallus = (map, pos) => {
+    map.splice(0, 1) // need verification if the line is empty, if not down piece and continue
+    map.push(['M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M'])
 
-// }
-
-
-// export function fullLine(map, max) {
-//     var remove = []
-//     for (var i = max - 1; i > 0; i--) {
-// 		if (!map[i].find(full))
-// 			remove.push(i)
-//     }
-//     return remove
-// }
-
-// export function full(value) {
-//     return value === '.'
-// }
+}
 
 
-// export function rotateClockwise(piece) {
-//     var rotation = piece.shape.reverse()
-//     piece.shape = rotation[0].map((v, k) => (
-// 		rotation.map(row => row[k])
-//     ))
-// }
+exports.isFull = (map, max, condition) => {
+    var remove = []
+    for (var i = max - 1; i > 0; i--) {
+		if (!map[i].find(condition))
+			remove.push(i)
+	}
+	if (remove.length === 0)
+		return undefined
+    return remove
+}
 
-// function rotateUndo(piece) {
-//     var undo = helpers.copyMap(piece.shape)
-//     var rotation = undo[0].map((v, k) => (
-// 		undo.map(row => row[k])
-//     ))
-// }
+exports.rotateRight = (piece) => {
+    var rotation = piece.shape.reverse()
+    piece.shape = rotation[0].map((v, k) => (
+		rotation.map(row => row[k])
+    ))
+}
+
+exports.rotateLeft = (piece) => {
+    var undo = [...piece.shape]
+    return undo[0].map((v, k) => (
+		undo.map(row => row[k])
+	))
+}

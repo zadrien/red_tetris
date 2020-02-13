@@ -1,5 +1,5 @@
-import Board from '../Game/Board'
 const events = require('events')
+import Board from '../Game/Board'
 
 function Player(socket, name) {
 	this.socket = socket
@@ -36,7 +36,7 @@ Player.prototype.join = function (Lobby) {
 	this.currentLobby = Lobby
 }
 
-Player.prototype.leave = function (Lobby) {
+Player.prototype.leave = function () {
 	console.log('this current lobby:', this.currentLobby.id)
 	this.socket.leave(this.currentLobby.id)
 	this.currentLobby = undefined
@@ -44,8 +44,9 @@ Player.prototype.leave = function (Lobby) {
 
 Player.prototype.disconnect = function () {
 	if (!this.currentLobby)
-		return ;
+		return false;
 	this.currentLobby.leaveGame(this)
+	this.currentLobby = undefined
 }
 
 Player.prototype.controller = function (data) {
