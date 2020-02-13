@@ -12,21 +12,46 @@ exports.clone = function(arr) {
     return [...arr];
 }
 
-exports.merge = function (map, piece, mapX, mapY) {
-    for(var y = 0; y < piece.shape.length; y++) {
-		for(var x = 0; x < piece.shape[y].length; x++) {
-			if (piece.shape[y][x] === piece.letter) {
-				if (!map[mapY + y]) {
+exports.merge = (map, piece, x, y) => {
+	const { start } = piece
+
+	console.log(piece.shape[start])
+	let k = y
+	for(let i = start; i < piece.shape.length; i++) {
+
+		let l = x
+		for(let j = 0; j < piece.shape[i].length; j++) {
+			if (piece.shape[i][j] === piece.letter) {
+				console.log("!", l)
+				if (!map[k]) {
 					return false
-				} else if (map[mapY + y][mapX + x] === '.') {
-					map[mapY + y][mapX + x] = piece.shape[y][x];
+				} else if (map[k][l] === '.') {
+						map[k][l] = piece.letter
 				} else
 					return false
+				l++
 			}
-		}	
-    }
-    return true;
+		}
+		k++
+	}
+	return true;
 }
+
+// exports.merge = function (map, piece, mapX, mapY) {
+//     for(var y = 0; y < piece.shape.length; y++) {
+// 		for(var x = 0; x < piece.shape[y].length; x++) {
+// 			if (piece.shape[y][x] === piece.letter) {
+// 				if (!map[mapY + y]) {
+// 					return false
+// 				} else if (map[mapY + y][mapX + x] === '.') {
+// 					map[mapY + y][mapX + x] = piece.shape[y][x];
+// 				} else
+// 					return false
+// 			}
+// 		}	
+//     }
+//     return true;
+// }
 
 // function remove(map, piece, mapX, mapY) {
 //     for (var y = 0; y < piece.shape.length; y++) {

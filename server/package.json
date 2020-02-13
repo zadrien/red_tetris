@@ -5,9 +5,9 @@
   "main": "src/start.js",
   "scripts": {
     "start": "NODE_ENV=development DEBUG=tetris* node start.js",
-	"test": "NODE_ENV=development mocha --exit --require @babel/register test/**/*.test.js",
-	"coverage": "nyc -r lcov -r text yarn run test",
-	"build": "webpack --mode production"
+    "test": "NODE_ENV=development mocha --exit --require @babel/register test/**/*.test.js",
+    "coverage": "nyc -r lcov -r text yarn run test",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",

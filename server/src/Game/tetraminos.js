@@ -1,5 +1,5 @@
 
-const shape = {
+export const shape = {
     Bar: {
 	shape: [
 	    ['.', '.', '.', '.'],
@@ -7,6 +7,7 @@ const shape = {
 	    ['.', '.', '.', '.'],
 	    ['.', '.', '.', '.']
 	],
+		start: 1,
 	letter: 'C'
     },
 
@@ -16,6 +17,7 @@ const shape = {
 	    ['B', 'B', 'B'],
 	    ['.', '.', '.']
 	],
+		start: 0,
 	letter: 'B'
     },
 
@@ -25,6 +27,7 @@ const shape = {
 	    ['O', 'O', 'O'],
 	    ['.', '.', '.']
 	],
+		start: 0,
 	letter: 'O'
     },
 
@@ -33,6 +36,7 @@ const shape = {
 	    ['Y', 'Y'],
 	    ['Y', 'Y'],
 	],
+		start: 0,		
 	letter: 'Y'
     },
 
@@ -42,6 +46,7 @@ const shape = {
 	    ['G', 'G', '.'],
 	    ['.', '.', '.']
 	],
+	start: 0,
 	letter: 'G'
     },
 
@@ -51,6 +56,7 @@ const shape = {
 	    ['V', 'V', 'V'],
 	    ['.', '.', '.']
 	],
+		start: 0,
 	letter: 'V'
     },
 
@@ -60,16 +66,17 @@ const shape = {
 	    ['.', 'R', 'R'],
 	    ['.', '.', '.']
 	],
+	start: 0,
 	letter: 'R'
     }
 }
 
 const keys = Object.keys(shape)
 
-function get () {
+exports.Tetraminos = function() {
     var i =  Math.floor(Math.random() * Math.floor(7));
 
     return Object.assign({}, shape[keys[i]]);
 }
 
-module.exports = get
+

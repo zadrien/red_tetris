@@ -1,5 +1,5 @@
 import utils from '../../src/Game/utils'
-import Tetraminos from '../../src/Game/tetraminos'
+import { shape } from '../../src/Game/tetraminos'
 
 import { expect } from 'chai'
 import { placeable } from '../../src/Game/helpers'
@@ -27,16 +27,41 @@ describe("Board Utility Function", () => {
 		})
 
 		describe('#merge()', () => {
-			let tetra
-			
-			beforeEach(() => {
-				tetra = new Tetraminos()
-			})
+			let tetra, i
+//			const keys = Object.
+//			i = 0
+			// beforeEach(() => {
+				
+			// 	tetra = 
+			// })
 
-			it("should return true (merge successful)", () => {
+			it.skip("should return true (merge successful)", () => {
 				expect(utils.merge(map, tetra, 0, 0)).to.be.true
 			})
 
+			it.only("should merge Bar shape to the board", () => {
+				const tetra = shape.Bar
+
+				const value = utils.merge(map, tetra, 0, 0)
+				console.log(map)
+				expect(value).to.be.true
+			})
+
+			it.only("should merge Left L shape to the board", () => {
+				const tetra = shape.LeftL
+
+				const value = utils.merge(map, tetra, 0, 0)
+				console.log(map)
+				expect(value).to.be.true
+			})
+			
+			it.only("should merge Right L shape to the board", () => {
+				const tetra = shape.RightL
+
+				const value = utils.merge(map, tetra, 0, 0)
+				console.log(map)
+				expect(value).to.be.true
+			})			
 			//should test all tetraminos
 		})
 
