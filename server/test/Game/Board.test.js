@@ -289,18 +289,16 @@ describe('board unit test2', () => {
 	})
 
 	describe("#verify()", () => {
-		it.only("should return the number of line remove", () => {
+		it("should return the number of line remove", () => {
 			board.map[19].forEach((v, k) => {
 				board.map[19][k] = 'X'
 			})
 			const value = board.verify()
-			console.log(value)
 			expect(value).to.be.equal(1)
 		})
 
-		it.only("should return zero (no line removable", () => {
+		it("should return zero (no line removable", () => {
 			const value = board.verify()
-			console.log(value)
 			expect(value).to.be.equal(0)
 		})
 	})

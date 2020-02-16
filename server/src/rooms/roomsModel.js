@@ -1,8 +1,8 @@
 import _ from 'lodash'
-import Tetraminos from '../Game/tetraminos'
+import { Tetraminos } from '../Game/tetraminos'
 import { isPlaying } from './helpers'
+
 export default function Lobby(io, id, name, mode) {
-	this.ios = io
 	this.io = io.sockets.in(id)
 	this.id = id
 	this.name = name
@@ -31,15 +31,13 @@ Lobby.prototype.kill = function() {
 
 Lobby.prototype.newPlayer = function (user) {
 	if (this.start)
-		return false
+		throw new Error("Lobby as already started")
 	this.users[user.socket.id] = user
 	user.join(this)
-	user.Notify("JOINED", { state: "JOINED", room: {id: this.id, name: this.name, mode: this.mode }})
-	if (this.host === undefined) {
+	if (this.host === undefined)
 		this.host = user
-		user.Notify("HOST", { host: true })
-	} else
-		user.Notify("HOST", { host: false })
+	user.Notify("JOINED", { state: "JOINED", room: {id: this.id, name: this.name, mode: this.mode }})		
+	user.Notify("HOST", { host: this.host.socket.id === user.socket.id })
 	user.initGame(this.mode)
 	this.ping('CHECK')
 	return true
@@ -48,9 +46,10 @@ Lobby.prototype.newPlayer = function (user) {
 Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
 		this.start = true
-		this.io.in(this.id).emit("START", { start: this.start })
+		// this.io.in(this.id).emit("START", { start: this.start })
 		var ids = Object.keys(this.users)
-		ids.map((id, k) => {
+		ids.map(id => {
+			this.users[id].Notify("START", { start: this.start })
 			this.users[id].initGame(this.mode)
 			this.users[id].isPlaying = true;
 			this.users[id].start(this.pieceCallback.bind(this),
@@ -70,27 +69,23 @@ Lobby.prototype.resetLobby = function () {
 
 Lobby.prototype.leaveGame = function (user) {
 	var leaver = this.users[user.socket.id]
-	if (!leaver) {
-		console.log("THROOOOOW")
+	if (!leaver)
 		throw new Error("User not found")
-	}
 	user.leave(this.id) //
 	if (leaver.isPlaying)
 		leaver.stopGame()
 	
 	// delete user.game
 	delete this.users[user.socket.id] // BECUSE OF U
-	console.log("Number of player::", this.users.length)
+	console.log(Object.keys(this.users).length)
 	if (!isPlaying(this.users))
 		this.resetLobby()
 	if (user.socket.id === this.host.socket.id) {
 		this.host = undefined
 		var newHost = _.sample(this.users)
 		if (newHost) {
-			console.log("new HOST")
 			this.host = newHost
 			this.host.Notify("HOST", { host: true })
-			// this.host.Notify("START", { start: this.start })
 		}
 	}
 	user.Notify("LEAVE", { state: "QUIT" })
@@ -127,8 +122,8 @@ Lobby.prototype.startBroadcast = function () {
 	this.io.in(this.id).emit("PLAYERS", arr)
 }
 
-Lobby.prototype.pieceCallback = function (id, nbr) {
-	var p = this.pieces[nbr]
+Lobby.prototype.pieceCallback = function (id, nbr) { // remove id
+	let p = this.pieces[nbr]
 	if (!p) {
 		p = Tetraminos()
 		this.pieces.push(p)
@@ -137,13 +132,15 @@ Lobby.prototype.pieceCallback = function (id, nbr) {
 }
 
 Lobby.prototype.mallusCallback = function (userID) {
-	var ids = Object.keys(this.users)
-	if (ids.length === 0)
+	let ids = Object.keys(this.users)
+	
+	// console.log(this.users)
+	console.log(ids.length)
+	if (ids.length < 2)
 		return false
-	ids.map((id, index) => {
-		if (id === userID)
-			return
-		this.users[id].getMalus()
+	ids.map(id => {
+		if (id !== userID)
+			this.users[id].getMalus()
 	})
 	return true
 }
@@ -158,7 +155,6 @@ Lobby.prototype.ping = function (event) {
 		nbrUser: nbr,
 		isStarted: this.start
 	}
-	console.log('[PING] EVENT: ', event, info)
 	try {
 		this.io.emit(event, { room : info })
 	} catch(err) {

@@ -1,9 +1,12 @@
 import { expect } from 'chai'
-import Lobby from '../../src/rooms/roomsModel'
+import sinon from 'sinon'
 
-import User from '../../src/player/playerModel'
 import io from 'socket.io'
 import ioClient from 'socket.io-client'
+import events from 'events'
+
+import Lobby from '../../src/rooms/roomsModel'
+import User from '../../src/player/playerModel'
 
 const socketURL = "http://localhost:5000"
 const option = {
@@ -12,15 +15,14 @@ const option = {
 }
 
 describe("Room Model Unit Test", () => {
-	let server, socket, room, client
+	let server, socket, room, client, stubUser
 	let data = {
 		name: "testName",
 		id: "testID",
 		mode: "classic"
 	}
-
-	var user
 	beforeEach(() => {
+		stubUser = sinon.stub(User.prototype, 'join').callsFake(() => true)
 		server = io.listen(5000)
 	})
 
@@ -32,124 +34,276 @@ describe("Room Model Unit Test", () => {
 			socket.close()
 		if (client)
 			client.close()
+		stubUser.restore()
 	})
 	
-	describe("create new Room instance", () => {
-		it("init room instance", () => {
-			room = new Lobby(server, data.id, `$room-{data.name}`, data.mode)
-			if (!room)
-				expect.fail()
+	describe("Lobby Constructor", () => {
+		it.only("init room instance", () => {
+			room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
+			expect(room).to.not.be.undefined
 		})
 	})
 
-	describe("A new player join the lobby", () => {		
+	describe.only("Lobby's method", () => {
+		let room, stub
+
+		// before(() => {
+		// 	stub = sinon.stub(Lobby.prototype, 'ping').callsFake(() => true)
+		// })
+		// after(() => {
+		// 	stub.restore()
+		// })
+
+		beforeEach(() => {
+			room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
+		})
+
 		describe("#newPlayer()", () => {
-			it("should return true", function (done) {
-				server.on("connect", function(socket) {
-					user = new User(socket, data.name)
-					room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
-					room.newPlayer(user)
+			it("should trigger HOST event listener", function (done) {
+				const eventEmitter = new events.EventEmitter()
+				eventEmitter.on("JOINED", (data) => {
+					expect(data).to.have.property('state', "JOINED")
+					expect(data).to.have.property('room')
+					expect(data.room).to.be.eql({id: 'testID', name: 'room-testName', mode: false})
 				})
-				
-				socket = ioClient.connect(socketURL, option)
-				
-				socket.on("HOST", function (data) {
-					expect(data.host).to.be.equal(true)
+
+				eventEmitter.on("HOST", (data) => {
+					expect(data).to.have.property("host", true)
 					done()
 				})
+				const user = new User(eventEmitter, data.name)
+				expect(room.newPlayer(user)).to.be.true
+			})
+
+			it('should throw error if lobby as started', () => {
+				room.start = true
+				expect(room.newPlayer.bind(room, {})).to.throw("Lobby as already started")
 			})
 		})
 
 		describe("#startGame()", () => {
-			it("should send START event", function(done) {
-				server.on("connect", function(socket) {
-					user = new User(socket, data.name)
-					room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
-					room.newPlayer(user)
-					room.startGame(user)
+			let user1, user2
+			let eventEmitter1, eventEmitter2
+
+			beforeEach(() => {
+				eventEmitter1 = new events.EventEmitter()
+				eventEmitter2 = new events.EventEmitter()
+				eventEmitter1.id = '1'
+				eventEmitter2.id = '2'
+				user1 = new User(eventEmitter1, "user1")
+				room.newPlayer(user1)
+				user2 = new User(eventEmitter2, "user2")
+				room.newPlayer(user2)
+			})
+
+			it.only("should return false (not the host of the Lobby)", () => {
+				expect(room.startGame(user2)).to.be.false
+			})
+
+			it.only("should return true (host of the lobby)", (done) => {
+				eventEmitter2.on("START", (data) => {
+					expect(data).to.have.property('start', true)
 				})
-
-				socket = ioClient.connect(socketURL, option)
-
-				socket.on("START", function (data) {
-					expect(data.start).to.be.equal(true)
+				eventEmitter1.on("START", (data) => {
+					expect(data).to.have.property('start', true)
 					done()
 				})
+				expect(room.startGame(user1)).to.be.true
+				expect(room.start).to.be.true
 			})
 		})
 
-	})
+		describe.only("TDD Lobby with 2 player", () => {
+			let user1, user2
+			let eventEmitter1, eventEmitter2
 
-	describe("#endGameCallback", () => {
-		let client1, client2
-		let map = [
-			['.', '.', '.', '.', '.','.', '.', '.', '.', '.'],
-			['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
-			['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
-			['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
-			['.', '.', '.', '.', 'X','X', '.', '.', '.', '.']
-		]
-
-		beforeEach(() => {
-			room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
-		})
-		
-		afterEach(() => {
-			room.kill()
-			if (client1)
-				client1.close()
-			if (client2)
-				client2.close()
-		})
-		
-		it("should send GAMEOVER event (winner when solo)", function (done) {
-			server.on("connect", function (socket) {
-				user = new User(socket, data.name)
-				room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
-				room.newPlayer(user)
-				room.startGame(user)
-				user.game.map = map
+			beforeEach(() => {
+				eventEmitter1 = new events.EventEmitter()
+				eventEmitter2 = new events.EventEmitter()
+				eventEmitter1.id = '1'
+				eventEmitter2.id = '2'
+				user1 = new User(eventEmitter1, "user1")
+				user2 = new User(eventEmitter2, "user2")
+				room.newPlayer(user1)
+				room.newPlayer(user2)
 			})
 
-			client1 = ioClient.connect(socketURL, option)
 
-			client1.on("GAMEOVER", function(data) {
-				expect(data.winner).to.be.equal(true)
-				done()
+			afterEach(() => {
+				eventEmitter1.removeAllListeners()
+				eventEmitter2.removeAllListeners()
 			})
-		})
 
-	})
 
-	describe("#pieceCallback()", () => {
-		it("should return a tetraminos", function () {
-			let piece = room.pieceCallback(data.id, 0)
-			expect(piece).to.have.keys('shape', 'letter')
+			describe.only("#leaveGame()", () => {
+				let stub
+
+				beforeEach(() => {
+					stub = sinon.stub(User.prototype, 'leave').callsFake(() => true)
+				})
+
+				afterEach(() => {
+					stub.restore()
+				})
+
+				it.only("should throw an error (User not found)", () => {
+					const user = {
+						socket: {
+							id: 'NotFound'
+						}
+					}
+					expect(room.leaveGame.bind(room, user)).to.throw("User not found")
+				})
+
+				it.only("should remove user2 player from the lobby", (done) => {
+					eventEmitter2.on("LEAVE", (data) => {
+						expect(data).to.have.property("state", "QUIT")
+						done()
+					})
+
+					room.leaveGame(user2)
+					expect(room.users).to.not.have.property(user2.socket.id)
+				})
+
+				it.only("should reassign host property to user2 when user1 (host) leave", (done) => {
+					eventEmitter2.on("HOST", (data) => {
+						expect(data).to.have.property('host', true)
+					})
+
+					eventEmitter1.on("LEAVE", (data) => {
+						expect(data).to.have.property("state", "QUIT")
+						done()
+					})
+
+					room.leaveGame(user1)
+				})
+
+				it.only("should trigger resetLobby() when party is not running", (done) => {
+					const stb = sinon.stub(Lobby.prototype, 'resetLobby').callsFake(() => {
+						stb.restore()
+						done()
+					})
+					// room.startGame()
+					room.leaveGame(user1)
+				})
+
+				it.only("should trigger Player's stopGame method when isPlaying is true", (done) => {
+					const stb = sinon.stub(User.prototype, 'stopGame').callsFake(() => {
+						stb.restore()
+						done()
+					})
+					room.startGame(user1)
+					room.leaveGame(user1)
+
+				})
+			})
 			
-		})
-	})
-
-	describe("#mallusCallback()", () => {
-		beforeEach(() => {
-			room = new Lobby(server, data.id, `room-${data.id}`, "classic")
-		})
-		
-		it("should return false  (when one is in the room)", () => {
-			expect(room.mallusCallback(data.id)).to.be.equal(false)
-		})
-
-		it("should return true (when multiple person are in the room)", function (done) {
-			server.on("connect", function (socket) {
-				console.log(socket.id)
-				user = new User(socket, data.name)
-				room.newPlayer(user)
-				room.startGame(user)
-				if (room.mallusCallback(user.socket.id))
-					done()
+			// describe("#endGameCallback", () => {
+			// 	let client1, client2
+			// 	let map = [
+			// 		['.', '.', '.', '.', '.','.', '.', '.', '.', '.'],
+			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
+			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
+			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
+			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.']
+			// 	]
+	
+			// 	beforeEach(() => {
+			// 		room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
+			// 	})
+				
+			// 	afterEach(() => {
+			// 		room.kill()
+			// 		if (client1)
+			// 			client1.close()
+			// 		if (client2)
+			// 			client2.close()
+			// 	})
+				
+			// 	it("should send GAMEOVER event (winner when solo)", function (done) {
+			// 		server.on("connect", function (socket) {
+			// 			user = new User(socket, data.name)
+			// 			room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
+			// 			room.newPlayer(user)
+			// 			room.startGame(user)
+			// 			user.game.map = map
+			// 		})
+	
+			// 		client1 = ioClient.connect(socketURL, option)
+	
+			// 		client1.on("GAMEOVER", function(data) {
+			// 			expect(data.winner).to.be.equal(true)
+			// 			done()
+			// 		})
+			// 	})
+	
+			// })
+	
+			describe.only("#pieceCallback()", () => {
+				it.only("should return a tetraminos", function () {
+					let piece = room.pieceCallback(data.id, 0)
+					expect(piece).to.have.keys('shape', 'letter', 'start')
+					expect(room.pieces.length).to.be.eql(1)
+				})
 			})
-			socket = ioClient.connect(socketURL, option)				
+	
+			describe.only("#mallusCallback()", () => {
+				it.only("should trigger user2 mallus method", (done) => {
+					const stb = sinon.stub(User.prototype, 'getMalus').callsFake(() => {
+						stb.restore()
+						done()
+					})
+	
+					room.startGame(user1)
+					room.mallusCallback(user1.socket.id)
+				})
+
+				it.only("should return false (one player only)", () => { // to fixed
+					room.leaveGame(user2)
+					room.startGame(user1)
+
+					
+					const value = room.mallusCallback(user1.socket.id)
+					expect(value).to.be.false
+				})
+			})
 		})
+
+		describe("#resetLobby()", () => {
+			it.only("should reset start and pieces attr", () => {
+				room.start = true
+				room.pieces = [1, 2, 3]
+
+				room.resetLobby()
+				expect(room.start).to.be.false
+				expect(room.pieces).to.be.empty
+			})
+		})
+
+		
 	})
+
+	// describe("#mallusCallback()", () => {
+	// 	beforeEach(() => {
+	// 		room = new Lobby(server, data.id, `room-${data.id}`, "classic")
+	// 	})
+		
+	// 	it("should return false  (when one is in the room)", () => {
+	// 		expect(room.mallusCallback(data.id)).to.be.equal(false)
+	// 	})
+
+	// 	it("should return true (when multiple person are in the room)", function (done) {
+	// 		server.on("connect", function (socket) {
+	// 			console.log(socket.id)
+	// 			user = new User(socket, data.name)
+	// 			room.newPlayer(user)
+	// 			room.startGame(user)
+	// 			if (room.mallusCallback(user.socket.id))
+	// 				done()
+	// 		})
+	// 		socket = ioClient.connect(socketURL, option)				
+	// 	})
+	// })
 
 	// describe('#ping()', function () { // need better imp
 	//   it.skip('should return an object', function(done) {
