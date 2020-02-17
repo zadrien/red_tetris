@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import Board from '../../src/Game/Board'
-import { Tetraminos } from '../../src/Game/tetraminos'
+import { Tetraminos, shape } from '../../src/Game/tetraminos'
 import utils from '../../src/Game/utils'
 
 import sinon from 'sinon'
@@ -28,7 +28,7 @@ describe('board unit test2', () => {
 		let tetra
 
 		beforeEach(() => {
-			tetra = new Tetraminos()
+			tetra = Tetraminos()
 		})
 
 		it("should return false (piece attribute already assign)", () => {
@@ -53,7 +53,7 @@ describe('board unit test2', () => {
 	describe("#setMalus", () => {
 		let tetra
 		beforeEach(() => {
-			tetra = new Tetraminos()
+			tetra = Tetraminos()
 		})
 
 		it('should return true (mallus added at end of the board)', () => {
@@ -252,11 +252,11 @@ describe('board unit test2', () => {
 		})
 	})
 
-	describe("#rotate()", () => {
+	describe.only("#rotate()", () => {
 		let tetra
 
 		beforeEach(() => {
-			tetra = Tetraminos()
+			tetra = JSON.parse(JSON.stringify(shape.Bar))
 			board.add(tetra)
 		})
 
@@ -272,9 +272,10 @@ describe('board unit test2', () => {
 		it('should return true and trigger listener (mode as false)', (done) => {
 			eventEmitter.on('display', (data) => {
 				expect(data).to.be.an('array')
+				console.log(data)
 				done()
 			})
-
+			// console.log(board.map)
 			expect(board.rotate()).to.be.true
 		})
 

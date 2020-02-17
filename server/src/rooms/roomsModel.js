@@ -77,7 +77,6 @@ Lobby.prototype.leaveGame = function (user) {
 	
 	// delete user.game
 	delete this.users[user.socket.id] // BECUSE OF U
-	console.log(Object.keys(this.users).length)
 	if (!isPlaying(this.users))
 		this.resetLobby()
 	if (user.socket.id === this.host.socket.id) {
@@ -111,15 +110,16 @@ Lobby.prototype.endGameCallback = function (id) {
 	}
 }
 
-Lobby.prototype.startBroadcast = function () {
-	var id = Object.keys(this.users)
-	if (!id)
-		return
-	var arr = []
-	id.map((v, k) => {
-		arr.push(this.users[v].get())
+Lobby.prototype.mallusCallback = function (userID) {
+	let ids = Object.keys(this.users)
+
+	if (ids.length < 2)
+		return false
+	ids.map(id => {
+		if (id !== userID)
+			this.users[id].getMalus()
 	})
-	this.io.in(this.id).emit("PLAYERS", arr)
+	return true
 }
 
 Lobby.prototype.pieceCallback = function (id, nbr) { // remove id
@@ -131,18 +131,15 @@ Lobby.prototype.pieceCallback = function (id, nbr) { // remove id
 	return p
 }
 
-Lobby.prototype.mallusCallback = function (userID) {
-	let ids = Object.keys(this.users)
-	
-	// console.log(this.users)
-	console.log(ids.length)
-	if (ids.length < 2)
-		return false
-	ids.map(id => {
-		if (id !== userID)
-			this.users[id].getMalus()
+Lobby.prototype.startBroadcast = function () {
+	var id = Object.keys(this.users)
+	if (!id)
+		return
+	var arr = []
+	id.map(v => {
+		arr.push(this.users[v].get())
 	})
-	return true
+	this.io.in(this.id).emit("PLAYERS", arr)
 }
 
 Lobby.prototype.ping = function (event) {

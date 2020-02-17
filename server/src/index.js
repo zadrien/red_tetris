@@ -6,8 +6,9 @@ import params from '../params'
 import { connectToDatabase } from './config'
 
 import { fetch, join, leave, start } from './rooms/roomsAPI'
-import userController from './player/playerController'
+import User from './player/playerController'
 
+const userController = new User({})
 const logerror = debug('tetris:error')
 , loginfo = debug('tetris:info')
 
@@ -17,6 +18,7 @@ const server = io.listen(params.server.port)
 loginfo(`Listening on: ${params.server.url}`)
 
 server.on('connection', function(socket) {
+	console.log("YO")
 	loginfo("Socket connected: YOO " + socket.id)
 	socket.on('login', async function(data) {
 		let user
@@ -41,3 +43,5 @@ server.on('connection', function(socket) {
 		userController.logout(socket)			
 	})
 })
+
+// module.exports = server

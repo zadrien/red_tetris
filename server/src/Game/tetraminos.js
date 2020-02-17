@@ -1,5 +1,5 @@
 
-export const shape = {
+const shape = {
     Bar: {
 	shape: [
 	    ['.', '.', '.', '.'],
@@ -73,10 +73,13 @@ export const shape = {
 
 const keys = Object.keys(shape)
 
-exports.Tetraminos = function() {
+function Tetraminos() {
     var i =  Math.floor(Math.random() * Math.floor(7));
 
     return Object.assign({}, shape[keys[i]]);
 }
 
-
+module.exports = {
+	Tetraminos,
+	shape
+}

@@ -20,10 +20,10 @@ Controller.prototype.login = function (socket, data) {
 
 Controller.prototype.logout = function (socket) {
 	const user = this.isLogged[socket.id]
-	if (!user)
-		throw new Error("User not found")
-	user.disconnect()
-	delete this.isLogged[socket.id]	
+	if (user) {
+		user.disconnect()
+		delete this.isLogged[socket.id]	
+	}
 }
 
 export default Controller

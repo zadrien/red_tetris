@@ -1,5 +1,4 @@
-
-import _ from 'lodash'
+const  _  = require('lodash')
 
 exports.buildMap = function() {
     var map = new Array(20);
@@ -81,7 +80,8 @@ exports.rotateRight = (piece) => {
     var rotation = piece.shape.reverse()
     piece.shape = rotation[0].map((v, k) => (
 		rotation.map(row => row[k])
-    ))
+	))
+	piece.start = piece.shape.findIndex(el => el.find(v => v !== '.') !== -1)
 }
 
 exports.rotateLeft = (piece) => {

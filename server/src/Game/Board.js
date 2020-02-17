@@ -41,14 +41,17 @@ Board.prototype.get = function () {
 }
 
 Board.prototype.add = function (piece) {
-	if (this.piece)
+	if (this.piece) {
+		console.log("BEGIIIN")
 		return false
+	}
 	this.piece = utils.clone(piece)
 	this.x = Math.round((10 - this.piece.shape[0].length) / 2);
 	this.y = 0
 	let cpy = utils.clone(this.map)
 
 	if (!utils.merge(cpy, this.piece, this.x, this.y)) {
+		console.log("LAAA")
 		return false
 	}
 	this.map = cpy
@@ -101,8 +104,10 @@ Board.prototype.down = function () {
 		return false
 	var copy = utils.clone(this.map)
 	if (utils.remove(copy, this.piece, this.x, this.y))
-		if (!utils.merge(copy, this.piece, this.x, this.y+1))
+		if (!utils.merge(copy, this.piece, this.x, this.y+1)) {
+			this.piece = undefined
 			return false
+		}
 	this.y++
 	this.map = copy
 	if (this.mode == true) {
@@ -159,6 +164,7 @@ Board.prototype.rotate = function () {
 	var piece = utils.clone(this.piece)		
 	if (utils.remove(copy, piece, this.x, this.y)) {
 		utils.rotateRight(piece)
+		console.log(piece)
 		if (!utils.merge(copy, piece, this.x, this.y))
 			return false
 	}

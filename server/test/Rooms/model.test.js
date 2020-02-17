@@ -38,13 +38,13 @@ describe("Room Model Unit Test", () => {
 	})
 	
 	describe("Lobby Constructor", () => {
-		it.only("init room instance", () => {
+		it("init room instance", () => {
 			room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
 			expect(room).to.not.be.undefined
 		})
 	})
 
-	describe.only("Lobby's method", () => {
+	describe("Lobby's method", () => {
 		let room, stub
 
 		// before(() => {
@@ -96,11 +96,11 @@ describe("Room Model Unit Test", () => {
 				room.newPlayer(user2)
 			})
 
-			it.only("should return false (not the host of the Lobby)", () => {
+			it("should return false (not the host of the Lobby)", () => {
 				expect(room.startGame(user2)).to.be.false
 			})
 
-			it.only("should return true (host of the lobby)", (done) => {
+			it("should return true (host of the lobby)", (done) => {
 				eventEmitter2.on("START", (data) => {
 					expect(data).to.have.property('start', true)
 				})
@@ -113,7 +113,7 @@ describe("Room Model Unit Test", () => {
 			})
 		})
 
-		describe.only("TDD Lobby with 2 player", () => {
+		describe("TDD Lobby with 2 player", () => {
 			let user1, user2
 			let eventEmitter1, eventEmitter2
 
@@ -135,7 +135,7 @@ describe("Room Model Unit Test", () => {
 			})
 
 
-			describe.only("#leaveGame()", () => {
+			describe("#leaveGame()", () => {
 				let stub
 
 				beforeEach(() => {
@@ -146,7 +146,7 @@ describe("Room Model Unit Test", () => {
 					stub.restore()
 				})
 
-				it.only("should throw an error (User not found)", () => {
+				it("should throw an error (User not found)", () => {
 					const user = {
 						socket: {
 							id: 'NotFound'
@@ -155,7 +155,7 @@ describe("Room Model Unit Test", () => {
 					expect(room.leaveGame.bind(room, user)).to.throw("User not found")
 				})
 
-				it.only("should remove user2 player from the lobby", (done) => {
+				it("should remove user2 player from the lobby", (done) => {
 					eventEmitter2.on("LEAVE", (data) => {
 						expect(data).to.have.property("state", "QUIT")
 						done()
@@ -165,7 +165,7 @@ describe("Room Model Unit Test", () => {
 					expect(room.users).to.not.have.property(user2.socket.id)
 				})
 
-				it.only("should reassign host property to user2 when user1 (host) leave", (done) => {
+				it("should reassign host property to user2 when user1 (host) leave", (done) => {
 					eventEmitter2.on("HOST", (data) => {
 						expect(data).to.have.property('host', true)
 					})
@@ -178,7 +178,7 @@ describe("Room Model Unit Test", () => {
 					room.leaveGame(user1)
 				})
 
-				it.only("should trigger resetLobby() when party is not running", (done) => {
+				it("should trigger resetLobby() when party is not running", (done) => {
 					const stb = sinon.stub(Lobby.prototype, 'resetLobby').callsFake(() => {
 						stb.restore()
 						done()
@@ -187,7 +187,7 @@ describe("Room Model Unit Test", () => {
 					room.leaveGame(user1)
 				})
 
-				it.only("should trigger Player's stopGame method when isPlaying is true", (done) => {
+				it("should trigger Player's stopGame method when isPlaying is true", (done) => {
 					const stb = sinon.stub(User.prototype, 'stopGame').callsFake(() => {
 						stb.restore()
 						done()
@@ -239,38 +239,38 @@ describe("Room Model Unit Test", () => {
 	
 			// })
 	
-			describe.only("#pieceCallback()", () => {
-				it.only("should return a tetraminos", function () {
+			describe("#mallusCallback()", () => {
+				it("should trigger user2 mallus method", (done) => {
+					const stb = sinon.stub(User.prototype, 'getMalus').callsFake(() => {
+						stb.restore()
+						done()
+					})
+
+					room.startGame(user1)
+					room.mallusCallback(user1.socket.id)
+				})
+
+				it("should return false (one player only)", () => { // to fixed
+					const stb = sinon.stub(User.prototype, 'leave').callsFake(() => true)
+					room.leaveGame(user2)
+					room.startGame.bind(user1)
+
+					expect(room.mallusCallback(user1.socket.id)).to.be.false
+					stb.restore()
+				})
+			})
+
+			describe("#pieceCallback()", () => {
+				it("should return a tetraminos", function () {
 					let piece = room.pieceCallback(data.id, 0)
 					expect(piece).to.have.keys('shape', 'letter', 'start')
 					expect(room.pieces.length).to.be.eql(1)
 				})
 			})
-	
-			describe.only("#mallusCallback()", () => {
-				it.only("should trigger user2 mallus method", (done) => {
-					const stb = sinon.stub(User.prototype, 'getMalus').callsFake(() => {
-						stb.restore()
-						done()
-					})
-	
-					room.startGame(user1)
-					room.mallusCallback(user1.socket.id)
-				})
-
-				it.only("should return false (one player only)", () => { // to fixed
-					room.leaveGame(user2)
-					room.startGame(user1)
-
-					
-					const value = room.mallusCallback(user1.socket.id)
-					expect(value).to.be.false
-				})
-			})
 		})
 
 		describe("#resetLobby()", () => {
-			it.only("should reset start and pieces attr", () => {
+			it("should reset start and pieces attr", () => {
 				room.start = true
 				room.pieces = [1, 2, 3]
 
@@ -283,50 +283,43 @@ describe("Room Model Unit Test", () => {
 		
 	})
 
-	// describe("#mallusCallback()", () => {
-	// 	beforeEach(() => {
-	// 		room = new Lobby(server, data.id, `room-${data.id}`, "classic")
-	// 	})
+	describe('#startBroadcast()', function () { // need better imp
+	  it.skip('should return an object', function(done) {
+		server.on('connect', function(socket) {
+		  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
+		})
 		
-	// 	it("should return false  (when one is in the room)", () => {
-	// 		expect(room.mallusCallback(data.id)).to.be.equal(false)
-	// 	})
-
-	// 	it("should return true (when multiple person are in the room)", function (done) {
-	// 		server.on("connect", function (socket) {
-	// 			console.log(socket.id)
-	// 			user = new User(socket, data.name)
-	// 			room.newPlayer(user)
-	// 			room.startGame(user)
-	// 			if (room.mallusCallback(user.socket.id))
-	// 				done()
-	// 		})
-	// 		socket = ioClient.connect(socketURL, option)				
-	// 	})
-	// })
-
-	// describe('#ping()', function () { // need better imp
-	//   it.skip('should return an object', function(done) {
-	// 	server.on('connect', function(socket) {
-	// 	  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
-	// 	  socket.on('PING', function () {
-	// 		room.ping()
-	// 	  })
-	// 	})
+		client = ioClient.connect(socketURL, option)
 		
-	// 	client = ioClient.connect(socketURL, option)
-		
-	// 	client.on('CHECK', function(d) {
-	// 	  const { room } = d
-	// 	  expect(room).to.be.an('object')
-	// 	  expect(room).to.have.property('nbrUser', 0)
-	// 	  expect(room).to.have.property('isStarted', false)
-	// 	  expect(room).to.have.property('id', data.id)
-	// 	  expect(room).to.have.property('name', `room-${data.id}`)
-	// 	  done()
-	// 	})
+		client.on('PLAYERS', function(d) {
+		  expect(d).to.be.an('array')
+		  done()
+		})
+	  })
+	})
 
-	// 	client.emit('PING')
-	//   })
-	// })
+	describe('#ping()', function () { // need better imp
+	  it('should return an object', function(done) {
+		server.on('connect', function(socket) {
+		  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
+		  socket.on('PING', function () {
+			room.ping('CHECK')
+		  })
+		})
+		
+		client = ioClient.connect(socketURL, option)
+		
+		client.on('CHECK', function(d) {
+		  const { room } = d
+		  expect(room).to.be.an('object')
+		  expect(room).to.have.property('nbrUser', 0)
+		  expect(room).to.have.property('isStarted', false)
+		  expect(room).to.have.property('id', data.id)
+		  expect(room).to.have.property('name', `room-${data.id}`)
+		  done()
+		})
+
+		client.emit('PING')
+	  })
+	})
 })

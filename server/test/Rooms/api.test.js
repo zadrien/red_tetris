@@ -12,15 +12,18 @@ const option = {
 	'force new connection': true
 }
 
-describe("room's API testing", () => {
+describe.only("room's API testing", () => {
 	let client
+	var server
 	before(() => {
 		connectToDatabase(params.server.db)
-		server.create(params.server)
-		.then(() => console.log("Ready to listen"))
-		.catch(err => console.log(err))
-		console.log("YOOOO", params.server.url)
+		server = require("../../src/index")
 		client = ioClient.connect(params.server.url, option)
+	})
+
+	afterEach(() => {
+		server.close()
+		client.close()
 	})
 
 	describe("#login LISTENER", () => {
