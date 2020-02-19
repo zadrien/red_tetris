@@ -1,4 +1,4 @@
-const listing = (state, action = {}) => {
+const listing = (state = {}, action = {}) => {
 	let obj
 	switch (action.state) {
 		case "FETCH":

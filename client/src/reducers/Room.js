@@ -6,7 +6,7 @@ const room = (state = {}, action = {}) => {
 		if (!action.result.room)
 			return state
 		return Object.assign({}, state, { menu: "ROOM", room: action.result.room })
-		
+
 	case "START":
 		if (!action.result)
 			return state

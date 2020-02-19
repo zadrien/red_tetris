@@ -24,24 +24,15 @@ describe("Room's DAL unit test", () => {
 	
 	describe("#create()", () => {
 		it("should create a new room" , async function () {
-			try {
-				let res = await roomsDAL.create(room)
-				expect(res.id).to.be.equal(room.id)
-				expect(res.name).to.be.equal(room.name)
-				expect(res.mode).to.be.equal(room.mode)
-				expect(res.open).to.be.equal(true)
-			} catch (err) {
-				expect().fail(err)
-			}
+			let res = await roomsDAL.create(room)
+
+			expect(res.id).to.be.equal(room.id)
+			expect(res.name).to.be.equal(room.name)
+			expect(res.mode).to.be.equal(room.mode)
 		})
 
 		it("should return error (duplicate)", async function () {
-			try {
-				let res = await roomsDAL.create(room)
-				expect(res).to.be.equal(undefined)
-			} catch(err) {
-
-			}
+			expect(await roomsDAL.create(room)).to.be.undefined
 		})
 	})
 

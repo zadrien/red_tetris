@@ -6,7 +6,7 @@ import utils from '../../src/Game/utils'
 import sinon from 'sinon'
 const events = require('events')
 
-describe('board unit test2', () => {
+describe('board unit test', () => {
 	let board, piece, eventEmitter
 
 	beforeEach(() => {
@@ -20,7 +20,7 @@ describe('board unit test2', () => {
 
 	describe("#get()", () => {
 		it("should return return map Array", () => {
-			expect(board.get()).to.be.equal(board.map)
+			expect(board.get()).to.be.eql(board.map)
 		})
 	})
 
@@ -60,7 +60,6 @@ describe('board unit test2', () => {
 			const value = board.setMalus()
 
 			expect(value).to.be.true
-			console.log(board.map[19])
 			expect(board.map[19].find(el => el === '.')).to.be.undefined
 		})
 
@@ -252,7 +251,7 @@ describe('board unit test2', () => {
 		})
 	})
 
-	describe.only("#rotate()", () => {
+	describe("#rotate()", () => {
 		let tetra
 
 		beforeEach(() => {
@@ -272,10 +271,8 @@ describe('board unit test2', () => {
 		it('should return true and trigger listener (mode as false)', (done) => {
 			eventEmitter.on('display', (data) => {
 				expect(data).to.be.an('array')
-				console.log(data)
 				done()
 			})
-			// console.log(board.map)
 			expect(board.rotate()).to.be.true
 		})
 

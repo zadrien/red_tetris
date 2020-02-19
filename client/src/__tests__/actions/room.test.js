@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit, winValidate } from '../../actions/Room'
+import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit, removeOverlay } from '../../actions/Room'
 
 describe('', () => {
   let res
@@ -119,13 +119,9 @@ describe('', () => {
 	})
   })
   
-  describe('#winValidate()', () => {
-	it('should return an object', () => {
-	  res = winValidate()
-
-	  expect(res).to.have.property('type', ROOM)
-	  expect(res).to.have.property('state', 'RESET')
-	  expect(res).to.have.property('reset', true)
+	describe("#removeOverlay()", () => {
+		it("should return an object", () => {
+			expect(removeOverlay()).to.be.eql({ type: ROOM, state: "RESET", reset: true})
+		})
 	})
-  })
 })

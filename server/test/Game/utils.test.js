@@ -2,7 +2,6 @@ import utils from '../../src/Game/utils'
 import { Tetraminos, shape } from '../../src/Game/tetraminos'
 
 import { expect } from 'chai'
-import { placeable } from '../../src/Game/helpers'
 
 describe("Board Utility Function", () => {
 
@@ -19,7 +18,7 @@ describe("Board Utility Function", () => {
 			map = utils.buildMap()
 		})
 
-		describe("#copyMap()", () => {
+		describe("#clone()", () => {
 			it("should return another map (copy reference)", () => {
 				const clone = utils.clone(map)
 				expect(clone).to.not.be.equal(map)
@@ -98,6 +97,7 @@ describe("Board Utility Function", () => {
 
 			it("should return true (Piece removed)", () => {
 				const value = utils.remove(map, tetra, 0, 0)
+				console.log(map)
 				expect(value).to.be.true
 			})
 

@@ -24,6 +24,8 @@ describe("User Controller", function() {
 			})
 
 			it("should throw error if username arleady taken", () => {
+				let socket = new events.EventEmitter()
+				socket.id = '2'
 				expect(testedController.login.bind(testedController, socket, {name: "AlreadyTakenCase"})).to.throw("Username already taken")
 			})
 		})
@@ -41,10 +43,6 @@ describe("User Controller", function() {
 	})
 	
 	describe("#logout()", () => {
-		// it("should throw an error (User not found)", () => {
-		// 	expect(testedController.logout.bind(testedController, "1")).to.throw("User not found")
-		// })
-
 		it("#logout() should remove user from the Controller variable (isLogged)", () => {
 			const eventEmitter = new events.EventEmitter()
 			eventEmitter.id  = '1'

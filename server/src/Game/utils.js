@@ -10,7 +10,7 @@ exports.buildMap = function() {
 }
 
 exports.clone = function(arr) {
-    return _.cloneDeep(arr)
+    return JSON.parse(JSON.stringify(arr))
 }
 
 exports.merge = (map, piece, x, y) => {
@@ -57,12 +57,15 @@ exports.remove = (map, piece, x, y) => {
 }
 
 
-
-exports.addMallus = (map, pos) => {
-    map.splice(0, 1) // need verification if the line is empty, if not down piece and continue
+exports.addMallus = (map, remove) => {
+	map.splice(remove, 1)
     map.push(['M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M'])
-
 }
+
+// exports.addMallus = (map, pos) => {
+//     map.splice(0, 1) // need verification if the line is empty, if not down piece and continue
+//     map.push(['M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M'])
+// }
 
 
 exports.isFull = (map, max, condition) => {

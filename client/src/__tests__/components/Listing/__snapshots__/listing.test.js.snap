@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Listing TDD should render 2 room 1`] = `
+<div
+  className="room-list"
+>
+  <div
+    className="room-list-item"
+    disabled={false}
+    onClick={[Function]}
+  >
+    <div
+      className="description"
+    >
+      <p
+        className="name"
+      >
+        Room1
+      </p>
+      <p
+        className="mode"
+      >
+        classic
+         [
+        0
+        /10]
+      </p>
+    </div>
+    <div
+      className="join-button"
+    >
+      <div>
+        JOIN
+      </div>
+    </div>
+  </div>
+  <div
+    className="room-list-item"
+    disabled={false}
+    onClick={[Function]}
+  >
+    <div
+      className="description"
+    >
+      <p
+        className="name"
+      >
+        Room1
+      </p>
+      <p
+        className="mode"
+      >
+        classic
+         [
+        0
+        /10]
+      </p>
+    </div>
+    <div
+      className="join-button"
+    >
+      <div>
+        JOIN
+      </div>
+    </div>
+  </div>
+</div>
+`;

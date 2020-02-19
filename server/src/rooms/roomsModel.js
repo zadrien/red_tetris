@@ -3,24 +3,34 @@ import { Tetraminos } from '../Game/tetraminos'
 import { isPlaying } from './helpers'
 
 export default function Lobby(io, id, name, mode) {
-	this.io = io.sockets.in(id)
+	this.io = io//.sockets.in(id)
 	this.id = id
 	this.name = name
-	this.mode = selectMode(mode)
+	this.mode = mode === "classic" ? false : true
 	this.host = undefined
 	this.users = {}
-	this.start = false
+	this.isOpen = true
 	this.pieces = []
 	this.broad = setInterval(function () {
-		this.startBroadcast()
+		this.startBroadcast(io)
 	}.bind(this), 500)
 	this.ping('CHECK')
+}
+Lobby.prototype.get = function () {
+	const obj = {
+		id: this.id,
+		name: this.name,
+		mode: this.mode === true ? "invisible": "classic",
+		nbrUser: Object.keys(this.users).length,
+		isOpen: this.isOpen
+	}
+	return obj
 }
 
 Lobby.prototype.kill = function() {
 	if (this.broad)
 		clearInterval(this.broad)
-	if (this.start) {
+	if (!this.isOpen) {
 		this.io.in(this.id).emit("LEAVE", { state: "QUIT", msg: "Server may intentionaly kill this lobby" })
 		_.map(this.users, (user) => {
 			user.stopGame()
@@ -30,13 +40,13 @@ Lobby.prototype.kill = function() {
 }
 
 Lobby.prototype.newPlayer = function (user) {
-	if (this.start)
+	if (!this.isOpen)
 		throw new Error("Lobby as already started")
 	this.users[user.socket.id] = user
 	user.join(this)
 	if (this.host === undefined)
 		this.host = user
-	user.Notify("JOINED", { state: "JOINED", room: {id: this.id, name: this.name, mode: this.mode }})		
+	user.Notify("JOINED", { state: "JOINED", room: this.get() })//{id: this.id, name: this.name, mode: this.mode }})		
 	user.Notify("HOST", { host: this.host.socket.id === user.socket.id })
 	user.initGame(this.mode)
 	this.ping('CHECK')
@@ -45,11 +55,11 @@ Lobby.prototype.newPlayer = function (user) {
 
 Lobby.prototype.startGame = function (user) {
 	if (user.socket.id === this.host.socket.id) {
-		this.start = true
-		// this.io.in(this.id).emit("START", { start: this.start })
+		this.isOpen = false
+		// this.io.in(this.id).emit("START", { start: this.isOpen })
 		var ids = Object.keys(this.users)
 		ids.map(id => {
-			this.users[id].Notify("START", { start: this.start })
+			this.users[id].Notify("START", { start: this.isOpen })
 			this.users[id].initGame(this.mode)
 			this.users[id].isPlaying = true;
 			this.users[id].start(this.pieceCallback.bind(this),
@@ -62,7 +72,7 @@ Lobby.prototype.startGame = function (user) {
 	return false
 }
 Lobby.prototype.resetLobby = function () {
-	this.start = false
+	this.isOpen = true
 	this.pieces = []
 	this.ping('CHECK')
 }
@@ -75,7 +85,6 @@ Lobby.prototype.leaveGame = function (user) {
 	if (leaver.isPlaying)
 		leaver.stopGame()
 	
-	// delete user.game
 	delete this.users[user.socket.id] // BECUSE OF U
 	if (!isPlaying(this.users))
 		this.resetLobby()
@@ -91,8 +100,6 @@ Lobby.prototype.leaveGame = function (user) {
 	this.ping('CHECK')
 }
 
-
-
 Lobby.prototype.endGameCallback = function (id) {
 	var user = this.users[id]
 	if (!user) 
@@ -103,22 +110,26 @@ Lobby.prototype.endGameCallback = function (id) {
 	if (_.isEmpty(stillPlaying)) {
 		this.resetLobby()
 		user.Notify("GAMEOVER", { winner: true })
-		this.host.Notify("START", { start: this.start })
+		this.host.Notify("START", { start: this.isOpen })
 	} else {
-		user.Notify("START", { start: !this.start})
+		user.Notify("START", { start: !this.isOpen})
 		user.Notify("GAMEOVER", { winner: false }) // maybe not necessary
 	}
 }
 
 Lobby.prototype.mallusCallback = function (userID) {
-	let ids = Object.keys(this.users)
+	const users = Object.values(this.users)
 
-	if (ids.length < 2)
+	if (users.length < 2)
 		return false
-	ids.map(id => {
-		if (id !== userID)
-			this.users[id].getMalus()
-	})
+	users.forEach(user => {
+		if (user.socket.id !== userID)
+			user.getMalus()
+	});
+	// users.map(user => {
+	// 	if (user.socket.id !== userID)
+	// 		user.getMalus()
+	// })
 	return true
 }
 
@@ -131,38 +142,36 @@ Lobby.prototype.pieceCallback = function (id, nbr) { // remove id
 	return p
 }
 
-Lobby.prototype.startBroadcast = function () {
-	var id = Object.keys(this.users)
-	if (!id)
-		return
-	var arr = []
-	id.map(v => {
-		arr.push(this.users[v].get())
+Lobby.prototype.startBroadcast = function (io) {
+	const connectedUsers = Object.values(this.users)
+	if (!connectedUsers)
+		return 
+	const arr = []
+	connectedUsers.forEach(user => {
+		arr.push(user.get())
 	})
-	this.io.in(this.id).emit("PLAYERS", arr)
+	io.to(this.id).emit('PLAYERS', arr)
 }
 
 Lobby.prototype.ping = function (event) {
-	var mode = this.mode === true ? "invisible" : "classic"
-	var nbr = Object.keys(this.users).length
-	let info = {
-		id: this.id,
-		name: this.name,
-		mode: mode,
-		nbrUser: nbr,
-		isStarted: this.start
-	}
-	try {
-		this.io.emit(event, { room : info })
-	} catch(err) {
-		console.log(err)
-	}
+	const data = this.get()
+	// var mode = this.mode === true ? "invisible" : "classic"
+	// var nbr = Object.keys(this.users).length
+	// let info = {
+	// 	id: this.id,
+	// 	name: this.name,
+	// 	mode: mode,
+	// 	nbrUser: nbr,
+	// 	isStarted: this.isOpen
+	// }
+	this.io.emit(event, { room : data })
+
 }
 
-function selectMode(mode) {
-	if (mode === "classic")
-		return false;
-	else if (mode === "invisible")
-		return true;
-	return false;
-}
+// function selectMode(mode) {
+// 	if (mode === "classic")
+// 		return false;
+// 	else if (mode === "invisible")
+// 		return true;
+// 	return false;
+// }

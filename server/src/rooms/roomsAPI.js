@@ -1,62 +1,58 @@
 import { Rooms } from './roomsDAL';
-import { create, find, restoreRooms } from './roomsController'
+import * as roomsController  from './roomsController'
 
 export async function fetch(io, user, data) {
     try {
-		if (!data)
-			return
 		let skip = data.hasOwnProperty('skip') ? data.skip : 0
 		let limit = data.hasOwnProperty('limit') ? data.limit : 0
-		
 		let rooms = await Rooms.read({}, {}, skip, limit)
-		
-		let list = await restoreRooms(io)
+		await roomsController.restoreRooms(io) // move in index.js
+
 		user.Notify("FETCH", { rooms })
     } catch (err) {
-		console.log(err)
+		user.Notify("FETCH", { err: err.message })
     }
 }
 
 export async function join(io, user, data) {
 	let room
-	try {
-		console.log("Room info::", data)
-		if (data.room.id)
-			room = await find(data.room.id)
-		else {
-			room = await create(io, data.room)
+	if (data.room.hasOwnProperty('id'))
+		room = roomsController.find(data.room.id)
+	if (!room) {
+		try {
+			room = await roomsController.create(io, data.room)
 			user.Notify("CREATED", { room: true })
+		} catch (err) {
+			return user.Notify("CREATED", { err: err.message}) 
 		}
+	}
+
+	try {
 		room.newPlayer(user)
 	} catch(err) {
-		user.Notify("JOINING", { state: "JOINED", err })
-		Promise.reject(err)
+		user.Notify("JOINING", { state: "JOINED", err: err.message })
 	}
 }
 
 export async function leave(user, data) {
-	let room
 	try {
-		console.log("Room info:::", data)
-		if (!data.id)
-			return
-		room = await find(data.id)
-		await room.leaveGame(user)
+		const { currentLobby } = user
+		if (!currentLobby)
+			throw new Error("user not in a Lobby")
+		currentLobby.leaveGame(user)
+		Rooms.update()
 	} catch (err) {
 		user.Notify("LEAVE", { err: err.message })
-		Promise.reject(err)
 	}
 }
 
-export async function start(user, data) {
-	let room
+export function start(user, data) {
 	try {
-		if (!data)
-			return
-		room = await find(data)
-		room.startGame(user)
+		const { currentLobby } = user
+		if (!currentLobby)
+			throw new Error("user not in a Lobby")
+		currentLobby.startGame(user)
 	} catch(err) {
-		user.Notify("START", err.message)
-		Promise.reject(err)
+		user.Notify("START", { err: err.message})
 	}
 }

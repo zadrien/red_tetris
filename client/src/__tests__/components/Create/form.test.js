@@ -1,3 +1,4 @@
+
 import React from 'react'
 
 import Create from '../../../components/Create/Form'
@@ -44,9 +45,8 @@ describe("Form TDD", () => {
 					room: { value: "ROOM NAME"}, mode: { value: "classic"}}}, state.user)
 		})
 
-		expect(store.dispatch).toHaveBeenCalledTimes(3)
+		expect(store.dispatch).toHaveBeenCalledTimes(2)
 		expect(store.dispatch).toHaveBeenCalledWith(isCreating())
-		expect(store.dispatch).toHaveBeenCalledWith(onCreation())
 		expect(store.dispatch).toHaveBeenCalledWith(emitCreate({
 			user: state.user,
 			room: {name: "ROOM NAME", mode: "classic"}}))

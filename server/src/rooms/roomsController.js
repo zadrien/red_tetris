@@ -19,31 +19,29 @@ export async function restoreRooms(io) {
 		})
 		return all
     } catch (err) {
-		console.log(err)
 		Promise.reject(err)
     }
 }
 
 export async function create(io, room) {
     try {
-		var id = uuidv4()
-		var r = new Room(io, id, room.name, room.mode)
-		Rooms[id] = r
+		let id = uuidv4()
 		room["id"] = id
-		var obj = await roomDb.create(room)
-		return r
+		await roomDb.create(room)
+		let instance = new Room(io, id, room.name, room.mode)
+		Rooms[id] = instance
+		return instance
     } catch (err) {
-		console.log("Room creation failure!..")
-		Promise.reject(err)
+		return Promise.reject(err)
     }
 }
 
-export async function find(id) {
+export function find(id) {
     if (!id)
 		return undefined
 	let room = Rooms[id]
 	if (!room)
-		Promise.reject("room not found")
+		return undefined
     return room
 }
 
@@ -55,4 +53,20 @@ export function deleteRoom(id) {
     delete Rooms[id]
     console.log("room deleted")
     return null
+}
+
+export function purge() {
+	console.log('/!\\ Closing all instance /!\\')
+	try {
+		let ids = Object.keys(Rooms)
+		if (!ids)
+			Promise.reject("no rooms")
+		ids.map(function (id) {
+			Rooms[id].kill()
+			delete Rooms[id]
+		})
+		return true
+	} catch (err) {
+		Promise.reject(err)
+	}
 }

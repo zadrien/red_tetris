@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Listing Container should render (and trigger fetch method 1`] = `
+<div>
+  <div>
+    <h4
+      className="title"
+    >
+      SELECT A ROOM
+    </h4>
+    <div
+      className="room-list pd"
+    >
+      <h2
+        className="title small my-auto"
+      >
+        No room available
+      </h2>
+    </div>
+  </div>
+  <div
+    className="d-flex"
+  >
+    <div
+      className="bob-btn secondary width-100"
+      id="create"
+      onClick={[Function]}
+    >
+      New room
+    </div>
+    <div
+      className="d-flex"
+    >
+      <div
+        className="bob-btn secondary width-100"
+        id="prev"
+        onClick={[Function]}
+      >
+        Prev
+      </div>
+      <div
+        className="bob-btn secondary width-100"
+        id="next"
+        onClick={[Function]}
+      >
+        Next
+      </div>
+    </div>
+  </div>
+</div>
+`;

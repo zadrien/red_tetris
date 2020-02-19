@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import socketMiddleware from '../../middleware/socketMiddleware'
+import { socketMiddleware } from '../../middleware/middleware'
 
 import io from 'socket.io'
 
@@ -18,8 +18,8 @@ describe('socket middleware', () => {
 			getState: jest.fn(() => ({})),
 			dispatch: dispatch
 		}
-		const m = middleware(option)
-		const invoke = action => m(store)(next)(action)
+		const m = middleware(store)
+		const invoke = action => m(next)(action)
 		return { store, next, invoke }
 	}
 	let server
@@ -38,7 +38,7 @@ describe('socket middleware', () => {
 			done()
 		})
 
-		const { invoke } = create(socketMiddleware, jest.fn(), jest.fn())
+		create(socketMiddleware, jest.fn(), jest.fn())
 	})
 
 	it('should go to non-funtion action', () => {

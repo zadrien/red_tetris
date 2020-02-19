@@ -6,9 +6,7 @@ import { connect } from 'react-redux'
 
 const OverlayDisplay = ({ room, onClick}) => {
 	useEffect(() => {
-		let interval = setTimeout(() => onClick(), 5000)
-
-		return () => clearInterval(interval)
+		setTimeout(() => onClick(), 5000)
 	}, [])
 
 	return (

@@ -1,4 +1,4 @@
-import Player from './playerModel'
+import User from './playerModel'
 
 function Controller(isLogged) {
 	this.isLogged = isLogged
@@ -7,15 +7,15 @@ function Controller(isLogged) {
 Controller.prototype.login = function (socket, data) {
 	if (!data.hasOwnProperty('name'))
 		throw new Error("No name property")
-	var ids = Object.keys(this.isLogged)
-	var value = ids.find(elem => this.isLogged[elem].name === data.name)
+	let ids = Object.keys(this.isLogged)
+	let value = ids.find(elem => this.isLogged[elem].name === data.name)
 	if (value)
 		throw new Error("Username already taken")
 	
-	var player = new Player(socket, data.name)
-	this.isLogged[socket.id] = player
-	console.log(`New player connected ${player.socket.id} - ${player.name}`)
-	return player	
+	let user = new User(socket, data.name)
+	this.isLogged[socket.id] = user
+	console.log(`New user connected ${user.socket.id} - ${user.name}`)
+	return user	
 }
 
 Controller.prototype.logout = function (socket) {

@@ -17,7 +17,7 @@ const option = {
 describe("Room Model Unit Test", () => {
 	let server, socket, room, client, stubUser
 	let data = {
-		name: "testName",
+		name: "room-testName",
 		id: "testID",
 		mode: "classic"
 	}
@@ -45,17 +45,22 @@ describe("Room Model Unit Test", () => {
 	})
 
 	describe("Lobby's method", () => {
-		let room, stub
-
-		// before(() => {
-		// 	stub = sinon.stub(Lobby.prototype, 'ping').callsFake(() => true)
-		// })
-		// after(() => {
-		// 	stub.restore()
-		// })
+		let room
 
 		beforeEach(() => {
-			room = new Lobby(server, data.id, `room-${data.name}`, data.mode)
+			room = new Lobby(server, data.id, data.name, data.mode)
+		})
+
+		describe("#get()", () => {
+			it("should return Lobby Information", () => {
+				expect(room.get()).to.be.eql({
+					id: "testID",
+					name: "room-testName",
+					mode: "classic",
+					nbrUser: 0,
+					isOpen: true
+				})
+			})
 		})
 
 		describe("#newPlayer()", () => {
@@ -75,8 +80,8 @@ describe("Room Model Unit Test", () => {
 				expect(room.newPlayer(user)).to.be.true
 			})
 
-			it('should throw error if lobby as started', () => {
-				room.start = true
+			it('should throw error if lobby as started (isOpen as false', () => {
+				room.isOpen = false
 				expect(room.newPlayer.bind(room, {})).to.throw("Lobby as already started")
 			})
 		})
@@ -109,7 +114,7 @@ describe("Room Model Unit Test", () => {
 					done()
 				})
 				expect(room.startGame(user1)).to.be.true
-				expect(room.start).to.be.true
+				expect(room.isOpen).to.be.false
 			})
 		})
 
@@ -183,7 +188,6 @@ describe("Room Model Unit Test", () => {
 						stb.restore()
 						done()
 					})
-					// room.startGame()
 					room.leaveGame(user1)
 				})
 
@@ -197,47 +201,6 @@ describe("Room Model Unit Test", () => {
 
 				})
 			})
-			
-			// describe("#endGameCallback", () => {
-			// 	let client1, client2
-			// 	let map = [
-			// 		['.', '.', '.', '.', '.','.', '.', '.', '.', '.'],
-			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
-			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
-			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.'],
-			// 		['.', '.', '.', '.', 'X','X', '.', '.', '.', '.']
-			// 	]
-	
-			// 	beforeEach(() => {
-			// 		room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
-			// 	})
-				
-			// 	afterEach(() => {
-			// 		room.kill()
-			// 		if (client1)
-			// 			client1.close()
-			// 		if (client2)
-			// 			client2.close()
-			// 	})
-				
-			// 	it("should send GAMEOVER event (winner when solo)", function (done) {
-			// 		server.on("connect", function (socket) {
-			// 			user = new User(socket, data.name)
-			// 			room = new Lobby(server, `${data.id}-2`, room-`${room-data.id}`, data.mode)
-			// 			room.newPlayer(user)
-			// 			room.startGame(user)
-			// 			user.game.map = map
-			// 		})
-	
-			// 		client1 = ioClient.connect(socketURL, option)
-	
-			// 		client1.on("GAMEOVER", function(data) {
-			// 			expect(data.winner).to.be.equal(true)
-			// 			done()
-			// 		})
-			// 	})
-	
-			// })
 	
 			describe("#mallusCallback()", () => {
 				it("should trigger user2 mallus method", (done) => {
@@ -275,7 +238,7 @@ describe("Room Model Unit Test", () => {
 				room.pieces = [1, 2, 3]
 
 				room.resetLobby()
-				expect(room.start).to.be.false
+				expect(room.isOpen).to.be.true
 				expect(room.pieces).to.be.empty
 			})
 		})
@@ -286,22 +249,28 @@ describe("Room Model Unit Test", () => {
 	describe('#startBroadcast()', function () { // need better imp
 	  it.skip('should return an object', function(done) {
 		server.on('connect', function(socket) {
-		  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
+		  const room = new Lobby(io, data.id, data.name, 'classic')
+		  socket.on("JOIN", () => {
+			let user = new User(socket, 'testName')			  
+			room.newPlayer(user)
+		  })
 		})
 		
 		client = ioClient.connect(socketURL, option)
 		
-		client.on('PLAYERS', function(d) {
-		  expect(d).to.be.an('array')
+		client.on('PLAYERS', (data) => {
+		  expect(data).to.be.an('array')
 		  done()
 		})
+
+		client.emit("JOIN")
 	  })
 	})
 
 	describe('#ping()', function () { // need better imp
 	  it('should return an object', function(done) {
 		server.on('connect', function(socket) {
-		  room = new Lobby(server, data.id, `room-${data.id}`, 'classic')
+		  room = new Lobby(server, data.id, data.name, 'classic')
 		  socket.on('PING', function () {
 			room.ping('CHECK')
 		  })
@@ -310,12 +279,15 @@ describe("Room Model Unit Test", () => {
 		client = ioClient.connect(socketURL, option)
 		
 		client.on('CHECK', function(d) {
-		  const { room } = d
-		  expect(room).to.be.an('object')
-		  expect(room).to.have.property('nbrUser', 0)
-		  expect(room).to.have.property('isStarted', false)
-		  expect(room).to.have.property('id', data.id)
-		  expect(room).to.have.property('name', `room-${data.id}`)
+		  expect(d).to.be.eql({
+			  room: {
+				id: data.id,
+				name: data.name,
+				mode: 'classic',
+				nbrUser: 0,
+				isOpen: true
+			  }
+		  })
 		  done()
 		})
 

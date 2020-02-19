@@ -141,11 +141,11 @@ describe('Room\'s Reducer BDD', () => {
 	})
 	
 	describe('GAMEOVER case', () => {
-		it('should return an object with winner property as true (Winner of the Lobby', () => {
+		it('should return an object with winner property as true (Winner of the Lobby)', () => {
 			res = Room(state, {
 				state: 'GAMEOVER',
 				result: {
-					winner: 'testName'
+					winner: true
 				}
 			})
 			
@@ -159,12 +159,12 @@ describe('Room\'s Reducer BDD', () => {
 			expect(res.room).to.be.eql(expectedValue)
 		})
 
-		it('should return an object with winner property as false (loser of the Room)', () => {
+		it('should return an object with winner property as false (Loser of the Room)', () => {
 
 			res = Room(state, {
 				state: 'GAMEOVER',
 				result: {
-					winner: "Someone Else"
+					winner: false
 				}
 			})
 			

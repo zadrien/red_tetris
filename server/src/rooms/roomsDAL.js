@@ -5,22 +5,23 @@ const Schema = mongoose.Schema
 const roomSchema = new Schema({
     id: String,
     name: String,
-    mode: String,
-    open: Boolean
+	mode: String,
+	nbrUser: Number,
+    isStart: Boolean
 }, {timestamps: { createdAt: 'created_at'}});
 
 
 roomSchema.statics = {
     async create(newRoom) {
 		try {
-			const duplicate = this.findOne({ id: newRoom.id })
-			if (!duplicate)
-				Promise.reject(new Error("room already exist"))
+			const duplicate = await this.findOne({ id: newRoom.id }).exec()
+			if (duplicate)
+				return undefined
 			var room = new Rooms(newRoom)
 			const p = await room.save()
 			return p
 		} catch (err) {
-			return Promise.reject(err)
+			Promise.reject(err)
 		}
     },
 
@@ -43,7 +44,7 @@ roomSchema.statics = {
 			}
 			return rooms.map(room => room.toObject())
 		} catch(err) {
-			return Promise.reject(err)
+			Promise.reject(err)
 		}
     },
 

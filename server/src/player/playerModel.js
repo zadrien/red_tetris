@@ -103,7 +103,6 @@ Player.prototype.stopGame = function () {
 	return false
 }
 
-// THIS ONE TOO
 Player.prototype.getMalus = function () {
 	if (!this.isPlaying)
 		return false;
