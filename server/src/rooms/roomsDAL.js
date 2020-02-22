@@ -7,7 +7,7 @@ const roomSchema = new Schema({
     name: String,
 	mode: String,
 	nbrUser: Number,
-    isStart: Boolean
+    isOpen: Boolean
 }, {timestamps: { createdAt: 'created_at'}});
 
 
@@ -17,7 +17,8 @@ roomSchema.statics = {
 			const duplicate = await this.findOne({ id: newRoom.id }).exec()
 			if (duplicate)
 				return undefined
-			var room = new Rooms(newRoom)
+			const room = new Rooms(newRoom)
+			console.log(room)
 			const p = await room.save()
 			return p
 		} catch (err) {

@@ -3,7 +3,7 @@ import debug from 'debug'
 import _ from 'lodash'
 import params from '../params'
 
-import { connectToDatabase } from './config'
+import { initConfig } from './config'
 
 import { fetch, join, leave, start } from './rooms/roomsAPI'
 import User from './player/playerController'
@@ -12,13 +12,13 @@ const userController = new User({})
 const logerror = debug('tetris:error')
 , loginfo = debug('tetris:info')
 
-connectToDatabase(params.server.db)
-
 const server = io.listen(params.server.port)
 loginfo(`Listening on: ${params.server.url}`)
 
+initConfig(server, params)
+
 server.on('connection', function(socket) {
-	loginfo("Socket connected: YOO " + socket.id)
+	loginfo(`Socket connected: ${socket.id}`)
 	socket.on('login', function(data) {
 		let user
 		try {

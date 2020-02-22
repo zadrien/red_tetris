@@ -34,14 +34,10 @@ const Board = ({ display, Overlay }) => (
 )
 
 export const Display = ({room, display, isOpen}) => {
-	// if (isOpen)
-	// 	return <Board display={display} Overlay={() => <Host/>}/>
-	// if (room.hasOwnProperty('winner'))
-	// 	return (<Board display={display} Overlay={() => <GameOver/>}/>)
 	if (!display)
 		return <div className="board"/>
 	if (room.hasOwnProperty('winner'))
-	return (<Board display={display} Overlay={() => <GameOver/>}/>)
+		return (<Board display={display} Overlay={() => <GameOver/>}/>)
 	if (isOpen)
 		return <Board display={display} Overlay={() => <Host/>}/>
 	return <Board display={display} />

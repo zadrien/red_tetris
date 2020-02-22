@@ -9,7 +9,7 @@ const Card = ({room, onClick}) => (
 			<p className="mode">{room.mode} [{room.nbrUser ? room.nbrUser : 0}/10]</p>
 		</div>
 		<div className='join-button'>
-			{room.isStarted ? <div disabled={true}>IN-GAME</div> : <div>JOIN</div>}
+			{room.isOpen ? <div>JOIN</div> : <div disabled={true}>IN-GAME</div>}
 		</div>
 	</div>
 )

@@ -4,7 +4,7 @@ import sinon from 'sinon'
 
 const events = require('events')
 
-import Controller from '../../src/player/playerController'
+// import Controller from '../../src/player/playerController'
 import Player from '../../src/player/playerModel'
 import Board from '../../src/Game/Board'
 import { Tetraminos } from '../../src/Game/tetraminos'
@@ -30,21 +30,14 @@ describe("User model", () => {
 		})
 
 		describe("Socket Listener", () => {
-			let stub
-			
-			afterEach(() => {
-				stub.restore()
-			})
-
 			it("should trigger event disconnect", (done) => {
 				user.game = true;
-
-				stub = sinon.stub(Player.prototype, "stopGame").callsFake(() => {done()})
+				eventEmitter.on("LEAVE", () => done())
 				eventEmitter.emit("disconnect")
 			})
 
 			it("should trigger QUIT event listener", (done) => {
-				stub = sinon.stub(Board.prototype, "stop").callsFake(() => {done()})
+				eventEmitter.on("LEAVE", () => done())
 				user.initGame(false)
 				eventEmitter.emit("QUIT")
 			})

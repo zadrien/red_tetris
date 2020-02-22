@@ -69,7 +69,13 @@ describe("Room Model Unit Test", () => {
 				eventEmitter.on("JOINED", (data) => {
 					expect(data).to.have.property('state', "JOINED")
 					expect(data).to.have.property('room')
-					expect(data.room).to.be.eql({id: 'testID', name: 'room-testName', mode: false})
+					expect(data.room).to.be.eql({
+						id: 'testID',
+						name: 'room-testName',
+						mode: 'classic',
+						nbrUser: 1,
+						isOpen: true
+					})
 				})
 
 				eventEmitter.on("HOST", (data) => {
@@ -102,18 +108,18 @@ describe("Room Model Unit Test", () => {
 			})
 
 			it("should return false (not the host of the Lobby)", () => {
-				expect(room.startGame(user2)).to.be.false
+				expect(() => room.startGame(user2)).to.throw("You're not the host of this lobby")
 			})
 
 			it("should return true (host of the lobby)", (done) => {
 				eventEmitter2.on("START", (data) => {
-					expect(data).to.have.property('start', true)
+					expect(data).to.have.property('start', false)
 				})
 				eventEmitter1.on("START", (data) => {
-					expect(data).to.have.property('start', true)
+					expect(data).to.have.property('start', false)
 					done()
 				})
-				expect(room.startGame(user1)).to.be.true
+				room.startGame(user1)
 				expect(room.isOpen).to.be.false
 			})
 		})

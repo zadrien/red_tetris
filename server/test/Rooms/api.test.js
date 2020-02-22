@@ -88,11 +88,17 @@ describe("room's API testing", () => {
 			client.close()
 		})
 
-		it("should JOINED an room", (done) => {
+		it("should JOINED a room", (done) => {
 			client.on("JOINED", (data) => {
 				expect(data).to.be.an('object')
 				expect(data).to.have.property("state", "JOINED")
-				expect(data).to.have.property("room").to.be.eql({id: room.id, name: room.name, mode: (room.mode === "classic" ? false: true)})
+				expect(data).to.have.property("room").to.be.eql({
+					id: room.id,
+					name: room.name,
+					mode: room.mode,
+					nbrUser: 1,
+					isOpen: true
+				})
 				done()
 			})
 
@@ -190,7 +196,7 @@ describe("room's API testing", () => {
 			client.close()
 		})
 
-		it("should triiger START listener with err attr (User not in a Lobby)", (done) => {
+		it("should trigger START listener with err attr (User not in a Lobby)", (done) => {
 			client.on("START", data => {
 				expect(data).to.have.property('err', "user not in a Lobby")
 				done()
@@ -202,7 +208,7 @@ describe("room's API testing", () => {
 		it("trigger START listener with start attr as true", (done) => {
 			client.emit("JOIN", { room: { id: room.id }})
 			client.on("START", data => {
-				expect(data).to.have.property('start', true)
+				expect(data).to.have.property('start', false)
 				done()
 			})
 

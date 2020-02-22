@@ -5,6 +5,15 @@ import _ from 'lodash'
 
 const Rooms = {};
 
+process.once('SIGINT', (code) => {
+	console.log(`Ciao [${code}]`)
+	Object.values(Rooms).forEach((room) => {
+		room.kill()
+		delete Rooms[room.id]
+	})
+	process.exit(1)
+})
+
 /*
 ** Launch at Start
 */
@@ -26,9 +35,11 @@ export async function restoreRooms(io) {
 export async function create(io, room) {
     try {
 		let id = uuidv4()
-		room["id"] = id
-		await roomDb.create(room)
+		room.id = id.toString()
+
 		let instance = new Room(io, id, room.name, room.mode)
+		const doc = instance.get()
+		await roomDb.create(doc)
 		Rooms[id] = instance
 		return instance
     } catch (err) {

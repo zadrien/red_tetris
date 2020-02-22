@@ -1,21 +1,27 @@
+import { connection } from 'mongoose';
+
 const mongoose = require('mongoose');
+const Rooms = require('./rooms/roomsController')
 
-export async function connectToDatabase(uri) {
-    try {
-		await mongoose.connect(uri, { urlNewUrlParser: true });
-		await mongoose.set('useFindAndModify', false);
-    } catch (err) {
-		Promise.reject(err)
-    }
-}
-
-export async function closeDatabase() {
+export async function connectToDatabase(URI) {
 	try {
-		await mongoose.connection.close()
+		await mongoose.connect(URI, { urlNewUrlParser: true})
+		await mongoose.set('useFindAndModify', false)
 	} catch (err) {
-		console.log(err)
-		process.exit(1)
+		throw err
 	}
 }
 
+export async function closeDatabase() {
+	mongoose.connection.close()
+}
 
+export async function initConfig(io, params) {
+	try {
+		await connectToDatabase(params.server.db)
+		await Rooms.restoreRooms(io)
+	} catch (err) {
+		io.close()
+		process.exit(1)
+	}
+}

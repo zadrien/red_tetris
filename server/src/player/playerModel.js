@@ -11,14 +11,14 @@ function Player(socket, name) {
 	this.socket.on("CONTROLLER", this.controller)
 	
 	this.socket.on('disconnect', () => {
-		if (this.game)
-			this.stopGame()
+		this.socket.emit("LEAVE");
 	})
 
 	this.socket.on('QUIT', () => { // is this necessary ?
 		if (this.game) {
+			this.socket.emit("LEAVE")
 			this.game.stop()
-			// this.eventEmitter.removeAllListener()
+			this.eventEmitter.removeAllListener()
 		}
 	})
 }
@@ -45,12 +45,13 @@ Player.prototype.Notify = function (event, data) {
 }
 
 Player.prototype.join = function (Lobby) {
+	console.log(`${this.name} - Joining Lobby : ${Lobby.id}`)
 	this.socket.join(Lobby.id)
 	this.currentLobby = Lobby
 }
 
 Player.prototype.leave = function () {
-	console.log('this current lobby:', this.currentLobby.id)
+	console.log(`${this.name} - Leaving Lobby : ${this.currentLobby.id}`)
 	this.socket.leave(this.currentLobby.id)
 	this.currentLobby = undefined
 }

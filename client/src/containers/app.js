@@ -7,7 +7,7 @@ import Create from './Create'
 
 import { onPlayer as onLogin } from '../actions/Profil'
 import { onFetch, onPing } from '../actions/Listing';
-import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, onStart } from '../actions/Room';
+import { onJoined, onQuit, onGameOver, onHost, onPlayers, onDisplay, onStart, onResetDisplay } from '../actions/Room';
 import quickAccess from '../utils/quickAccess'
 
 import './style.css';
@@ -55,6 +55,7 @@ const mapDispatchToProps = (dispatch) => ({
 			onQuit(),
 			onStart(),
 			onGameOver(),
+			onResetDisplay(),
 			onPing(),
 			onLogin(),
 		])

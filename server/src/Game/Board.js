@@ -37,7 +37,10 @@ Board.prototype.stop = function () {
 }
 
 Board.prototype.get = function () {
-	return utils.clone(this.map)
+	const display = utils.clone(this.map)
+	if (this.piece)
+		utils.remove(display, this.piece, this.x, this.y)
+	return display
 }
 
 Board.prototype.add = function (piece) {
