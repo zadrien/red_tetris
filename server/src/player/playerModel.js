@@ -24,6 +24,7 @@ function Player(socket, name) {
 }
 
 Player.prototype.initGame = function (mode) {
+	this.isPlaying = false
 	this.eventEmitter = new events.EventEmitter()
 	this.game = new Board(this.eventEmitter, mode)
 	this.socket.emit("DISPLAY", this.game.get())	

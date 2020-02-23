@@ -41,33 +41,6 @@ describe('Listing\'s Reducer BDD', () => {
 	})
   })
   
-//   describe.skip("Reducer's JOINING case", () => {
-// 	it('should return isJoining property', () => {
-// 	  expect(Listing({}, { state: 'JOINING', roomID: 1 })).to.be.eql({ rooms: { isJoining: 1 }})
-// 	})
-
-// 	it('should return an object without isJoining Property', () => {
-// 	  expect(Listing({ rooms: { isJoining: 1}}, { state: 'JOINING', result: { success: true } }))
-// 		.to.be.eql({ rooms: {} })
-// 	})
-	
-// 	it('should return an err property', () => {
-// 	  expect(Listing({}, { state: 'JOINING', result: { err : "failed to join room"}}))
-// 		.to.be.eql({ rooms: { isJoining: { err: "failed to join room" } }})
-// 	})
-//   })
-  
-//   describe('Reducer\'s CREATE case', () => {
-// 	it('should return an object with isCreating property', () => {
-// 	  expect(Listing({}, { state: 'CREATE', bool: true })).to.be.eql({ isCreating: true })
-// 	})
-
-// 	it('should return an object with isCreating as false', () => {
-// 		expect(Listing({}, { state: 'CREATE', result: { err: 'failed creating' }}))
-// 			.to.be.eql({ isCreating: { status: false, err: 'failed creating'}})
-// 	})
-//   })
-  
   describe('Reducer\'s CHECK case', () => {
 	it('should update room-3 status', () => {
 	  expect(Listing({rooms: {

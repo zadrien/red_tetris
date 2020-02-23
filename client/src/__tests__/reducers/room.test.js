@@ -55,7 +55,7 @@ describe('Room\'s Reducer BDD', () => {
 			res = Room(state, {
 				state: 'START',
 				result: {
-					start: true
+					start: false
 				}
 			})
 
@@ -63,7 +63,7 @@ describe('Room\'s Reducer BDD', () => {
 				id: 1,
 				name: 'testName',
 				mode: 'classic',
-				start: true
+				isOpen: false
 			}
 
 			expect(res.room).to.be.eql(expectedValue)

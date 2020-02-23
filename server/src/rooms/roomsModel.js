@@ -12,9 +12,6 @@ export default function Lobby(io, id, name, mode) {
 	this.users = {}
 	this.isOpen = true
 	this.pieces = []
-	this.broad = setInterval(function () {
-		this.startBroadcast()
-	}.bind(this), 500)
 	this.ping('CHECK')
 }
 
@@ -29,17 +26,22 @@ Lobby.prototype.get = function () {
 	return obj
 }
 
-Lobby.prototype.kill = function() {
-	if (this.broad)
-		clearInterval(this.broad)
+Lobby.prototype.kill = async function() {
 	this.io.in(this.id).emit("LEAVE", { state: "QUIT", msg: "Server may intentionaly kill this lobby" })
-	Object.values(this.users).forEach((user) => {
+	Object.values(this.users).forEach(user => {
 		if (user.isPlaying)
 			user.stopGame()
-		delete this.user[user.socket.id]
+		delete this.users[user.socket.id]
 	})
 	this.isOpen = true
-	Rooms.update(this.id, this.get())
+	try {
+		console.log("YOOOO")
+		const value = await Rooms.update(this.id, this.get())
+		console.log("Element modified:", value)
+	} catch (err) {
+		console.log("FUU")
+		console.log(err)
+	}
 	return true
 }
 
@@ -54,6 +56,7 @@ Lobby.prototype.newPlayer = function (user) {
 	user.Notify("HOST", { host: this.host.socket.id === user.socket.id })
 	user.initGame(this.mode)
 	this.ping('CHECK')
+	this.broadcast()
 	return true
 }
 
@@ -61,14 +64,11 @@ Lobby.prototype.startGame = function (user) {
 	if (user.socket.id !== this.host.socket.id)
 		throw new Error("You're not the host of this lobby")
 	this.isOpen = false
-	let ids = Object.keys(this.users)
-	ids.map(id => {
-		this.users[id].Notify("START", { start: this.isOpen })
-		this.users[id].initGame(this.mode)
-		this.users[id].isPlaying = true;
-		this.users[id].start(this.pieceCallback.bind(this),
-								this.mallusCallback.bind(this),
-								this.endGameCallback.bind(this))
+	Object.values(this.users).forEach(user => {
+		user.Notify("START", { start: this.isOpen })
+		user.start(this.pieceCallback.bind(this),
+					this.mallusCallback.bind(this),
+					this.endGameCallback.bind(this))
 	})
 	this.ping('CHECK')
 }
@@ -76,6 +76,10 @@ Lobby.prototype.startGame = function (user) {
 Lobby.prototype.resetLobby = function () {
 	this.isOpen = true
 	this.pieces = []
+	Object.values(this.users).forEach(user => {
+		user.initGame(this.mode)
+		user.isPlaying = false
+	})
 	this.ping('CHECK')
 }
 
@@ -100,6 +104,7 @@ Lobby.prototype.leaveGame = function (user) {
 	}
 	user.Notify("LEAVE", { state: "QUIT" })
 	this.ping('CHECK')
+	this.broadcast()
 }
 
 Lobby.prototype.endGameCallback = function (id) {
@@ -110,15 +115,14 @@ Lobby.prototype.endGameCallback = function (id) {
 		user.stopGame()
 	let stillPlaying = _.find(this.users, function(u) { return u.isPlaying === true })
 	if (_.isEmpty(stillPlaying)) {
-		this.resetLobby()
 		user.Notify("GAMEOVER", { winner: true })
 		Rooms.update(this.id, this.get())
 		setTimeout(() => {
 			this.io.in(this.id).emit("START", { start: this.isOpen })
 			this.io.in(this.id).emit("RESET")
+			this.resetLobby()
 		}, 3000)
 	} else {
-		// user.Notify("START", { start: this.isOpen})
 		user.Notify("GAMEOVER", { winner: false })
 	}
 }
@@ -132,6 +136,7 @@ Lobby.prototype.mallusCallback = function (userID) {
 		if (user.socket.id !== userID)
 			user.getMalus()
 	});
+	this.broadcast()
 	return true
 }
 
@@ -141,13 +146,12 @@ Lobby.prototype.pieceCallback = function (id, nbr) { // remove id
 		p = Tetraminos()
 		this.pieces.push(p)
 	}
+	this.broadcast()
 	return p
 }
 
-Lobby.prototype.startBroadcast = function () {
+Lobby.prototype.broadcast = function () {
 	const connectedUsers = Object.values(this.users)
-	if (!connectedUsers) // need to find a better way
-		return 
 	const arr = []
 	connectedUsers.forEach(user => {
 		arr.push(user.get())

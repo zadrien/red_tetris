@@ -1,5 +1,3 @@
-import { connection } from 'mongoose';
-
 const mongoose = require('mongoose');
 const Rooms = require('./rooms/roomsController')
 

@@ -252,26 +252,28 @@ describe("Room Model Unit Test", () => {
 		
 	})
 
-	describe('#startBroadcast()', function () { // need better imp
-	  it.skip('should return an object', function(done) {
-		server.on('connect', function(socket) {
-		  const room = new Lobby(io, data.id, data.name, 'classic')
-		  socket.on("JOIN", () => {
-			let user = new User(socket, 'testName')			  
-			room.newPlayer(user)
-		  })
-		})
+	// describe('#broadcast()', function () { // need better imp
+	//   it.only('should return an object', function(done) {
+	// 	server.on('connect', function(socket) {
+	// 	  const room = new Lobby(server, data.id, data.name, 'classic')
+	// 	  socket.on("JOIN", () => {
+	// 		  console.log("YOO")
+	// 		let user = new User(socket, 'testName')			  
+	// 		room.newPlayer(user)
+	// 		room.broadcast()
+	// 	  })
+	// 	})
 		
-		client = ioClient.connect(socketURL, option)
+	// 	client = ioClient.connect(socketURL, option)
 		
-		client.on('PLAYERS', (data) => {
-		  expect(data).to.be.an('array')
-		  done()
-		})
+	// 	client.on('PLAYERS', (data) => {
+	// 	  expect(data).to.be.an('array')
+	// 	  done()
+	// 	})
 
-		client.emit("JOIN")
-	  })
-	})
+	// 	client.emit("JOIN")
+	//   })
+	// })
 
 	describe('#ping()', function () { // need better imp
 	  it('should return an object', function(done) {

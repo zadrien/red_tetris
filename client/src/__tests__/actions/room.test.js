@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit, removeOverlay } from '../../actions/Room'
+import {ROOM, onJoined, onDisplay, onHost, onPlayers, onStart, emitStart, emitMove, startGame, onGameOver, emitQuit, onQuit } from '../../actions/Room'
 
 describe('', () => {
   let res
@@ -118,10 +118,4 @@ describe('', () => {
 	  expect(res).to.have.property('state', 'QUIT')
 	})
   })
-  
-	describe("#removeOverlay()", () => {
-		it("should return an object", () => {
-			expect(removeOverlay()).to.be.eql({ type: ROOM, state: "RESET", reset: true})
-		})
-	})
 })

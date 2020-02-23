@@ -5,10 +5,10 @@ import _ from 'lodash'
 
 const Rooms = {};
 
-process.once('SIGINT', (code) => {
+process.once('SIGINT', code => {
 	console.log(`Ciao [${code}]`)
-	Object.values(Rooms).forEach((room) => {
-		room.kill()
+	Object.values(Rooms).forEach(async (room) => {
+		await room.kill()
 		delete Rooms[room.id]
 	})
 	process.exit(1)

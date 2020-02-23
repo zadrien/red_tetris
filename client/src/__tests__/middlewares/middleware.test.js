@@ -25,7 +25,7 @@ describe('socket middleware', () => {
 	let server
 
 	beforeEach(() => {
-		server = io.listen(3004)
+		server = io.listen(8080)
 	})
 
 	afterEach(() => {

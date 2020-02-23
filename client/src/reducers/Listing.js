@@ -1,3 +1,18 @@
+const merge = (arr1, arr2) => {
+	const result_arr = []
+	const  arr  = arr1.concat(arr2)
+	const assoc = {}
+
+	for (let i = arr.length - 1; i >= 0; i--) {
+		const item = arr[i]
+		if (!assoc[item.id]) {
+			result_arr.unshift(item)
+			assoc[item.id] = true
+		}
+	}
+	return result_arr
+}
+
 const listing = (state = {}, action = {}) => {
 	let obj
 	switch (action.state) {
@@ -6,7 +21,7 @@ const listing = (state = {}, action = {}) => {
 				if (!state.rooms)
 					return Object.assign({}, state, {rooms: { list: action.result.rooms }})
 				obj = state.rooms
-				Object.assign(obj.list, action.result.rooms)
+				obj.list = merge(obj.list, action.result.rooms)
 				return Object.assign({}, state, { rooms : obj })
 			}
 			return state
