@@ -1,0 +1,68 @@
+{
+  "name": "red-tetris",
+  "version": "1.0.0",
+  "description": "An Online Multplayer Game",
+  "private": true,
+  "scripts": {
+    "srv:dev": "DEBUG=tetris:* nodemon src/server/start.js",
+    "cli:dev": "webpack-dev-server --colors --hot --inline --host 0.0.0.0 --port 8080",
+    "cli:dist": "NODE_ENV=production webpack --progress --colors --config webpack.config.js",
+    "srv:dist": "NODE_ENV=production DEBUG=tetris:* nodemon src/server/start.js",
+    "start:dist": "npm run cli:dist && node src/server/start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-function-bind": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/preset-stage-0": "^7.8.3",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^3.4.2",
+    "jest": "^25.1.0",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "@babel/register": "^7.8.3",
+    "@babel/runtime": "^7.8.4",
+    "babel-polyfill": "^6.26.0",
+    "debug": "^4.1.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.9.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "uuid": "^7.0.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "regenerator": true
+        }
+      ]
+    ]
+  }
+}
