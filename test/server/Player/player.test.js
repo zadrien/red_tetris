@@ -4,10 +4,9 @@ import sinon from 'sinon'
 
 const events = require('events')
 
-// import Controller from '../../src/player/playerController'
-import Player from '../../src/player/playerModel'
-import Board from '../../src/Game/Board'
-import { Tetraminos } from '../../src/Game/tetraminos'
+import Player from '../../../src/server/player/playerModel'
+import Board from '../../../src/server/Game/Board'
+import { Tetraminos } from '../../../src/server/Game/tetraminos'
 
 describe("User model", () => {
 	let user, eventEmitter
@@ -223,7 +222,6 @@ describe("User model", () => {
 				
 				stub = sinon.stub(Board.prototype, "add").callsFake(() => false)
 				user.start(getPiece, sendMallus, testedCallback)
-				console.log("HMM", user.game.map)
 			})
 		})
 	})

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import Create from '../../reducers/Create'
+import Create from '../../../src/client/reducers/Create'
 
 describe('Create\'s Reduce BDD', () => {
   describe('Reducer without parameters', () => {

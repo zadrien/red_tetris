@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import Listing from '../../reducers/Listing'
+import Listing from '../../../src/client/reducers/Listing'
 
 describe('Listing\'s Reducer BDD', () => {
   describe('Reducer without parameters', () => {

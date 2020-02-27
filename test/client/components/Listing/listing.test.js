@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
 
-import List from '../../../components/Listing/Listing'
+import List from '../../../../src/client/components/Listing/Listing'
 
 const mockStore = configureStore([])
 

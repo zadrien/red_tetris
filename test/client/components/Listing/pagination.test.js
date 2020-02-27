@@ -4,8 +4,8 @@ import { Provider } from 'react-redux'
 import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
 
-import Pagination from '../../../components/Listing/Pagination'
-import { CURSOR_PREV, CURSOR_NEXT } from '../../../actions/Pagination'
+import Pagination from '../../../../src/client/components/Listing/Pagination'
+import { CURSOR_PREV, CURSOR_NEXT } from '../../../../src/client/actions/Pagination'
 
 const mockStore = configureStore([])
 

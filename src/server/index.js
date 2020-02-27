@@ -7,7 +7,8 @@ import io from 'socket.io'
 
 import params from '../../params'
 import { initConfig } from './config'
-import { fetch, join, leave, start } from './rooms/roomsAPI'
+import API from './rooms/roomsAPI'
+// import { fetch, join, leave, start } from './rooms/roomsAPI'
 import User from './player/playerController'
 
 const logerror = debug('tetris:error')
@@ -41,7 +42,11 @@ const server = http.createServer((req, res) => {
 const ioServer = io(server)
 
 initConfig(ioServer, params)
+
 const userController = new User({})
+
+const APISocket = new API(ioServer)
+
 ioServer.on('connection', function (socket) {
 	loginfo(`Socket connected: ${socket.id}`)
 	socket.on('login', function(data) {
@@ -50,11 +55,11 @@ ioServer.on('connection', function (socket) {
 			user = userController.login(socket, data)
 			socket.emit("login", { name: user.name })
 			if (data.hasOwnProperty('room'))
-				join(io, user, data)
-			socket.on('FETCH', (data) => fetch(ioServer, user, data))
-			socket.on('JOIN', (data) => join(ioServer, user, data))
-			socket.on("LEAVE", (data) => leave(user, data))
-			socket.on("START", (data) => start(user, data))
+				APISocket.join(user, data)
+			socket.on('FETCH', (data) => APISocket.fetch(user, data))
+			socket.on('JOIN', (data) => APISocket.join(user, data))
+			socket.on("LEAVE", (data) => APISocket.leave(user, data))
+			socket.on("START", (data) => APISocket.start(user, data))
 		} catch (err) {
 			socket.emit("login", { err: err.message })
 			logerror(err)
@@ -68,6 +73,8 @@ ioServer.on('connection', function (socket) {
 })
 
 server.listen(params.server.port, () => {
-	console.log("Listening on port: ", params.server.url)
+	loginfo("Listening on port: ", params.server.url)
 })
+
+module.exports = server
 

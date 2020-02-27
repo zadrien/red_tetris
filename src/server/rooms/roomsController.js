@@ -1,12 +1,35 @@
-import uuidv4 from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import Room from './roomsModel';
-import { Rooms as roomDb } from './roomsDAL';
+import { roomsDAL } from './roomsDAL';
 import _ from 'lodash'
+import debug from 'debug'
 
-const Rooms = {};
+// const Rooms = {};
+
+const loginfo = debug('tetris:roomController')
+
+const Controller = function (io) {
+	this.io = io
+	this.Rooms = {}
+}
+
+Controller.prototype.restore = async function () {
+	try {
+		if (Object.values(this.Rooms) === 0)
+			return undefined
+		const fetchedRoom = await roomsDAL.read({}, {}, 0, 0)
+		fetchedRoom.map(room => {
+			const instance = new Room(this.io, room.id, room.name, room.mode)
+			this.Rooms[room.id] = instance
+		})
+		return fetchedRoom
+	} catch (err) {
+		Promise.reject(err)
+	}
+}
 
 process.once('SIGINT', code => {
-	console.log(`Ciao [${code}]`)
+	loginfo("Trying to close gracefully")
 	Object.values(Rooms).forEach(async (room) => {
 		await room.kill()
 		delete Rooms[room.id]
@@ -17,67 +40,51 @@ process.once('SIGINT', code => {
 /*
 ** Launch at Start
 */
-export async function restoreRooms(io) {
-    try {
-		if (!_.isEmpty(Rooms))
-			return null;
-		var all = await roomDb.read({}, {}, 0, 0)
-		_.map(all, function (v) {
-		  var newRoom = new Room(io, v.id, v.name, v.mode)
-			Rooms[v.id] = newRoom
-		})
-		return all
-    } catch (err) {
-		Promise.reject(err)
-    }
-}
 
-export async function create(io, room) {
-    try {
-		let id = uuidv4()
-		room.id = id.toString()
-
-		let instance = new Room(io, id, room.name, room.mode)
-		const doc = instance.get()
-		await roomDb.create(doc)
-		Rooms[id] = instance
-		return instance
-    } catch (err) {
-		return Promise.reject(err)
-    }
-}
-
-export function find(id) {
-    if (!id)
-		return undefined
-	let room = Rooms[id]
-	if (!room)
-		return undefined
-    return room
-}
-
-export function deleteRoom(id) {
-    console.log("deleting room:", id)
-    if (!Rooms[id]) {
-		return new Error("Room doesn't exist")
-    }
-    delete Rooms[id]
-    console.log("room deleted")
-    return null
-}
-
-export function purge() {
-	console.log('/!\\ Closing all instance /!\\')
+Controller.prototype.create = async function (room) {
 	try {
-		let ids = Object.keys(Rooms)
-		if (!ids)
-			Promise.reject("no rooms")
-		ids.map(function (id) {
-			Rooms[id].kill()
-			delete Rooms[id]
-		})
-		return true
+		const id = uuidv4()
+		room.id = id.toString()
+		
+		const instance = new Room(this.io, id, room.name, room.mode)
+		await roomsDAL.create(instance.get())
+		this.Rooms[id] = instance
+		return instance
 	} catch (err) {
 		Promise.reject(err)
 	}
 }
+
+Controller.prototype.find = function (roomID) {
+	if (!this.Rooms.hasOwnProperty(roomID))
+		throw new Error("Room not found")
+	return this.Rooms[roomID]
+}
+
+Controller.prototype.deleteRoom = async function (instanceID) {
+	loginfo(`deleting room... ${instanceID}`)
+	try {
+		if (!this.Rooms.hasOwnProperty(instanceID))
+			throw new Error("Can't delete instance: Room does not exist")
+		delete this.Rooms[instanceID]
+		await roomsDAL.delete(instanceID)
+	} catch (err) {
+		Promise.reject(err)
+	}
+}
+
+Controller.prototype.purge = function () {
+	loginfo('/!\\ Closing all instance /!\\')
+	try {
+		const values = Object.values(this.Rooms)
+		if (values) {
+			values.map(room => {
+				delete this.Rooms[room.id]
+			})
+		}
+	} catch (err) {
+		Promise.reject(err)
+	}
+}
+
+module.exports = Controller

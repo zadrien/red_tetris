@@ -1,5 +1,7 @@
-const events = require('events')
+import events from 'events'
 import Board from '../Game/Board'
+
+const loginfo = require('debug')("tetris:user")
 
 function Player(socket, name) {
 	this.socket = socket
@@ -18,7 +20,7 @@ function Player(socket, name) {
 		if (this.game) {
 			this.socket.emit("LEAVE")
 			this.game.stop()
-			this.eventEmitter.removeAllListener()
+			this.eventEmitter.removeAllListeners()
 		}
 	})
 }
@@ -46,13 +48,13 @@ Player.prototype.Notify = function (event, data) {
 }
 
 Player.prototype.join = function (Lobby) {
-	console.log(`${this.name} - Joining Lobby : ${Lobby.id}`)
+	loginfo(`${this.name} - Joining Lobby : ${Lobby.id}`)
 	this.socket.join(Lobby.id)
 	this.currentLobby = Lobby
 }
 
 Player.prototype.leave = function () {
-	console.log(`${this.name} - Leaving Lobby : ${this.currentLobby.id}`)
+	loginfo(`${this.name} - Leaving Lobby : ${this.currentLobby.id}`)
 	this.socket.leave(this.currentLobby.id)
 	this.currentLobby = undefined
 }

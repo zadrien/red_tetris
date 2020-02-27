@@ -1,7 +1,5 @@
-// import { expect } from 'chai'
-
-import quickAccess from '../../utils/quickAccess'
-import { emitPlayer } from '../../actions/Profil'
+import quickAccess from '../../../src/client/utils/quickAccess'
+import { emitPlayer } from '../../../src/client/actions/Profil'
 
 describe('quickAccess Unit Test', () => {
 	

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import Room from '../../reducers/Room'
+import Room from '../../../src/client/reducers/Room'
 
 describe('Room\'s Reducer BDD', () => {
 	let res, expectedValue

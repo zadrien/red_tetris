@@ -3,7 +3,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { expect } from 'chai'
 
-import { HomeButton } from '../../../../src/client/components/app/HomeButton' //omponents/app/HomeButton'
+import { HomeButton } from '../../../../src/client/components/app/HomeButton'
 
 describe('Home Button TDD', () => {
     const setup = (props) => {

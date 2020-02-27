@@ -1,5 +1,7 @@
 import User from './playerModel'
 
+const loginfo = require('debug')('tetris:userController')
+
 function Controller(isLogged) {
 	this.isLogged = isLogged
 }
@@ -14,7 +16,7 @@ Controller.prototype.login = function (socket, data) {
 	
 	let user = new User(socket, data.name)
 	this.isLogged[socket.id] = user
-	console.log(`New user connected ${user.socket.id} - ${user.name}`)
+	loginfo(`New user connected ${user.socket.id} - ${user.name}`)
 	return user	
 }
 

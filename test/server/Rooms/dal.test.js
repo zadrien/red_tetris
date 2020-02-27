@@ -1,10 +1,10 @@
 import 'babel-polyfill'
-import { expect} from 'chai'
-import uuidv4 from 'uuid'
+import { expect } from 'chai'
+import { v4 as uuidv4 } from 'uuid'
 
-import { connectToDatabase, closeDatabase } from '../../src/config'
-import { Rooms as roomsDAL } from '../../src/rooms/roomsDAL'
-import params from '../../params'
+import { connectToDatabase, closeDatabase } from '../../../src/server/config'
+import {  roomsDAL } from '../../../src/server/rooms/roomsDAL'
+import params from '../../../params'
 
 describe("Room's DAL unit test", () => {
 	let room = {
@@ -14,11 +14,11 @@ describe("Room's DAL unit test", () => {
 		open: true
 	}
 	
-	before(function() {
+	beforeAll(() => {
 		connectToDatabase(params.server.db)
 	})
 
-	after(() => {
+	afterAll(() => {
 		closeDatabase()
 	})
 	
@@ -42,7 +42,7 @@ describe("Room's DAL unit test", () => {
 				let fetch = await roomsDAL.readOne(room.id)
 				expect(fetch.id).to.be.equal(room.id)
 			} catch (err) {
-				expect().fail(err)
+				console.log(err)
 			}
 		})
 	})
@@ -54,7 +54,7 @@ describe("Room's DAL unit test", () => {
 				expect(data).to.be.an('array')
 				expect(data.length).to.be.above(0)
 			} catch (err) {
-				expect().fail(err)
+				console.log(err)
 			}
 		})
 
@@ -71,7 +71,7 @@ describe("Room's DAL unit test", () => {
 				var data = await roomsDAL.update(room.id, {open: false})
 				expect(data).to.be.above(0)
 			} catch (err) {
-				expect().fail(err)
+				console.log(err)
 			}
 		})
 		
@@ -84,15 +84,15 @@ describe("Room's DAL unit test", () => {
 	describe("#delete()", () => {
 		it("should delete testRoom",  async function () {
 			try {
-				var d = await roomsDAL.deleteRoom(room.id)
+				var d = await roomsDAL.delete(room.id)
 				expect(d).to.be.equal(1)
 			} catch (err) {
-				expect().fail(err)				
+				console.log(err)
 			}
 		})
 
 		it("should return err", async function () {
-			var d = await roomsDAL.deleteRoom("IDNotFound")
+			var d = await roomsDAL.delete("IDNotFound")
 			expect(d).to.be.equal(0)
 		})
 	})

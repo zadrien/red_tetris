@@ -1,10 +1,11 @@
 import React from 'react'
 
-import {Provider} from 'react-redux'
-import Host from '../../../../components/Room/Overlay/Host'
+import { Provider } from 'react-redux'
 import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
-import { emitStart, onDisplay, onPlayers, startGame } from '../../../../actions/Room'
+
+import Host from '../../../../../src/client/components/Room/Overlay/Host'
+import { emitStart, onDisplay, onPlayers, startGame } from '../../../../../src/client/actions/Room'
 
 const mockStore = configureStore([])
 

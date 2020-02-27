@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { Tetraminos } from '../Game/tetraminos'
 import { isPlaying } from './helpers'
-import { Rooms } from './roomsDAL'
+import { roomsDAL } from './roomsDAL'
 
 export default function Lobby(io, id, name, mode) {
 	this.io = io
@@ -35,11 +35,8 @@ Lobby.prototype.kill = async function() {
 	})
 	this.isOpen = true
 	try {
-		console.log("YOOOO")
-		const value = await Rooms.update(this.id, this.get())
-		console.log("Element modified:", value)
+		await roomsDAL.update(this.id, this.get())
 	} catch (err) {
-		console.log("FUU")
 		console.log(err)
 	}
 	return true
@@ -116,7 +113,7 @@ Lobby.prototype.endGameCallback = function (id) {
 	let stillPlaying = _.find(this.users, function(u) { return u.isPlaying === true })
 	if (_.isEmpty(stillPlaying)) {
 		user.Notify("GAMEOVER", { winner: true })
-		Rooms.update(this.id, this.get())
+		roomsDAL.update(this.id, this.get())
 		setTimeout(() => {
 			this.io.in(this.id).emit("START", { start: this.isOpen })
 			this.io.in(this.id).emit("RESET")

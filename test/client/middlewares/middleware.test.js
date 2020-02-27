@@ -1,11 +1,8 @@
 import { expect } from 'chai'
 
-import { socketMiddleware } from '../../middleware/middleware'
+import { socketMiddleware } from '../../../src/client/middleware/middleware'
 
 import io from 'socket.io'
-
-const socketURL = "http://localhost:5000"
-
 
 describe('socket middleware', () => {
 	const option = {
@@ -25,7 +22,7 @@ describe('socket middleware', () => {
 	let server
 
 	beforeEach(() => {
-		server = io.listen(8080)
+		server = io.listen(3004)
 	})
 
 	afterEach(() => {

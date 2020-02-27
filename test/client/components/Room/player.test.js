@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
 
-import PlayersHandler from '../../../components/Room/Player'
+import PlayersHandler from '../../../../src/client/components/Room/Player'
 
 const mockStore = configureStore([])
 

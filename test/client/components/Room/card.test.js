@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
 
 
-import { Card } from '../../../components/Room/Card'
+import { Card } from '../../../../src/client/components/Room/Card'
 
 const mockStore = configureStore([])
 describe('Card TDD', () => {

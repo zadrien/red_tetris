@@ -1,5 +1,5 @@
-import utils from '../../src/Game/utils'
-import { Tetraminos, shape } from '../../src/Game/tetraminos'
+import utils from '../../../src/server/Game/utils'
+import { Tetraminos, shape } from '../../../src/server/Game/tetraminos'
 
 import { expect } from 'chai'
 
@@ -97,7 +97,6 @@ describe("Board Utility Function", () => {
 
 			it("should return true (Piece removed)", () => {
 				const value = utils.remove(map, tetra, 0, 0)
-				console.log(map)
 				expect(value).to.be.true
 			})
 

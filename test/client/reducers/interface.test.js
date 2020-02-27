@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import Interface from '../../reducers/Interface'
+import Interface from '../../../src/client/reducers/Interface'
 
 describe('Interface Reduce BDD', () => {
   describe('Reducer without parameter', () => {

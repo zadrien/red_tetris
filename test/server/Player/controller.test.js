@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Controller from '../../src/player/playerController'
+import Controller from '../../../src/server/player/playerController'
 
 import events from 'events'
 

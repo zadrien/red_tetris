@@ -1,4 +1,4 @@
-import { isPlaying } from '../../src/rooms/helpers'
+import { isPlaying } from '../../../src/server/rooms/helpers'
 import { expect } from 'chai'
 
 describe("rooms Helpers TDD", () => {

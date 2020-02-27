@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
-import { Pagination } from '../../reducers/Pagination'
-import { CURSOR_NEXT, CURSOR_PREV, CURSOR_REFRESH } from '../../actions/Pagination'
+import { Pagination } from '../../../src/client/reducers/Pagination'
+import { CURSOR_NEXT, CURSOR_PREV, CURSOR_REFRESH } from '../../../src/client/actions/Pagination'
 
 describe('Pagination TDD', () => {
 	const state = {

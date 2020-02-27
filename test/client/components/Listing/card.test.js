@@ -3,8 +3,8 @@ import { Provider } from 'react-redux'
 import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
 
-import RoomCard from '../../../../card'
-import { emitJoin } from '../../../../Listing' error();
+import RoomCard from '../../../../src/client/components/Listing/card'
+import { emitJoin } from '../../../../src/client/actions/Listing'
 
 
 const mockStore = configureStore([])

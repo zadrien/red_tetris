@@ -1,14 +1,14 @@
 import 'babel-polyfill'
 import { expect } from 'chai'
 import sinon from 'sinon'
-
 import ioClient from 'socket.io-client'
-import Room from '../../src/rooms/roomsModel'
-import { Rooms } from '../../src/rooms/roomsDAL'
 
-import server from '../../src/index'
-import params from '../../params'
+import Room from '../../../src/server/rooms/roomsModel'
+import { roomsDAL } from '../../../src/server/rooms/roomsDAL'
 
+import Controller from '../../../src/server/rooms/roomsController'
+import params from '../../../params'
+import server from '../../../src/server/index'
 
 const option = {
 	transports: ['websocket'],
@@ -24,6 +24,9 @@ describe("room's API testing", () => {
 
 	afterEach(() => {
 		client.close()
+	})
+	afterAll(() => {
+		server.close()
 	})
 
 	describe("#login LISTENER", () => {
@@ -66,7 +69,7 @@ describe("room's API testing", () => {
 		})
 
 		it("should trigger FETCH listener with an error property", (done) => {
-			const stub = sinon.stub(Rooms, 'read').callsFake(() => Promise.reject(new Error("failed")))
+			const stub = sinon.stub(roomsDAL, 'read').callsFake(() => Promise.reject(new Error("failed")))
 
 			client.on("FETCH", (data) => {
 				expect(data).to.not.have.property('rooms')
@@ -125,7 +128,7 @@ describe("room's API testing", () => {
 		})
 
 		it("should trigger CREATED listner w/ err attr", (done) => {
-			const stub = sinon.stub(Rooms, 'create').callsFake(() => Promise.reject(new Error("FUCK")))
+			const stub = sinon.stub(Controller.prototype, 'create').callsFake(() => Promise.reject(new Error("FUCK")))
 			client.on("CREATED", (data) => {
 				expect(data).to.not.have.property('room')
 				expect(data).to.have.property('err', 'FUCK')

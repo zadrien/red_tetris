@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import Profil from '../../reducers/Profil'
+import Profil from '../../../src/client/reducers/Profil'
 
 describe('Profil reducer BDD', () => {
   let res

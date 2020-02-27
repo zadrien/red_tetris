@@ -1,9 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { emitPlayer } from '../../actions/Profil';
+import React from 'react'
+import { connect } from 'react-redux'
+import { emitPlayer } from '../../actions/Profil'
 
-import './home.css';
-import '../../global.css';
+import './home.css'
+import '../../global.css'
 
 export const HomeButton = ({onSubmit}) => {
   return (

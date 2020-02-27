@@ -1,13 +1,13 @@
 import { expect } from 'chai'
-import Board from '../../src/Game/Board'
-import { Tetraminos, shape } from '../../src/Game/tetraminos'
-import utils from '../../src/Game/utils'
-
 import sinon from 'sinon'
-const events = require('events')
+import events from 'events'
+
+import Board from '../../../src/server/Game/Board'
+import { Tetraminos, shape } from '../../../src/server/Game/tetraminos'
+import utils from '../../../src/server/Game/utils'
 
 describe('board unit test', () => {
-	let board, piece, eventEmitter
+	let board, eventEmitter
 
 	beforeEach(() => {
 		eventEmitter = new events.EventEmitter()
@@ -141,7 +141,7 @@ describe('board unit test', () => {
 
 			const y = board.y
 			expect(board.down()).to.be.true
-			expect(y).to.be.eql(y -1)
+			expect(board.y).to.be.equal(y + 1)
 		})
 
 		it("should return true and trigger event listener (mode as true)", (done) => {
@@ -153,7 +153,7 @@ describe('board unit test', () => {
 			const y = board.y
 			board.mode = true
 			expect(board.down()).to.be.true
-			expect(y).to.be.eql(y -1)
+			expect(board.y).to.be.equal(y + 1)
 		})
 
 	})
@@ -224,9 +224,9 @@ describe('board unit test', () => {
 				done()
 			})
 
-			let x = board.x
+			const x = board.x
 			expect(board.right()).to.be.true
-			expect(board.x).to.be.equal(x)
+			expect(board.x).to.be.equal(x + 1)
 		})
 
 		it("should return true and trigger event listener (mode as true)", (done) => {

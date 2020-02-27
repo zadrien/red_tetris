@@ -1,10 +1,10 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 
-import GameOver from '../../../../components/Room/Overlay/GameOver'
 import renderer from 'react-test-renderer'
 import configureStore from 'redux-mock-store'
-import { removeOverlay } from '../../../../actions/Room'
+
+import GameOver from '../../../../../src/client/components/Room/Overlay/GameOver'
 
 const mockStore = configureStore([])
 
