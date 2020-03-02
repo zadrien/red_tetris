@@ -1,4 +1,5 @@
-require("babel-polyfill")
+require('@babel/register')({
+	presets: [ "@babel/preset-env"]
+})
 
-require = require('esm')(module)
-module.exports = require('./main.js')
+module.exports = require('./index.js')

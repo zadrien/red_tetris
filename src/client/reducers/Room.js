@@ -6,19 +6,19 @@ const room = (state = {}, action = {}) => {
 		if (!action.result.room)
 			return state
 		return Object.assign({}, state, { menu: "ROOM", room: action.result.room })
-		
+
 	case "START":
 		if (!action.result)
 			return state
-		room["start"] = action.result.start
+		room.isOpen = action.result.start
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "DISPLAY":
-		room['display'] = action.result
+		room.display = action.result
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "HOST":
-		room['host'] = action.result.host
+		room.host = action.result.host
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "PLAYERS":
@@ -27,11 +27,11 @@ const room = (state = {}, action = {}) => {
 		})
 		if (!obj)
 			return state
-		room['players'] = obj
+		room.players = obj
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "GAMEOVER":
-		room['winner'] = (action.result.winner === state.user.name ? true : false)
+		room.winner = (action.result.winner)
 		return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
 		
 	case "RESET":

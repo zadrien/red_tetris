@@ -1,72 +1,52 @@
-import _ from 'lodash'
+const merge = (arr1, arr2) => {
+	const result_arr = []
+	const  arr  = arr1.concat(arr2)
+	const assoc = {}
 
-const listing = (state = { }, action = {}) => {
-  let obj
-  
-  switch (action.state) {
-  case "FETCH":
-	if (state.rooms)
-	  if (!_.isEmpty(state.rooms.list))
-		return Object.assign({}, state, { rooms: { list: [...state.rooms.list, ...action.result.rooms] } })
-    return Object.assign({}, state, { rooms: { list: action.result.rooms } })
-	
-  case "JOINING":
-	if (action.result) {
-	  if (action.result.err)
-		return Object.assign({}, state, { rooms: { isJoining: { err: action.result.err } } })
-	  else if (action.result.success) {
-		obj = Object.assign({}, state.rooms)
-		delete obj['isJoining']
-		return Object.assign({}, state, { rooms: obj })
-	  }
+	for (let i = arr.length - 1; i >= 0; i--) {
+		const item = arr[i]
+		if (!assoc[item.id]) {
+			result_arr.unshift(item)
+			assoc[item.id] = true
+		}
 	}
-	return Object.assign({}, state, { rooms: { isJoining: action.roomID	}})
-	
-  case "CREATE":
-      if (action.result)
-		  if (action.result.err)
-			  return Object.assign({}, state, { isCreating: { status: false, err: action.result.err} })
-      return Object.assign({}, state, { isCreating: action.bool })
-	  
-  case "CHECK":
-	if (!action.result.room)
-	  break
-	let rooms = state.rooms.list
-	
-	let i = rooms.findIndex(function (el) { return el.id === action.result.room.id})
-	rooms[i] = action.result.room
-	return Object.assign({}, state, { rooms: { list: rooms } })
-  default:
-	return state
-  }
+	return result_arr
+}
 
-  // case "NEXT": // TO-REMOVE CHANGE WITH A MORE BUTTON
-  //   obj = Object.assign({}, state.rooms)
-  //   obj.start += action.nbr
-  //   return Object.assign({}, state, { rooms: obj })
-
-  // case "PREV": // TO-REMOVE CHANGE WITH A MORE BUTTON
-  //   obj = Object.assign({}, state.rooms)
-  //   obj.start -= action.nbr
-  //   return Object.assign({}, state, { rooms: obj })
-	
-  // case "JOINED": // TO REMOVE use JOINING case
-  //   if (state.onLoad === undefined) {
-  // 	  //	console.log("onLoad undefined")
-  // 	  return state
-  //   }
-  //   obj = Object.assign({}, state.rooms)
-  //   delete obj[state.onLoad]['isLoading']; // need testing
-  //   for (i = 0; i < Object.keys(obj).length; i++) {
-  // 	  arr.push(r[i])
-  //   }
-  //   if (action.result.err) {
-  // 	  console.log(action.result.err)
-  // 	  return Object.assign({}, state, { onLoad: undefined, rooms: arr })
-  //   }
-    
-  //   return Object.assign({}, state, { menu: "ROOM", onLoad: undefined, rooms: arr, room: action.result.room }) // DONT LIKE DEFINITION OF MENU
-
+const listing = (state = {}, action = {}) => {
+	let obj
+	switch (action.state) {
+		case "FETCH":
+			if (action.result.rooms) {
+				if (!state.rooms)
+					return Object.assign({}, state, {rooms: { list: action.result.rooms }})
+				obj = state.rooms
+				obj.list = merge(obj.list, action.result.rooms)
+				return Object.assign({}, state, { rooms : obj })
+			}
+			return state
+		
+		case "CREATE":
+			if (action.result)
+				if (action.result.err)
+					return Object.assign({}, state, { isCreating: { status: false, err: action.result.err} })
+			return Object.assign({}, state, { isCreating: action.bool })
+		
+		case "CHECK":
+			if (!action.result.room)
+				break
+			if (!state.rooms)
+				return state
+			obj = JSON.parse(JSON.stringify(state.rooms))
+			let i = obj.list.findIndex(el => el.id === action.result.room.id)
+			if (i === -1)
+				obj.list.push(action.result.room)
+			else
+				obj.list[i] = action.result.room
+			return Object.assign({}, state, { rooms: obj })
+		default:
+			return state
+	}
 }
 
 export default listing

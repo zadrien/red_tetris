@@ -1,5 +1,9 @@
 export const INTERFACE = 'INTERFACE';
 
+export const LISTING = 'LISTING'
+export const CREATE = 'CREATE'
+export const ROOM = 'ROOM'
+
 export const setInterface = (menu) => {
   return {
     type: INTERFACE,

@@ -1,28 +1,31 @@
-import Player from './playerModel'
+import User from './playerModel'
+
+const loginfo = require('debug')('tetris:userController')
 
 function Controller(isLogged) {
 	this.isLogged = isLogged
 }
 
 Controller.prototype.login = function (socket, data) {
-	if (!data.name)
-		return 
-	var ids = Object.keys(this.isLogged)
-	var value = ids.find(elem => this.isLogged[elem].name === data.name)
-	if (value) {
-		throw { err: "Username already taken" }
-	}
+	if (!data.hasOwnProperty('name'))
+		throw new Error("No name property")
+	let ids = Object.keys(this.isLogged)
+	let value = ids.find(elem => this.isLogged[elem].name === data.name)
+	if (value)
+		throw new Error("Username already taken")
 	
-	var player = new Player(socket, data.name)
-	this.isLogged[socket.id] = player
-	console.log(`New player connected ${player.socket.id} - ${player.name}`)
-	return player	
+	let user = new User(socket, data.name)
+	this.isLogged[socket.id] = user
+	loginfo(`New user connected ${user.socket.id} - ${user.name}`)
+	return user	
 }
 
 Controller.prototype.logout = function (socket) {
-	if (!this.isLogged[socket.id])
-		return 
-	delete this.isLogged[socket.id]	
+	const user = this.isLogged[socket.id]
+	if (user) {
+		user.disconnect()
+		delete this.isLogged[socket.id]	
+	}
 }
 
-export default new Controller({})
+export default Controller

@@ -1,7 +1,7 @@
 export const LISTING = 'LISTING'
 
 
-export const onFetch = () => ({ // done
+export const onFetch = () => ({
     event: "FETCH",
     handle: LISTING,
     state: "FETCH"
@@ -13,8 +13,6 @@ export const emitFetch = (payload) => ({
   handle: LISTING,
   payload: payload,
   state: "FETCH",
-  
-  
 })
 
 export const onPrev = (nbr) => ({
@@ -29,16 +27,6 @@ export const onNext = (nbr) => ({
   nbr
 })
 
-// OBSOLETE ?
-export const onLoading = (id) => {
-  return {
-    type: LISTING,
-    state: "LOADING",
-    id
-  }
-}
-
-
 export const emitJoin = (user, room) => ({
   emit: true,
   event: "JOIN",
@@ -51,13 +39,13 @@ export const emitJoin = (user, room) => ({
 /*
 ** OBSOLETE ?
 */
-export const onJoined = () => {
-  return {
-    event: "JOINED",
-    handle: "LISTING",
-    state: "JOINED",
-  }
-}
+// export const onJoined = () => {
+//   return {
+//     event: "JOINED",
+//     handle: "LISTING",
+//     state: "JOINED",
+//   }
+// }
 
 // OBSOLETE ?
 export const isCreating = (bool) => {
@@ -67,23 +55,6 @@ export const isCreating = (bool) => {
     bool
   }
 }
-
-export const onCreation = () => { //done
-  return {
-    event: "CREATION",
-    type: LISTING,
-    handle: LISTING,
-    state: "CREATE",
-    
-  }
-}
-
-// OBSOLETE ?
-export const emitPing = (room) => ({
-  emit: true,
-  event: "CHECK",
-  payload: room
-})
 
 export const onPing = () => ({
   type: "LISTING",

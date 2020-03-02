@@ -6,30 +6,25 @@ export const onJoined = () => ({
   state: "JOINED"
 })
 
-export const onDisplay = () => {
-    return {
+export const onDisplay = () => ({
 	event: "DISPLAY",
 	handle: ROOM,
 	state: "DISPLAY",
-    }
+})
 
-}
-
-export const onHost = () => {
-    return {
+export const onHost = () => ({
 	event: "HOST",
 	handle: ROOM,
 	state: "HOST",
-    }
-}
+})
 
-export const onPlayers = () => {
-    return {
+
+export const onPlayers = () => ({
 	event: "PLAYERS",
 	handle: ROOM,
 	state: "PLAYERS",
-    }
-}
+})
+
 
 export const onStart = () => ({
   event: "START",
@@ -37,14 +32,11 @@ export const onStart = () => ({
   state: "START"
 })
 
-export const emitStart = (id) => {
-  return {
+export const emitStart = (id) => ({
     event: "START",
     emit: true,
     payload: id
-  }
-}
-
+})
 
 export const emitMove = (move) => ({
     event: "CONTROLLER",
@@ -53,13 +45,11 @@ export const emitMove = (move) => ({
 })
 
 
-export const startGame = (start) => {
-  return {
+export const startGame = (start) => ({
     type: "ROOM",
     state: "START",
     start
-  }
-}
+})
 
 export const onGameOver = () => ({
 	event: "GAMEOVER",
@@ -79,8 +69,9 @@ export const onQuit = () => ({
   state: "QUIT",
 })
 
-export const winValidate = () => ({
-  type: ROOM,
-  state: "RESET",
-  reset: true
+export const onResetDisplay = () => ({
+	event: "RESET",
+	handle: ROOM,
+	state: "RESET"
 })
+

@@ -1,17 +1,21 @@
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 
 import TetrisApp from '../reducers'
 
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import socketMiddleware from '../middleware/socketMiddleware'
+import { AppMiddleWare, socketMiddleware } from '../middleware/middleware'
 
 export default function configureStore(initialState = {}) {
-	const middlewares = [ thunk, createLogger(), socketMiddleware]
-
+	if (process.env.NODE_ENV !== "production")
+		return createStore(
+			TetrisApp,
+			initialState,
+			applyMiddleware(thunk, createLogger(), AppMiddleWare, socketMiddleware)
+		)
 	return createStore(
 		TetrisApp,
 		initialState,
-		applyMiddleware(thunk, createLogger(), socketMiddleware())
+		applyMiddleware(thunk, AppMiddleWare, socketMiddleware)
 	)
 }

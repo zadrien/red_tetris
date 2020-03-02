@@ -1,90 +1,80 @@
-import fs  from 'fs'
+import http from 'http'
+import path from 'path'
+import fs from 'fs'
+
 import debug from 'debug'
-import _ from 'lodash'
+import io from 'socket.io'
 
-import { fetch, ping, join, leave, start } from './rooms/roomsAPI'
-import userController from './player/playerController'
-
-var url = require('url');
+import params from '../../params'
+import { initConfig } from './config'
+import API from './rooms/roomsAPI'
+// import { fetch, join, leave, start } from './rooms/roomsAPI'
+import User from './player/playerController'
 
 const logerror = debug('tetris:error')
 , loginfo = debug('tetris:info')
 
-const initApp = (app, params, cb) => {
-	const {host, port} = params
-	const handler = (req, res) => {
-		const file = req.url === '/bundle.js' ? '/../../build/bundle.js' : '/../../index.html'
-		fs.readFile(__dirname + file, (err, data) => {
-			if (err) {
-				logerror(err)
-				res.writeHead(500)
-				return res.end('Error loading index.html')
-			}
-			res.writeHead(200)
-			res.end(data)
-		})
-	}    
-	app.on('request', handler)
-	app.listen({host, port}, () => {
-		loginfo(`tetris listen on ${params.url}`)
-		cb()
-	})
-}
+const server = http.createServer((req, res) => {	
+	const getFile = (file) => path.resolve(__dirname, `../../${file}`)
+	const notFound = '404 Not found'
+	switch (req.url) {
+		case '/':
+			return fs.readFile(getFile('index.html'), (err, data) => {
+				if (err)
+					throw err
+				res.end(data)
+			})
+		case '/bundle.js':
+			return fs.readFile(getFile(`build${req.url}`), (err, data) => {
+				if (err)
+					throw err
+				res.end(data)
+			})
+		default:
+			res.writeHead(404, {
+				'Content-Length': Buffer.byteLength(notFound),
+				'Content-Type': 'text/plain'
+			})
+			res.end(notFound)
+	}
+})
 
-const initEngine = io => {
-	io.on('connection', function (socket) {
-		loginfo("Socket connected: " + socket.id)
-		
-		socket.on('action', (action) => {
-			console.log("Action:", action)
-			if(action.type === 'server/ping') {
-				socket.emit('action', { type: 'pong' })
-			}
-		});
+const ioServer = io(server)
 
-		socket.on('login', async function(data) {
-			var user
-			try {
-				user = await userController.login(socket, data)
-				if (!user)
-					return
-				socket.emit("login", { name: user.name })
-				if (!_.isEmpty(data.room))
-					join(io, user, data)
-			} catch (err) {
-				socket.emit("login", err)
-				return 
-			}
-			socket.on('FETCH', (data) => fetch(io, user, data))
-			socket.on('JOIN', (data) => join(io, user, data))
-			socket.on("LEAVE", (data) => leave(user, data))
-			socket.on("START", (data) => start(user, data))
-			socket.on("CHECK", (data) => ping(user, data))
-		})
-		
-		socket.on('disconnect', function() {
-			loginfo('Socket disconnected: ' + socket.id);
-			userController.logout(socket)			
-		})
-	})
-}
+initConfig(ioServer, params)
 
-export function create(params) {
-	const promise = new Promise( (resolve, reject) => {
-		const app = require('http').createServer()
-		initApp(app, params, () => {
-			const io = require('socket.io')(app)
-			const stop = (cb) => {
-				io.close()
-				app.close( () => {
-					app.unref()
-				})
-				loginfo(`Engine stopped.`)
-				cb()
-			}	
-			initEngine(io)
-			resolve({stop})
-		})
+const userController = new User({})
+
+const APISocket = new API(ioServer)
+
+ioServer.on('connection', function (socket) {
+	loginfo(`Socket connected: ${socket.id}`)
+	socket.on('login', function(data) {
+		let user
+		try {
+			user = userController.login(socket, data)
+			socket.emit("login", { name: user.name })
+			if (data.hasOwnProperty('room'))
+				APISocket.join(user, data)
+			socket.on('FETCH', (data) => APISocket.fetch(user, data))
+			socket.on('JOIN', (data) => APISocket.join(user, data))
+			socket.on("LEAVE", (data) => APISocket.leave(user, data))
+			socket.on("START", (data) => APISocket.start(user, data))
+		} catch (err) {
+			socket.emit("login", { err: err.message })
+			logerror(err)
+		}
 	})
-	return promise
-}
+	
+	socket.on('disconnect', function() {
+		loginfo('Socket disconnected: ' + socket.id);
+		userController.logout(socket)			
+	})
+})
+
+server.listen(params.server.port, () => {
+	loginfo("Listening on port: ", params.server.url)
+})
+
+module.exports = server
+
