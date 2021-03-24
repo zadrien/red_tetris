@@ -14,7 +14,7 @@ describe("User model", () => {
 	beforeEach(() => {
 		eventEmitter = new events.EventEmitter()
 		eventEmitter.id = "testID"
-		user = new Player(eventEmitter, "testName")
+		user = new Player(eventEmitter, {name: "testName"})
 	})
 
 	describe("Player constructor", () => {

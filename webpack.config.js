@@ -1,5 +1,6 @@
 const path = require('path')
 
+// const nodeExternals = require('node-')
 module.exports = {
 	entry: './src/client/index.js',
 	output: {
@@ -25,5 +26,5 @@ module.exports = {
 				loader: ['style-loader', 'css-loader']
 			}
 		]
-	  }
+  }
 }

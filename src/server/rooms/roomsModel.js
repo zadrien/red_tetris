@@ -2,7 +2,10 @@ import _ from 'lodash'
 import { Tetraminos } from '../Game/tetraminos'
 import { isPlaying } from './helpers'
 import { roomsDAL } from './roomsDAL'
+import debug from 'debug'
 
+const logerror = debug('lobby:error')
+, loginfo = debug('lobby:info')
 export default function Lobby(io, id, name, mode) {
 	this.io = io
 	this.id = id
@@ -36,6 +39,7 @@ Lobby.prototype.kill = async function() {
 	this.isOpen = true
 	try {
 		await roomsDAL.update(this.id, this.get())
+    loginfo(`${this.id} - lobby killed!`)
 	} catch (err) {
 		console.log(err)
 	}
@@ -54,6 +58,7 @@ Lobby.prototype.newPlayer = function (user) {
 	user.initGame(this.mode)
 	this.ping('CHECK')
 	this.broadcast()
+  loginfo(`a player joined the lobby - ${user.id} joined ${this.id}`)
 	return true
 }
 
@@ -68,6 +73,7 @@ Lobby.prototype.startGame = function (user) {
 					this.endGameCallback.bind(this))
 	})
 	this.ping('CHECK')
+  loginfo(`${this.id} game has started`)
 }
 
 Lobby.prototype.resetLobby = function () {
@@ -78,6 +84,7 @@ Lobby.prototype.resetLobby = function () {
 		user.isPlaying = false
 	})
 	this.ping('CHECK')
+  loginfo(`${this.id} is reset`)
 }
 
 Lobby.prototype.leaveGame = function (user) {
@@ -102,6 +109,7 @@ Lobby.prototype.leaveGame = function (user) {
 	user.Notify("LEAVE", { state: "QUIT" })
 	this.ping('CHECK')
 	this.broadcast()
+  loginfo(`${user.id} has quit the lobby ${this.id}`)
 }
 
 Lobby.prototype.endGameCallback = function (id) {
@@ -114,11 +122,12 @@ Lobby.prototype.endGameCallback = function (id) {
 	if (_.isEmpty(stillPlaying)) {
 		user.Notify("GAMEOVER", { winner: true })
 		roomsDAL.update(this.id, this.get())
-		setTimeout(() => {
-			this.io.in(this.id).emit("START", { start: this.isOpen })
-			this.io.in(this.id).emit("RESET")
-			this.resetLobby()
-		}, 3000)
+		setTimeout(function (that) {
+			that.io.in(that.id).emit("START", { start: !that.isOpen })
+			that.io.in(that.id).emit("RESET")
+			that.resetLobby()
+		}, 3000, this)
+    loginfo(`${this.id} game is over`)
 	} else {
 		user.Notify("GAMEOVER", { winner: false })
 	}

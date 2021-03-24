@@ -3,7 +3,7 @@ import Board from '../Game/Board'
 
 const loginfo = require('debug')("tetris:user")
 
-function Player(socket, name) {
+function Player(socket, {name}) {
 	this.socket = socket
 	this.name = name
 	this.game = undefined

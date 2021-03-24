@@ -3,13 +3,10 @@ import path from 'path'
 import fs from 'fs'
 
 import debug from 'debug'
-import io from 'socket.io'
 
 import params from '../../params'
 import { initConfig } from './config'
-import API from './rooms/roomsAPI'
-// import { fetch, join, leave, start } from './rooms/roomsAPI'
-import User from './player/playerController'
+import wSocket from './wSocket/wSocket'
 
 const logerror = debug('tetris:error')
 , loginfo = debug('tetris:info')
@@ -39,42 +36,17 @@ const server = http.createServer((req, res) => {
 	}
 })
 
-const ioServer = io(server)
+const wsocket = new wSocket(server)
 
-initConfig(ioServer, params)
+initConfig(wsocket.wServer)
 
-const userController = new User({})
 
-const APISocket = new API(ioServer)
-
-ioServer.on('connection', function (socket) {
-	loginfo(`Socket connected: ${socket.id}`)
-	socket.on('login', function(data) {
-		let user
-		try {
-			user = userController.login(socket, data)
-			socket.emit("login", { name: user.name })
-			if (data.hasOwnProperty('room'))
-				APISocket.join(user, data)
-			socket.on('FETCH', (data) => APISocket.fetch(user, data))
-			socket.on('JOIN', (data) => APISocket.join(user, data))
-			socket.on("LEAVE", (data) => APISocket.leave(user, data))
-			socket.on("START", (data) => APISocket.start(user, data))
-		} catch (err) {
-			socket.emit("login", { err: err.message })
-			logerror(err)
-		}
-	})
-	
-	socket.on('disconnect', function() {
-		loginfo('Socket disconnected: ' + socket.id);
-		userController.logout(socket)			
-	})
+server.listen(process.env.SERVER_PORT, () => {
+	loginfo(`Listening on port :${process.env.SERVER_PORT}`)
 })
 
-server.listen(params.server.port, () => {
-	loginfo("Listening on port: ", params.server.url)
+process.once('SIGINT', (code) => {
+  wsocket.close()
 })
-
 module.exports = server
 

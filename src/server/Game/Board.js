@@ -12,6 +12,10 @@ function Board(emitter, mode) {
 	this.nbr = 0
 }
 
+/**
+ * start the login of the game
+ * @returns 
+ */
 Board.prototype.start = function () {
 	function logic() {
 		if (this.down() === false) {
@@ -28,6 +32,12 @@ Board.prototype.start = function () {
 	return this.itr
 }
 
+/**
+ * stop the Board logic
+ * 1. clear the interval to stop the game
+ * 2. emit the end of the game
+ * @returns 
+ */
 Board.prototype.stop = function () {
 	if (this.itr === 0)
 		return false
@@ -36,6 +46,10 @@ Board.prototype.stop = function () {
 	this.event.emit("end")
 }
 
+/**
+ * get the the board mapping
+ * @returns 
+ */
 Board.prototype.get = function () {
 	const display = utils.clone(this.map)
 	if (this.piece)
@@ -43,6 +57,11 @@ Board.prototype.get = function () {
 	return display
 }
 
+/**
+ * add a tetraminos into the Board
+ * @param {*} piece 
+ * @returns 
+ */
 Board.prototype.add = function (piece) {
 	if (this.piece)
 		return false
@@ -61,6 +80,10 @@ Board.prototype.add = function (piece) {
 	return true
 }
 
+/**
+ * setMalus lock a line of the Board
+ * @returns 
+ */
 Board.prototype.setMalus = function () {
 	this.malus++
 	let copy = utils.clone(this.map)
@@ -79,44 +102,16 @@ Board.prototype.setMalus = function () {
 		this.map = copy
 	if (this.mode === true && this.piece) {
 		copy = utils.clone(this.map)
-		utils.remove(this.map, this.piece, this.x, this.y) }
-		this.event.emit('display', this.map)
-	// }
+		utils.remove(this.map, this.piece, this.x, this.y) 
+  }
+  this.event.emit('display', this.map)
 	return true
 }
 
-// Board.prototype.setMalus = function () {
-// 	this.malus++
-// 	this.mutex = true
-// 	let copy = utils.clone(this.map)
-// 	if (this.piece)
-// 		utils.remove(copy, this.piece, this.x, this.y)		
-	
-// 	if (copy[0].find(c => c !== '.'))
-// 		return false
-// 	utils.addMallus(copy, 20 - this.malus)
-// 	if (this.piece) {
-// 		let arr = utils.clone(copy)
-
-// 		utils.merge(arr, this.piece, this.x, this.y -1)
-// 		if (!utils.merge(arr, this.piece, this.x, this.y))
-// 			this.map = arr
-// 		else
-// 			this.map = copy
-// 		// this.map = !utils.merge(arr, this.piece, this.x, this.y) ? arr : copy
-// 	} else {
-// 		this.map = copy
-// 	}
-// 	if (this.mode === true && this.piece) {
-// 		copy = utils.clone(this.map)
-// 		utils.remove(copy, this.piece, this.x, this.y)
-// 		this.event.emit("display", copy)
-// 	} else
-// 		this.event.emit("display", this.map)
-// 	this.mutex = false
-// 	return true
-// }
-
+/**
+ * place merge the descending tetraminos with the Board
+ * @returns 
+ */
 Board.prototype.place = function () {
 	if (!this.piece)
 		return false
@@ -132,6 +127,11 @@ Board.prototype.place = function () {
 	return true
 }
 
+/**
+ * down
+ * Move the tetraminos down
+ * @returns 
+ */
 Board.prototype.down = function () {
 	if (!this.piece)
 		return false
@@ -156,6 +156,11 @@ Board.prototype.down = function () {
 	return false
 }
 
+/**
+ * left
+ * Move the tetraminos one column to the left
+ * @returns 
+ */
 Board.prototype.left = function () {
 	if (!this.piece)
 		return false
@@ -174,6 +179,10 @@ Board.prototype.left = function () {
 	return true
 }
 
+/**
+ * Move the tetraminos one column to the right
+ * @returns 
+ */
 Board.prototype.right = function () {
 	if (!this.piece)
 		return false
@@ -192,6 +201,10 @@ Board.prototype.right = function () {
 	return true
 }
 
+/**
+ * rotate the tetraminos
+ * @returns 
+ */
 Board.prototype.rotate = function () {
 	if (!this.piece)
 		return false
@@ -213,6 +226,10 @@ Board.prototype.rotate = function () {
 	return true
 }
 
+/**
+ * verify if a line is complete & remove it
+ * @returns 
+ */
 Board.prototype.verify = function () {
 	let copy = utils.clone(this.map)
 	var r = utils.isFull(this.map, this.map.length - this.malus, el => el === '.')

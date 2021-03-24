@@ -3,7 +3,7 @@ import Controller from '../../../src/server/player/playerController'
 
 import events from 'events'
 
-describe("User Controller", function() {
+describe.only("User Controller", function() {
 	let data = { name: "testName" }
 	let testedController
 	
@@ -26,7 +26,11 @@ describe("User Controller", function() {
 			it("should throw error if username arleady taken", () => {
 				let socket = new events.EventEmitter()
 				socket.id = '2'
-				expect(testedController.login.bind(testedController, socket, {name: "AlreadyTakenCase"})).to.throw("Username already taken")
+        try {
+          const err = testedController.login(socket, {name: "AlreadyTakenCase"})
+        } catch (err) {
+          expect(err.message).to.eql('Username already taken')
+        }
 			})
 		})
 

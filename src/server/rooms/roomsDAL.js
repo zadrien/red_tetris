@@ -5,8 +5,8 @@ const Schema = mongoose.Schema
 const roomSchema = new Schema({
     id: String,
     name: String,
-	mode: String,
-	nbrUser: Number,
+	  mode: String,
+	  nbrUser: Number,
     isOpen: Boolean
 }, { timestamps: { createdAt: 'created_at' }});
 

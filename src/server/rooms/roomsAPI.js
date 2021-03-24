@@ -7,26 +7,20 @@ const API = function (io) {
 	this.roomsController.restore()
 }
 
+
+API.prototype.close = function () {
+  this.roomsController.shutdown()
+}
 API.prototype.fetch = async function (user, data) {
 	try {
 		const { skip, limit } = data
 		const rooms = await roomsDAL.read({}, {}, skip, limit)
+    console.log('fetch', rooms)
 		user.Notify("FETCH", { rooms })
 	} catch (err) {
 		user.Notify("FETCH", { err: err.message })
 	}
 }
-
-// export async function fetch(user, data) {
-//     try {
-// 		let skip = data.hasOwnProperty('skip') ? data.skip : 0
-// 		let limit = data.hasOwnProperty('limit') ? data.limit : 0
-// 		let rooms = await roomsDAL.read({}, {}, skip, limit)
-// 		user.Notify("FETCH", { rooms })
-//     } catch (err) {
-// 		user.Notify("FETCH", { err: err.message })
-//     }
-// }
 
 API.prototype.join = async function (user, data) {
 	let room
@@ -34,9 +28,12 @@ API.prototype.join = async function (user, data) {
 		room = this.roomsController.find(data.room.id)
 	if (!room) {
 		try {
+      console.log("Creating room...")
 			room = await this.roomsController.create(data.room)
 			user.Notify("CREATED", { room: true })
+      console.log("Created...")
 		} catch (err) {
+      console.log(err)
 			return user.Notify("CREATED", { err: err.message}) 
 		}
 	}
@@ -48,27 +45,6 @@ API.prototype.join = async function (user, data) {
 		user.Notify("JOINING", { state: "JOINED", err: err.message })
 	}
 }
-
-// export async function join(io, user, data) {
-// 	let room
-// 	if (data.room.hasOwnProperty('id'))
-// 	room = roomsController.find(data.room.id)
-// 	if (!room) {
-// 		try {
-// 			room = await roomsController.create(io, data.room)
-// 			user.Notify("CREATED", { room: true })
-// 		} catch (err) {
-// 			return user.Notify("CREATED", { err: err.message}) 
-// 		}
-// 	}
-
-// 	try {
-// 		room.newPlayer(user)
-// 		await Rooms.update(room.id, room.get())
-// 	} catch(err) {
-// 		user.Notify("JOINING", { state: "JOINED", err: err.message })
-// 	}
-// }
 
 API.prototype.leave = function (user, data) {
 	try {
@@ -82,18 +58,6 @@ API.prototype.leave = function (user, data) {
 	}
 }
 
-// export async function leave(user, data) {
-// 	try {
-// 		const { currentLobby } = user
-// 		if (!currentLobby)
-// 			throw new Error("user not in a Lobby")
-// 		currentLobby.leaveGame(user)
-// 		Rooms.update(currentLobby.id, currentLobby.get())
-// 	} catch (err) {
-// 		user.Notify("LEAVE", { err: err.message })
-// 	}
-// }
-
 API.prototype.start = async function (user, data) {
 	try {
 		const { currentLobby } = user
@@ -106,17 +70,5 @@ API.prototype.start = async function (user, data) {
 	}
 
 }
-
-// export function start(user, data) {
-// 	try {
-// 		const { currentLobby } = user
-// 		if (!currentLobby)
-// 			throw new Error("user not in a Lobby")
-// 		currentLobby.startGame(user)
-// 		Rooms.update(currentLobby.id, currentLobby.get())
-// 	} catch(err) {
-// 		user.Notify("START", { err: err.message})
-// 	}
-// }
 
 module.exports = API

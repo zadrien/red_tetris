@@ -4,8 +4,6 @@ import { roomsDAL } from './roomsDAL';
 import _ from 'lodash'
 import debug from 'debug'
 
-// const Rooms = {};
-
 const loginfo = debug('tetris:roomController')
 
 const Controller = function (io) {
@@ -28,14 +26,13 @@ Controller.prototype.restore = async function () {
 	}
 }
 
-process.once('SIGINT', code => {
-	loginfo("Trying to close gracefully")
-	Object.values(Rooms).forEach(async (room) => {
-		await room.kill()
-		delete Rooms[room.id]
-	})
-	process.exit(1)
-})
+Controller.prototype.shutdown = async function () {
+  console.log(this.Rooms)
+  for (const [k, room] of Object.entries(this.Rooms)) {
+    console.log(`${k} ${room}`, room)
+    await room.kill()
+  }
+}
 
 /*
 ** Launch at Start
@@ -45,7 +42,6 @@ Controller.prototype.create = async function (room) {
 	try {
 		const id = uuidv4()
 		room.id = id.toString()
-		
 		const instance = new Room(this.io, id, room.name, room.mode)
 		await roomsDAL.create(instance.get())
 		this.Rooms[id] = instance
